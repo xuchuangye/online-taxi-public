@@ -1,4 +1,4 @@
-package com.mashibing.request;
+package com.mashibing.apipassenger.request;
 
 /**
  * @author xcy

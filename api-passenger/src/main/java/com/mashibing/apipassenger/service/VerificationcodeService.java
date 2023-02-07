@@ -1,4 +1,4 @@
-package com.mashibing.service;
+package com.mashibing.apipassenger.service;
 
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;

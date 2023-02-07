@@ -17,6 +17,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>api-passenger</module>
+        <module>service-verificationcode</module>
     </modules>
 
     <packaging>pom</packaging>
