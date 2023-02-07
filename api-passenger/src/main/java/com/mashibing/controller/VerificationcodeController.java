@@ -19,6 +19,7 @@ public class VerificationcodeController {
 
 	@GetMapping("/verification-code")
 	public String verificationcode(@RequestBody VerificationcodeDTO verificationcodeDTO) {
-		return verificationcodeService.generateVerificationcode();
+		String passengerPhone = verificationcodeDTO.getPassengerPhone();
+		return verificationcodeService.generateVerificationcode(passengerPhone);
 	}
 }

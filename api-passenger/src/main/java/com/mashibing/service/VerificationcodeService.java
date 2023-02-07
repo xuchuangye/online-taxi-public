@@ -10,13 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class VerificationcodeService {
 
-	public String generateVerificationcode() {
+	public String generateVerificationcode(String passengerPhone) {
 
 		System.out.println("乘客获取验证码，调用验证码服务");
+
 
 		//存入Redis
 		System.out.println("存入Redis");
 
+		//返回值
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("code", 1);
 		jsonObject.put("message", "success");

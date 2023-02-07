@@ -1,2 +1,11 @@
 server:
   port: 8081
+spring:
+  cloud:
+    nacos:
+      discovery:
+        #Nacos的地址
+        server-addr: 127.0.0.1:8848
+  application:
+    #服务名称
+    name: api-passenger

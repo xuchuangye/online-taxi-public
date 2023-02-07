@@ -17,10 +17,16 @@
     </properties>
 
     <dependencies>
+        <!-- 引入Web场景启动器 -->
         <dependency>
-            <!-- 引入Web场景启动器 -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- Nacos的发现 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>2021.1</version>
         </dependency>
     </dependencies>
 
