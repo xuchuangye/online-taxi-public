@@ -18,6 +18,7 @@
     <modules>
         <module>api-passenger</module>
         <module>service-verificationcode</module>
+        <module>internal-common</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -34,6 +35,12 @@
             <artifactId>json-lib</artifactId>
             <version>2.4</version>
             <classifier>jdk15</classifier>
+        </dependency>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
         </dependency>
     </dependencies>
 
