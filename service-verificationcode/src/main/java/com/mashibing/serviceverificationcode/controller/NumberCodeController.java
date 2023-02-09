@@ -2,7 +2,6 @@ package com.mashibing.serviceverificationcode.controller;
 
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.NumberCodeResponse;
-import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,9 +20,8 @@ public class NumberCodeController {
 
 		//生成验证码
 		double random = (Math.random() * 9 + 1) * Math.pow(10, size - 1);
-		System.out.println(random);
 		int randomVerificationcode = (int) random;
-		System.out.println(randomVerificationcode);
+		System.out.println("本地服务获取的numberCode: " + randomVerificationcode);
 
 		/*JSONObject result = new JSONObject();
 		result.put("code", 1);
@@ -37,6 +35,7 @@ public class NumberCodeController {
 
 		NumberCodeResponse numberCodeResponse = new NumberCodeResponse();
 		numberCodeResponse.setNumberCode(randomVerificationcode);
+
 		return ResponseResult.success(numberCodeResponse);
 	}
 }
