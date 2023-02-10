@@ -4,6 +4,7 @@ import ch.qos.logback.core.util.TimeUtil;
 import com.mashibing.apipassenger.remote.ServiceVerificationcodeClient;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.NumberCodeResponse;
+import com.mashibing.internalcommon.response.TokenResponse;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -42,5 +43,22 @@ public class VerificationcodeService {
 		//返回值
 
 		return ResponseResult.success("");
+	}
+
+	public ResponseResult checkVerificationcode(String passengerPhone, String verificationcode) {
+		//key
+		String key = verificationcodePrefix + passengerPhone;
+		//value
+		String value = stringRedisTemplate.opsForValue().get(key);
+		//根据乘客手机号，从Redis中获取验证码
+
+		//校验验证码
+
+		//根据不同的情况，做不同的处理
+
+		//响应结果，返回token令牌
+		TokenResponse tokenResponse = new TokenResponse();
+		tokenResponse.setToken("token value");
+		return ResponseResult.success(tokenResponse);
 	}
 }

@@ -9,7 +9,7 @@ spring:
   application:
     #服务名称
     name: api-passenger
-
+  #默认可以配置，也可以不配置
   redis:
     host: 127.0.0.1
     port: 6379
