@@ -1,9 +1,11 @@
 package com.mashibing.apipassenger.service;
 
 import ch.qos.logback.core.util.TimeUtil;
+import com.mashibing.apipassenger.remote.ServicePassengerUserClient;
 import com.mashibing.apipassenger.remote.ServiceVerificationcodeClient;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.dto.ResponseResult;
+import com.mashibing.internalcommon.request.VerificationcodeDTO;
 import com.mashibing.internalcommon.response.NumberCodeResponse;
 import com.mashibing.internalcommon.response.TokenResponse;
 import net.sf.json.JSONObject;
@@ -22,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 public class VerificationcodeService {
 	@Autowired
 	private ServiceVerificationcodeClient serviceVerificationcodeClient;
+
+	@Autowired
+	private ServicePassengerUserClient servicePassengerUserClient;
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
@@ -43,10 +48,14 @@ public class VerificationcodeService {
 		stringRedisTemplate.opsForValue().set(key, numberCode + "", 2, TimeUnit.MINUTES);
 
 		//返回值
-
 		return ResponseResult.success("");
 	}
 
+	/**
+	 * 拼接前缀 + 乘客手机号作为Redis的key值
+	 * @param passengerPhone
+	 * @return
+	 */
 	private String redisKey(String passengerPhone) {
 		return verificationcodePrefix + passengerPhone;
 	}
@@ -68,6 +77,9 @@ public class VerificationcodeService {
 		}
 
 		//根据不同的情况，做不同的处理
+		VerificationcodeDTO verificationcodeDTO = new VerificationcodeDTO();
+		verificationcodeDTO.setPassengerPhone(passengerPhone);
+		servicePassengerUserClient.loginOrRegister(verificationcodeDTO);
 
 		//响应结果，返回token令牌
 		TokenResponse tokenResponse = new TokenResponse();
