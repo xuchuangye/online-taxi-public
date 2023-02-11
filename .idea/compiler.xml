@@ -7,8 +7,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="api-passenger" />
         <module name="internal-common" />
+        <module name="api-passenger" />
+        <module name="service-passenger-user" />
         <module name="service-verificationcode" />
       </profile>
     </annotationProcessing>
@@ -17,6 +18,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-passenger" options="-parameters" />
       <module name="internal-common" options="-parameters" />
+      <module name="service-passenger-user" options="-parameters" />
       <module name="service-verificationcode" options="-parameters" />
     </option>
   </component>

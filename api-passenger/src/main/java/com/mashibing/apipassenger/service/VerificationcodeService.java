@@ -2,10 +2,12 @@ package com.mashibing.apipassenger.service;
 
 import ch.qos.logback.core.util.TimeUtil;
 import com.mashibing.apipassenger.remote.ServiceVerificationcodeClient;
+import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.NumberCodeResponse;
 import com.mashibing.internalcommon.response.TokenResponse;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -37,7 +39,7 @@ public class VerificationcodeService {
 		System.out.println("存入Redis");
 
 		//key,value,ttl过期时间
-		String key = verificationcodePrefix + passengerPhone;
+		String key = redisKey(passengerPhone);
 		stringRedisTemplate.opsForValue().set(key, numberCode + "", 2, TimeUnit.MINUTES);
 
 		//返回值
@@ -45,14 +47,25 @@ public class VerificationcodeService {
 		return ResponseResult.success("");
 	}
 
+	private String redisKey(String passengerPhone) {
+		return verificationcodePrefix + passengerPhone;
+	}
+
 	public ResponseResult checkVerificationcode(String passengerPhone, String verificationcode) {
 		//key
-		String key = verificationcodePrefix + passengerPhone;
+		String key = redisKey(passengerPhone);
 		//value
-		String value = stringRedisTemplate.opsForValue().get(key);
+		String redisVerificationcode = stringRedisTemplate.opsForValue().get(key);
+		System.out.println(redisVerificationcode);
 		//根据乘客手机号，从Redis中获取验证码
-
 		//校验验证码
+		if (StringUtils.isBlank(redisVerificationcode)) {
+			return ResponseResult.fail(CommonStatusEnum.VERIFICATIONCODE_OVERDUE.getCode(), CommonStatusEnum.VERIFICATIONCODE_OVERDUE.getMessage());
+		}
+
+		if (!verificationcode.trim().equals(redisVerificationcode.trim())) {
+			return ResponseResult.fail(CommonStatusEnum.VERIFICATIONCODE_ERROR.getCode(), CommonStatusEnum.VERIFICATIONCODE_ERROR.getMessage());
+		}
 
 		//根据不同的情况，做不同的处理
 

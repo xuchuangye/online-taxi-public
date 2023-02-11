@@ -10,6 +10,15 @@ import lombok.Getter;
 public enum CommonStatusEnum {
 
 	/**
+	 * 验证码已过期
+	 */
+	VERIFICATIONCODE_OVERDUE(1001, "验证码已过期"),
+	/**
+	 * 验证码不正确
+	 */
+	VERIFICATIONCODE_ERROR(1099, "验证码不正确"),
+
+	/**
 	 * 请求成功
 	 */
 	SUCCESS(1,"请求响应成功"),
