@@ -43,9 +43,9 @@ public class JWTUtils {
 	public static String generatorToken(String phone, String identity) {
 
 		//设置过期时间
-		Calendar calendar = Calendar.getInstance();
+		/*Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, 1);
-		Date date = calendar.getTime();
+		Date date = calendar.getTime();*/
 
 		//
 		JWTCreator.Builder builder = JWT.create();
@@ -61,7 +61,7 @@ public class JWTUtils {
 				}
 		);
 		//整合过期时间
-		builder.withExpiresAt(date);
+		//builder.withExpiresAt(date);
 		//整合算法
 		return builder.sign(Algorithm.HMAC256(SIGH));
 	}

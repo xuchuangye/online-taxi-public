@@ -34,7 +34,10 @@ public class VerificationcodeService {
 	private StringRedisTemplate stringRedisTemplate;
 
 	//验证码的前缀
-	private String verificationcodePrefix = "passenger-verificationcode-";
+	private final String verificationcodePrefix = "passenger-verificationcode-";
+
+	//token的前缀
+	private final String tokenPrefix = "token-";
 
 	/**
 	 * 生成验证码
@@ -52,7 +55,7 @@ public class VerificationcodeService {
 		System.out.println("存入Redis");
 
 		//key,value,ttl过期时间
-		String key = redisKey(phone);
+		String key = redisVerificationcodeKey(phone);
 		stringRedisTemplate.opsForValue().set(key, numberCode + "", 2, TimeUnit.MINUTES);
 
 		//返回值
@@ -60,14 +63,26 @@ public class VerificationcodeService {
 	}
 
 	/**
-	 * 拼接前缀 + 乘客手机号作为Redis的key值
+	 * 拼接验证码的前缀 + 手机号作为Redis的key值
 	 *
 	 * @param phone 手机号
 	 * @return
 	 */
-	private String redisKey(String phone) {
+	private String redisVerificationcodeKey(String phone) {
 		return verificationcodePrefix + phone;
 	}
+
+	/**
+	 * 拼接token的前缀 + 手机号 + "-" + 身份标识
+	 *
+	 * @param phone    手机号
+	 * @param identity 身份标识
+	 * @return
+	 */
+	private String redisTokenKey(String phone, String identity) {
+		return tokenPrefix + phone + "-" + identity;
+	}
+
 
 	/**
 	 * 校验验证码
@@ -78,9 +93,9 @@ public class VerificationcodeService {
 	 */
 	public ResponseResult checkVerificationcode(String phone, String verificationcode) {
 		//key
-		String key = redisKey(phone);
+		String VerificationcodeKey = redisVerificationcodeKey(phone);
 		//value
-		String redisVerificationcode = stringRedisTemplate.opsForValue().get(key);
+		String redisVerificationcode = stringRedisTemplate.opsForValue().get(VerificationcodeKey);
 		System.out.println(redisVerificationcode);
 		//根据乘客手机号，从Redis中获取验证码
 		//校验验证码
@@ -99,6 +114,10 @@ public class VerificationcodeService {
 
 		//颁发令牌
 		String token = JWTUtils.generatorToken(phone, IdentityConstant.PASSENGER_IDENTITY);
+
+		//将token存储到Redis中
+		String tokenKey = redisTokenKey(phone, IdentityConstant.PASSENGER_IDENTITY);
+		stringRedisTemplate.opsForValue().set(tokenKey, token, 30, TimeUnit.DAYS);
 
 		//响应结果，返回token令牌
 		TokenResponse tokenResponse = new TokenResponse();
