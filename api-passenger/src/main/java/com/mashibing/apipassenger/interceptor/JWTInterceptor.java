@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 
 /**
  * 该类需要在配置类中进行注册，否则在该类中注入的属性无效
+ *
  * @author xcy
  * @date 2023/2/12 - 9:56
  */
@@ -39,28 +40,7 @@ public class JWTInterceptor implements HandlerInterceptor {
 		//从Header的授权中获取token
 		String token = request.getHeader("Authorization");
 		//解析token
-		TokenResult tokenResult = null;
-		try {
-			tokenResult = JWTUtils.parseToken(token);
-		}
-		//签名错误
-		catch (SignatureVerificationException e) {
-			resultString = "token sign error";
-			result = false;
-		}
-		//token过期
-		catch (TokenExpiredException e) {
-			resultString = "token time out";
-			result = false;
-		}
-		//token算法错误
-		catch (AlgorithmMismatchException e) {
-			resultString = "token AlgorithmMismatchException";
-			result = false;
-		} catch (Exception e) {
-			resultString = "token invalid";
-			result = false;
-		}
+		TokenResult tokenResult = JWTUtils.checkToken(token);
 
 		if (tokenResult == null) {
 			resultString = "token invalid";
@@ -72,18 +52,11 @@ public class JWTInterceptor implements HandlerInterceptor {
 			String accessTokenKey = RedisKeyUtils.generateTokenKey(phone, identity, TokenTypeConstant.ACCESS_TOKEN_TYPE);
 			//从Redis中获取accessToken
 			String accessTokenRedis = stringRedisTemplate.opsForValue().get(accessTokenKey);
-
-			if (StringUtils.isBlank(accessTokenRedis)) {
+			//比较从Header的授权中获取token和从Redis中获取的token是否一样
+			if ((StringUtils.isBlank(accessTokenRedis)) || (!token.trim().equals(accessTokenRedis.trim()))) {
 				resultString = "token invalid";
 				result = false;
-			} else {
-				//比较从Header的授权中获取token和从Redis中获取的token是否一样
-				if (!token.trim().equals(accessTokenRedis.trim())) {
-					resultString = "token invalid";
-					result = false;
-				}
 			}
-
 		}
 
 		//表示捕获到异常

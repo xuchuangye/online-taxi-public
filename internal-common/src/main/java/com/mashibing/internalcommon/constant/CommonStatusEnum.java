@@ -14,9 +14,14 @@ public enum CommonStatusEnum {
 	 */
 	VERIFICATIONCODE_OVERDUE(1001, "验证码已过期"),
 	/**
+	 * 验证码类的提示：1001 ~ 1099
 	 * 验证码不正确
 	 */
 	VERIFICATIONCODE_ERROR(1099, "验证码不正确"),
+	/**
+	 * token类的提示：1101 ~ 1199
+	 */
+	TOKEN_ERROR(1101, "token不正确"),
 
 	/**
 	 * 请求成功

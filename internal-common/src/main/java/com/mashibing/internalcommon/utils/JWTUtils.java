@@ -3,6 +3,9 @@ package com.mashibing.internalcommon.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.AlgorithmMismatchException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mashibing.internalcommon.constant.TokenTypeConstant;
@@ -42,7 +45,7 @@ public class JWTUtils {
 	/**
 	 * 生成token
 	 *
-	 * @param phone 手机号
+	 * @param phone    手机号
 	 * @param identity 身份标识
 	 * @return 返回token
 	 */
@@ -92,6 +95,22 @@ public class JWTUtils {
 		tokenResult.setPhone(phone);
 		tokenResult.setIdentity(identity);
 
+		return tokenResult;
+	}
+
+	/**
+	 * 解析token
+	 *
+	 * @param token
+	 * @return
+	 */
+	public static TokenResult checkToken(String token) {
+		TokenResult tokenResult = null;
+		try {
+			tokenResult = JWTUtils.parseToken(token);
+		} catch (Exception e) {
+
+		}
 		return tokenResult;
 	}
 
