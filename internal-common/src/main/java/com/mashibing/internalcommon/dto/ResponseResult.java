@@ -32,6 +32,17 @@ public class ResponseResult<T> {
 	}
 
 	/**
+	 * 请求响应失败
+	 * @param data
+	 * @return
+	 */
+	public static <T> ResponseResult fail(T data) {
+		return new ResponseResult().setCode(CommonStatusEnum.FAIL.getCode())
+				.setMessage(CommonStatusEnum.FAIL.getMessage())
+				.setData(data);
+	}
+
+	/**
 	 * 自定义请求响应失败，响应码和提示信息
 	 * @param code
 	 * @param message
