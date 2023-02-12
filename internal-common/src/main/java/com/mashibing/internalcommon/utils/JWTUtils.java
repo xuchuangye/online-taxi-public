@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.mashibing.internalcommon.constant.TokenTypeConstant;
 import com.mashibing.internalcommon.dto.TokenResult;
 
 import java.util.Calendar;
@@ -34,13 +35,18 @@ public class JWTUtils {
 	private static final String JWT_KEY_IDENTITY = "identity";
 
 	/**
+	 *
+	 */
+	private static final String TOKEN_TYPE = "token-type-";
+
+	/**
 	 * 生成token
 	 *
 	 * @param phone 手机号
 	 * @param identity 身份标识
 	 * @return 返回token
 	 */
-	public static String generatorToken(String phone, String identity) {
+	public static String generatorToken(String phone, String identity, String tokenType) {
 
 		//设置过期时间
 		/*Calendar calendar = Calendar.getInstance();
@@ -54,6 +60,7 @@ public class JWTUtils {
 		Map<String, String> map = new HashMap<>();
 		map.put(JWT_KEY_PHONE, phone);
 		map.put(JWT_KEY_IDENTITY, identity);
+		map.put(TOKEN_TYPE, tokenType);
 		//整合Map
 		map.forEach(
 				/*(k, v) -> {
@@ -100,7 +107,7 @@ public class JWTUtils {
 		String s = parseToken(token);
 		System.out.println("解析token: " + s);*/
 
-		String token = generatorToken("18528380690", "1");
+		String token = generatorToken("18528380690", "1", TokenTypeConstant.ACCESS_TOKEN_TYPE);
 		System.out.println("token：" + token);
 		TokenResult tokenResult = parseToken(token);
 		System.out.println("手机号：" + tokenResult.getPhone());

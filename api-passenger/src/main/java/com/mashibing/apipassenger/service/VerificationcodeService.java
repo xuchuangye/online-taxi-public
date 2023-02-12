@@ -4,6 +4,7 @@ import com.mashibing.apipassenger.remote.ServicePassengerUserClient;
 import com.mashibing.apipassenger.remote.ServiceVerificationcodeClient;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.constant.IdentityConstant;
+import com.mashibing.internalcommon.constant.TokenTypeConstant;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.VerificationcodeDTO;
 import com.mashibing.internalcommon.response.NumberCodeResponse;
@@ -85,15 +86,19 @@ public class VerificationcodeService {
 		servicePassengerUserClient.loginOrRegister(verificationcodeDTO);
 
 		//颁发令牌
-		String token = JWTUtils.generatorToken(phone, IdentityConstant.PASSENGER_IDENTITY);
+		String accessToken = JWTUtils.generatorToken(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.ACCESS_TOKEN_TYPE);
+		String refreshToken = JWTUtils.generatorToken(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.REFRESH_TOKEN_TYPE);
 
 		//将token存储到Redis中
-		String tokenKey = RedisKeyUtils.generateTokenKey(phone, IdentityConstant.PASSENGER_IDENTITY);
-		stringRedisTemplate.opsForValue().set(tokenKey, token, 30, TimeUnit.DAYS);
+		String accessTokenKey = RedisKeyUtils.generateTokenKey(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.ACCESS_TOKEN_TYPE);
+		String refreshTokenKey = RedisKeyUtils.generateTokenKey(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.REFRESH_TOKEN_TYPE);
+		stringRedisTemplate.opsForValue().set(accessTokenKey, accessToken, 30, TimeUnit.DAYS);
+		stringRedisTemplate.opsForValue().set(refreshTokenKey, refreshToken, 31, TimeUnit.DAYS);
 
 		//响应结果，返回token令牌
 		TokenResponse tokenResponse = new TokenResponse();
-		tokenResponse.setToken(token);
+		tokenResponse.setAccessToken(accessToken);
+		tokenResponse.setRefreshToken(refreshToken);
 		return ResponseResult.success(tokenResponse);
 	}
 }

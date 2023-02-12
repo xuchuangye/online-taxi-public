@@ -3,6 +3,7 @@ package com.mashibing.apipassenger.interceptor;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.mashibing.internalcommon.constant.TokenTypeConstant;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.dto.TokenResult;
 import com.mashibing.internalcommon.utils.JWTUtils;
@@ -67,17 +68,17 @@ public class JWTInterceptor implements HandlerInterceptor {
 		} else {
 			String phone = tokenResult.getPhone();
 			String identity = tokenResult.getIdentity();
-			//根据手机号和身份标识生成token
-			String tokenKey = RedisKeyUtils.generateTokenKey(phone, identity);
-			//从Redis中获取token
-			String tokenRedis = stringRedisTemplate.opsForValue().get(tokenKey);
+			//根据手机号和身份标识生成accessToken
+			String accessTokenKey = RedisKeyUtils.generateTokenKey(phone, identity, TokenTypeConstant.ACCESS_TOKEN_TYPE);
+			//从Redis中获取accessToken
+			String accessTokenRedis = stringRedisTemplate.opsForValue().get(accessTokenKey);
 
-			if (StringUtils.isBlank(tokenRedis)) {
+			if (StringUtils.isBlank(accessTokenRedis)) {
 				resultString = "token invalid";
 				result = false;
 			} else {
 				//比较从Header的授权中获取token和从Redis中获取的token是否一样
-				if (!token.trim().equals(tokenRedis.trim())) {
+				if (!token.trim().equals(accessTokenRedis.trim())) {
 					resultString = "token invalid";
 					result = false;
 				}
