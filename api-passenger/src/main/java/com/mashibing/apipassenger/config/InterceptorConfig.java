@@ -31,7 +31,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
 		List<String> list = Arrays.asList(
 				"/noauthTest",
 				"/verification-code",
-				"/verification-code-check");
+				"/verification-code-check",
+				"/token-refresh");
 		registry.addInterceptor(jwtInterceptor())
 				//拦截的路径
 				.addPathPatterns("/**")

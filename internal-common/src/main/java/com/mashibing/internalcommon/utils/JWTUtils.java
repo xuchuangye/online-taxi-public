@@ -38,9 +38,14 @@ public class JWTUtils {
 	private static final String JWT_KEY_IDENTITY = "identity";
 
 	/**
-	 *
+	 * 令牌类型
 	 */
-	private static final String TOKEN_TYPE = "token-type-";
+	private static final String TOKEN_TYPE = "tokenType";
+
+	/**
+	 * 令牌的创建时间
+	 */
+	private static final String TOKEN_TIME = "tokenTime";
 
 	/**
 	 * 生成token
@@ -52,9 +57,8 @@ public class JWTUtils {
 	public static String generatorToken(String phone, String identity, String tokenType) {
 
 		//设置过期时间
-		/*Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.DATE, 1);
-		Date date = calendar.getTime();*/
+		Calendar calendar = Calendar.getInstance();
+		Date date = calendar.getTime();
 
 		//
 		JWTCreator.Builder builder = JWT.create();
@@ -64,6 +68,8 @@ public class JWTUtils {
 		map.put(JWT_KEY_PHONE, phone);
 		map.put(JWT_KEY_IDENTITY, identity);
 		map.put(TOKEN_TYPE, tokenType);
+		//防止使用原来的refreshToken生成新的refreshToken都一样，加上时间戳
+		map.put(TOKEN_TIME, date.toString());
 		//整合Map
 		map.forEach(
 				/*(k, v) -> {
