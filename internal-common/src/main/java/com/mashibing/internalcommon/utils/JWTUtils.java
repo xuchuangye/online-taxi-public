@@ -56,9 +56,10 @@ public class JWTUtils {
 		map.put(JWT_KEY_IDENTITY, identity);
 		//整合Map
 		map.forEach(
-				(k, v) -> {
+				/*(k, v) -> {
 					builder.withClaim(k, v);
-				}
+				}*/
+				builder::withClaim
 		);
 		//整合过期时间
 		//builder.withExpiresAt(date);
@@ -74,11 +75,11 @@ public class JWTUtils {
 	 * @return
 	 */
 	public static TokenResult parseToken(String token) {
-		DecodedJWT verify = JWT.require(Algorithm.HMAC256(SIGH))
-				.build()
-				.verify(token);
-		String phone = verify.getClaim(JWT_KEY_PHONE).toString();
-		String identity = verify.getClaim(JWT_KEY_IDENTITY).toString();
+		DecodedJWT verify = JWT.require(Algorithm.HMAC256(SIGH)).build().verify(token);
+		//如果本身就是字符串，使用toString()时，会有两对""
+		//因此必须使用asString()，字符串仍然作为它本身
+		String phone = verify.getClaim(JWT_KEY_PHONE).asString();
+		String identity = verify.getClaim(JWT_KEY_IDENTITY).asString();
 
 		TokenResult tokenResult = new TokenResult();
 		tokenResult.setPhone(phone);
