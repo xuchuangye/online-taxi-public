@@ -16,4 +16,7 @@ public interface ServicePassengerUserClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/user")
 	ResponseResult loginOrRegister(@RequestBody VerificationcodeDTO verificationcodeDTO);
+
+	@RequestMapping(method = RequestMethod.GET, value = "/user")
+	ResponseResult getUsers(@RequestBody VerificationcodeDTO verificationcodeDTO);
 }

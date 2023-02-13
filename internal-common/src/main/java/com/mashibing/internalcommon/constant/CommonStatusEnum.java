@@ -24,6 +24,11 @@ public enum CommonStatusEnum {
 	TOKEN_ERROR(1101, "token不正确"),
 
 	/**
+	 * 用户类的提示：1201 ~ 1299
+	 */
+	USER_IS_NOT_EXISTS(1201, "用户不存在"),
+
+	/**
 	 * 请求成功
 	 */
 	SUCCESS(1,"请求响应成功"),
