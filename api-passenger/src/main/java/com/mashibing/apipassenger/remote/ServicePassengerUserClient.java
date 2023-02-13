@@ -1,8 +1,10 @@
 package com.mashibing.apipassenger.remote;
 
+import com.mashibing.internalcommon.dto.PassengerUser;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.VerificationcodeDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +19,9 @@ public interface ServicePassengerUserClient {
 	@RequestMapping(method = RequestMethod.POST, value = "/user")
 	ResponseResult loginOrRegister(@RequestBody VerificationcodeDTO verificationcodeDTO);
 
-	@RequestMapping(method = RequestMethod.GET, value = "/user")
-	ResponseResult getUsers(@RequestBody VerificationcodeDTO verificationcodeDTO);
+	/*@RequestMapping(method = RequestMethod.GET, value = "/user")
+	ResponseResult getUser(@RequestBody VerificationcodeDTO verificationcodeDTO);*/
+
+	@RequestMapping(method = RequestMethod.GET, value = "/user/{phone}")
+	ResponseResult getUser(@PathVariable("phone") String phone);
 }

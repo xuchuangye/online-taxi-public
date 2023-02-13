@@ -32,13 +32,8 @@ public class UserService {
 		String phone = tokenResult.getPhone();
 		log.info("手机号: " + phone);
 		//
-		VerificationcodeDTO verificationcodeDTO = new VerificationcodeDTO();
-		verificationcodeDTO.setPassengerPhone(phone);
-		servicePassengerUserClient.getUsers(verificationcodeDTO);
-
-		PassengerUser passengerUser = new PassengerUser();
-		passengerUser.setPassengerName("张三");
-		passengerUser.setProfilePhoto("工作照");
-		return ResponseResult.success(passengerUser);
+		/*VerificationcodeDTO verificationcodeDTO = new VerificationcodeDTO();
+		verificationcodeDTO.setPassengerPhone(phone);*/
+		return ResponseResult.success(servicePassengerUserClient.getUser(phone).getData());
 	}
 }

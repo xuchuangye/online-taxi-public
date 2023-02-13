@@ -4,10 +4,7 @@ import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.VerificationcodeDTO;
 import com.mashibing.servicepassengeruser.service.PassengerUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author xcy
@@ -27,11 +24,26 @@ public class PassengerUserController {
 		return passengerUserService.loginOrRegister(passengerPhone);
 	}
 
-	@GetMapping("/user")
-	public ResponseResult getUsers(@RequestBody VerificationcodeDTO verificationcodeDTO) {
+	/**
+	 * Feign调用的Bug：以@RequestBody的方式传递对象的话，会将请求方式从GET方式自动转换成POST方式
+	 * @param
+	 * @return
+	 */
+	/*@GetMapping("/user")
+	public ResponseResult getUser(@RequestBody VerificationcodeDTO verificationcodeDTO) {
 		String passengerPhone = verificationcodeDTO.getPassengerPhone();
 		System.out.println("手机号：" + passengerPhone);
 
 		return passengerUserService.getUserByPassengerPhone(passengerPhone);
+	}*/
+
+	/**
+	 * 以路径变量的方式传递参数
+	 * @param phone
+	 * @return
+	 */
+	@GetMapping("/user/{phone}")
+	public ResponseResult getUser(@PathVariable("phone") String phone) {
+		return passengerUserService.getUserByPassengerPhone(phone);
 	}
 }
