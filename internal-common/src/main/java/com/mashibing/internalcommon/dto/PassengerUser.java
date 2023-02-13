@@ -1,8 +1,6 @@
 package com.mashibing.internalcommon.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -19,5 +17,6 @@ public class PassengerUser {
 	private String passengerPhone;
 	private String passengerName;
 	private Byte passengerGender;
+	private String profilePhoto;
 	private Byte state;
 }

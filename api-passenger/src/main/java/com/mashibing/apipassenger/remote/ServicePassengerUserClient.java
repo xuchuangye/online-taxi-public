@@ -1,6 +1,5 @@
 package com.mashibing.apipassenger.remote;
 
-import com.mashibing.internalcommon.dto.PassengerUser;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.VerificationcodeDTO;
 import org.springframework.cloud.openfeign.FeignClient;

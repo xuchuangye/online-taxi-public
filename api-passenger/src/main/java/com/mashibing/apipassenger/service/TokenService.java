@@ -43,7 +43,7 @@ public class TokenService {
 		if ((StringUtils.isBlank(refreshTokenRedis)) || (!refreshTokenSrc.trim().equals(refreshTokenRedis.trim()))) {
 			return ResponseResult.fail(CommonStatusEnum.TOKEN_ERROR.getCode(), CommonStatusEnum.TOKEN_ERROR.getMessage());
 		}
-		
+
 		String accessTokenKey = RedisKeyUtils.generateTokenKey(phone, identity, TokenTypeConstant.ACCESS_TOKEN_TYPE);
 
 		//4.生成新的双token：accessToken和refreshToken

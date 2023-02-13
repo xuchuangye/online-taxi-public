@@ -44,9 +44,7 @@ public class UserService {
 			passengerUser.setGmtModified(now);
 			passengerUserMapper.insert(passengerUser);
 		}
-
 		//如果用户信息存在，查询用户
-
 		return ResponseResult.success("");
 	}
 }
