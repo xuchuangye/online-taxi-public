@@ -1,20 +1,17 @@
-package com.mashibing.serviceprice;
+package com.mashibing.servicemap;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @author xcy
- * @date 2023/2/14 - 9:04
+ * @date 2023/2/14 - 9:45
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
-public class ServicePriceApplication {
-
+public class ServiceMapApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(ServicePriceApplication.class, args);
+		SpringApplication.run(ServiceMapApplication.class, args);
 	}
 }

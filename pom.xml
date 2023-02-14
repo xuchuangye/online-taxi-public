@@ -21,6 +21,7 @@
         <module>service-passenger-user</module>
         <module>service-price</module>
         <module>internal-common</module>
+        <module>service-map</module>
     </modules>
 
     <packaging>pom</packaging>
