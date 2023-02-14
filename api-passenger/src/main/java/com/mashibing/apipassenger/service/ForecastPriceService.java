@@ -19,23 +19,24 @@ public class ForecastPriceService {
 	@Autowired
 	private ServicePriceClient servicePriceClient;
 
-	public ResponseResult forecastPrice(ForecastPriceDTO forecastPriceDTO) {
-		String depLongitude = forecastPriceDTO.getDepLongitude();
-		String depLatitude = forecastPriceDTO.getDepLatitude();
-		String destLongitude = forecastPriceDTO.getDestLongitude();
-		String destLatitude = forecastPriceDTO.getDestLatitude();
+	public ResponseResult forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
+		ForecastPriceDTO forecastPriceDTO = new ForecastPriceDTO();
+		forecastPriceDTO.setDepLongitude(depLongitude);
+		forecastPriceDTO.setDepLatitude(depLatitude);
+		forecastPriceDTO.setDestLongitude(destLongitude);
+		forecastPriceDTO.setDestLatitude(destLatitude);
 
 		log.info("出发地经度: " + depLongitude);
 		log.info("出发低纬度: " + depLatitude);
 		log.info("目的地经度: " + destLongitude);
 		log.info("目的地纬度: " + destLatitude);
 
-		servicePriceClient.forecastPrice(forecastPriceDTO);
 
 		log.info("调用地图服务，预估价格");
+		ResponseResult forecastPrice = servicePriceClient.forecastPrice(forecastPriceDTO);
 
 		ForecastPriceResponse forecastPriceResponse = new ForecastPriceResponse();
-		forecastPriceResponse.setPrice(12.36);
+		forecastPriceResponse.setPrice((Double) forecastPrice.getData());
 		return ResponseResult.success(forecastPriceResponse);
 	}
 }
