@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2023/2/14 - 9:50
  */
 @RestController
+@RequestMapping("/direction")
 public class DirectionController {
 	@Autowired
 	private DirectionService directionService;
 
-	@GetMapping("/direction/driving")
+	@GetMapping("/driving")
 	public ResponseResult directionDriving(@RequestBody ForecastPriceDTO forecastPriceDTO) {
 		String depLongitude = forecastPriceDTO.getDepLongitude();
 		String depLatitude = forecastPriceDTO.getDepLatitude();

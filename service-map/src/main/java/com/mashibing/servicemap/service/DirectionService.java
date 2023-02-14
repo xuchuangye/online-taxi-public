@@ -28,20 +28,9 @@ public class DirectionService {
 	 * @param destLatitude  终点维度
 	 * @return
 	 */
-	public ResponseResult directionDriving(
-			String depLongitude,
-			String depLatitude,
-			String destLongitude,
-			String destLatitude) {
-		log.info("出发地经度: " + depLongitude);
-		log.info("出发低纬度: " + depLatitude);
-		log.info("目的地经度: " + destLongitude);
-		log.info("目的地纬度: " + destLatitude);
-
-		log.info("调用地图服务，查询距离和时长");
-		ForecastPriceResponse directionResponse = mapDirectionClient.direction(depLongitude, depLatitude, destLongitude, destLatitude);
-		log.info("读取计价规则");
-		log.info("根据距离、时长、计价规则，计算价格");
+	public ResponseResult directionDriving(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
+		//调用第三方地图接口
+		DirectionResponse directionResponse = mapDirectionClient.mapDirection(depLongitude, depLatitude, destLongitude, destLatitude);
 		return ResponseResult.success(directionResponse);
 	}
 }
