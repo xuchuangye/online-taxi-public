@@ -29,6 +29,11 @@ public enum CommonStatusEnum {
 	USER_IS_NOT_EXISTS(1201, "用户不存在"),
 
 	/**
+	 * 计价规则不存在
+	 */
+	PRICE_RULE_NOT_EXISTS(1301, "计价规则不存在"),
+
+	/**
 	 * 请求成功
 	 */
 	SUCCESS(1,"请求响应成功"),
