@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/api-passenger/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/internal-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/service-passenger-user/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/service-price/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/service-verificationcode/src/main/java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
