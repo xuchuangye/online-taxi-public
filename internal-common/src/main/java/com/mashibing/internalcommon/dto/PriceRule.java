@@ -1,6 +1,8 @@
 package com.mashibing.internalcommon.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author xcy
