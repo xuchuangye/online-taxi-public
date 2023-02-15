@@ -9,6 +9,14 @@ spring:
 
   application:
     name: service-map
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/service-map?characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: root
+    password: root
+
+
 #自定义URL的key
 amap:
   key: 57503e34267a445386d2908e14d60d5a

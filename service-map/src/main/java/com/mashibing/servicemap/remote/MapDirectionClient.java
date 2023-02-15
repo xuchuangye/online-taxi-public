@@ -1,6 +1,6 @@
 package com.mashibing.servicemap.remote;
 
-import com.mashibing.internalcommon.constant.DirectionConstant;
+import com.mashibing.internalcommon.constant.MapConfigConstant;
 import com.mashibing.internalcommon.response.DirectionResponse;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
@@ -39,7 +39,7 @@ public class MapDirectionClient {
 	public DirectionResponse mapDirection(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
 		//组装请求的URL
 		StringBuilder urlBuilder = new StringBuilder();
-		urlBuilder.append(DirectionConstant.DIRECTION_URL);
+		urlBuilder.append(MapConfigConstant.DIRECTION_URL);
 		urlBuilder.append("?");
 		urlBuilder.append("origin=").append(depLongitude).append(",").append(depLatitude);
 		urlBuilder.append("&");
@@ -72,22 +72,22 @@ public class MapDirectionClient {
 		DirectionResponse directionResponse = null;
 		try {
 			JSONObject result = JSONObject.fromObject(directionString);
-			if (result.has(DirectionConstant.STATUS)) {
-				int status = result.getInt(DirectionConstant.STATUS);
+			if (result.has(MapConfigConstant.STATUS)) {
+				int status = result.getInt(MapConfigConstant.STATUS);
 				if (status == 1) {
-					if (result.has(DirectionConstant.ROUTE)) {
-						JSONObject routeObject = result.getJSONObject(DirectionConstant.ROUTE);
-						JSONArray pathsArray = routeObject.getJSONArray(DirectionConstant.PATHS);
+					if (result.has(MapConfigConstant.ROUTE)) {
+						JSONObject routeObject = result.getJSONObject(MapConfigConstant.ROUTE);
+						JSONArray pathsArray = routeObject.getJSONArray(MapConfigConstant.PATHS);
 						JSONObject pathObject = pathsArray.getJSONObject(0);
 
 						directionResponse = new DirectionResponse();
-						if (pathObject.has(DirectionConstant.DISTANCE)) {
-							int distance = pathObject.getInt(DirectionConstant.DISTANCE);
+						if (pathObject.has(MapConfigConstant.DISTANCE)) {
+							int distance = pathObject.getInt(MapConfigConstant.DISTANCE);
 							directionResponse.setDistance(distance);
 						}
 
-						if (pathObject.has(DirectionConstant.DURATION)) {
-							int duration = pathObject.getInt(DirectionConstant.DURATION);
+						if (pathObject.has(MapConfigConstant.DURATION)) {
+							int duration = pathObject.getInt(MapConfigConstant.DURATION);
 							directionResponse.setDuration(duration);
 						}
 					}
