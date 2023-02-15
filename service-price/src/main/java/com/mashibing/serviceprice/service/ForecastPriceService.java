@@ -6,6 +6,7 @@ import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.ForecastPriceDTO;
 import com.mashibing.internalcommon.response.DirectionResponse;
 import com.mashibing.internalcommon.response.ForecastPriceResponse;
+import com.mashibing.internalcommon.utils.BigDecimalUtils;
 import com.mashibing.serviceprice.mapper.PriceRuleMapper;
 import com.mashibing.serviceprice.remote.ServiceMapClient;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,8 @@ public class ForecastPriceService {
 		//调用第三方接口API
 		log.info("读取计价规则");
 		Map<String, Object> queryMap = new HashMap<>();
+
+		//city_code和vehicle_type组成联合索引
 		queryMap.put("city_code", "110000");
 		queryMap.put("vehicle_type", "1");
 		List<PriceRule> priceRules = priceRuleMapper.selectByMap(queryMap);
@@ -76,36 +79,34 @@ public class ForecastPriceService {
 	 */
 	public double getPrice(int distance, int duration, PriceRule priceRule) {
 		//总费用
-		BigDecimal price = new BigDecimal(0);
+		double price = 0.0;
 
 		//起步价
-		BigDecimal startFare = BigDecimal.valueOf(priceRule.getStartFare());
-		price = price.add(startFare);
+		price = BigDecimalUtils.add(price, priceRule.getStartFare());
 
 		//里程费
 		//起步里程：公里
-		BigDecimal startMile = new BigDecimal(priceRule.getStartMile());
 		//需要计费的里程 = 总里程（米转换成公里） - 起步里程（公里）
-		BigDecimal subtract = new BigDecimal(distance).divide(new BigDecimal(1000), 2, BigDecimal.ROUND_HALF_UP).subtract(startMile);
+		;
+		double subtract = BigDecimalUtils.subtract(BigDecimalUtils.divide(distance, 1000), priceRule.getStartMile());
 		//只有需要计算的里程超过起步里程，才需要计价，否则不计价
-		double sub = subtract.doubleValue() < 0 ? 0 : subtract.doubleValue();
+		double sub = subtract < 0 ? 0 : subtract;
 
 		//计程单价
-		BigDecimal unitPricePreMile = BigDecimal.valueOf(priceRule.getUnitPricePreMile());
 		//里程费 = 计程单价 * 需要计费的里程
-		BigDecimal mileFarePrice = unitPricePreMile.multiply(BigDecimal.valueOf(sub));
-		price = price.add(mileFarePrice);
+		double mileFarePrice = BigDecimalUtils.multiply(priceRule.getUnitPricePreMile(), sub);
+		price = BigDecimalUtils.add(price, mileFarePrice);
 
 		//时长费
 		//时长：秒转换成分钟，并且保留小数点后两位，四舍五入
-		BigDecimal durationBigDecimal = new BigDecimal(duration).divide(new BigDecimal(60), 2, BigDecimal.ROUND_HALF_UP);
+		double duration_minute = BigDecimalUtils.divide(duration, 60);
 		//计时单价
-		BigDecimal unitPricePreMinute = BigDecimal.valueOf(priceRule.getUnitPricePreMinute());
 		//时长费 = 时长 * 计时单价
-		BigDecimal durationPrice = durationBigDecimal.multiply(unitPricePreMinute);
-		price = price.add(durationPrice);
+		double durationPrice = BigDecimalUtils.multiply(priceRule.getUnitPricePreMinute(), duration_minute);
+		price = BigDecimalUtils.add(price, durationPrice);
 
-		return price.doubleValue();
+		price = BigDecimal.valueOf(price).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		return price;
 	}
 
 	/*public static void main(String[] args) {
