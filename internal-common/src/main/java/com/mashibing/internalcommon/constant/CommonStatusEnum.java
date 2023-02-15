@@ -34,6 +34,11 @@ public enum CommonStatusEnum {
 	PRICE_RULE_NOT_EXISTS(1301, "计价规则不存在"),
 
 	/**
+	 * 拉取地图地区字典信息错误
+	 */
+	DISTRICT_URL_ERROR(1401, "拉取地图地区字典信息错误"),
+
+	/**
 	 * 请求成功
 	 */
 	SUCCESS(1,"请求响应成功"),
