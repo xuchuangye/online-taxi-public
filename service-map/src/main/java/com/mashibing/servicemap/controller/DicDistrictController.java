@@ -4,6 +4,7 @@ import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.servicemap.service.DicDistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,9 +18,9 @@ public class DicDistrictController {
 	private DicDistrictService dicDistrictService;
 
 
-	@GetMapping("/dic-district")
-	public ResponseResult getDicDistrict(String keywords) {
-		dicDistrictService.getDicDistrict(keywords);
-		return  ResponseResult.success("");
+	@GetMapping("/dic-district/{keywords}")
+	public ResponseResult getDicDistrict(@PathVariable("keywords") String keywords) {
+
+		return dicDistrictService.initDicDistrict(keywords);
 	}
 }
