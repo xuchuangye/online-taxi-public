@@ -99,11 +99,11 @@ public class DriverUser {
 	/**
 	 * 合同（或协议）有效日期起
 	 */
-	private LocalDate contract_on;
+	private LocalDate contractOn;
 	/**
 	 * 合同（或协议）有效日期止
 	 */
-	private LocalDate contract_off;
+	private LocalDate contractOff;
 	/**
 	 * 司机状态，1：无效，0：有效
 	 */
