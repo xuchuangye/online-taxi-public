@@ -23,6 +23,7 @@
         <module>internal-common</module>
         <module>service-map</module>
         <module>service-driver-user</module>
+        <module>api-boss</module>
     </modules>
 
     <packaging>pom</packaging>
