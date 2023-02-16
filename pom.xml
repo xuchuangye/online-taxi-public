@@ -22,6 +22,7 @@
         <module>service-price</module>
         <module>internal-common</module>
         <module>service-map</module>
+        <module>service-driver-user</module>
     </modules>
 
     <packaging>pom</packaging>

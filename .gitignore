@@ -2,3 +2,4 @@ service-price/target/
 internal-common/target/
 api-passenger/target/
 service-map/target/
+service-driver-user/target/

@@ -8,11 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="internal-common" />
+        <module name="api-passenger" />
+        <module name="service-driver-user" />
+        <module name="service-verificationcode" />
         <module name="service-price" />
         <module name="service-map" />
-        <module name="api-passenger" />
         <module name="service-passenger-user" />
-        <module name="service-verificationcode" />
       </profile>
     </annotationProcessing>
   </component>
@@ -20,6 +21,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-passenger" options="-parameters" />
       <module name="internal-common" options="-parameters" />
+      <module name="service-driver-user" options="-parameters" />
       <module name="service-map" options="-parameters" />
       <module name="service-passenger-user" options="-parameters" />
       <module name="service-price" options="-parameters" />
