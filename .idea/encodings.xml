@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$PROJECT_DIR$/api-boss/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-driver/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/api-passenger/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/internal-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/service-driver-user/src/main/java" charset="UTF-8" />

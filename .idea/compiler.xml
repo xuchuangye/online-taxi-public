@@ -15,12 +15,14 @@
         <module name="service-price" />
         <module name="service-map" />
         <module name="service-passenger-user" />
+        <module name="api-driver" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-boss" options="-parameters" />
+      <module name="api-driver" options="-parameters" />
       <module name="api-passenger" options="-parameters" />
       <module name="internal-common" options="-parameters" />
       <module name="service-driver-user" options="-parameters" />
