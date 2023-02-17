@@ -52,15 +52,19 @@ public enum CommonStatusEnum {
 	CAR_BIND_EXISTS(1505, "车辆已经被绑定过了"),
 
 	/**
+	 * 司机用户的提示：1601 ~ 1699
+	 */
+	DRIVER_NOT_EXISTS(1601, "司机用户不存在"),
+
+	/**
 	 * 请求成功
 	 */
-	SUCCESS(1,"请求响应成功"),
+	SUCCESS(1, "请求响应成功"),
 
 	/**
 	 * 请求失败
 	 */
-	FAIL(0, "请求响应失败");
-	;
+	FAIL(0, "请求响应失败");;
 	private int code;
 	private String message;
 

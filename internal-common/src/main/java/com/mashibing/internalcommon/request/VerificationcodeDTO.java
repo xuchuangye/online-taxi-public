@@ -18,4 +18,9 @@ public class VerificationcodeDTO {
 	 * 验证码
 	 */
 	private String verificationcode;
+
+	/**
+	 * 司机手机号
+	 */
+	private String driverPhone;
 }
