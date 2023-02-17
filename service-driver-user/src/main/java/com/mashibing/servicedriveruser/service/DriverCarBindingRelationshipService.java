@@ -1,6 +1,7 @@
 package com.mashibing.servicedriveruser.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.constant.DriverCarBindingConstant;
 import com.mashibing.internalcommon.dto.DriverCarBindingRelationship;
@@ -70,10 +71,32 @@ public class DriverCarBindingRelationshipService {
 
 	/**
 	 * 司机和车辆关系进行解绑
-	 * @param driverCarBindingRelationship
+	 * @param driverCarBindingRelationshipParam
 	 * @return
 	 */
-	public ResponseResult unbind(DriverCarBindingRelationship driverCarBindingRelationship) {
+	public ResponseResult unbind(DriverCarBindingRelationship driverCarBindingRelationshipParam) {
+		QueryWrapper<DriverCarBindingRelationship> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("driver_id", driverCarBindingRelationshipParam.getDriverId());
+		queryWrapper.eq("car_id", driverCarBindingRelationshipParam.getCarId());
+		queryWrapper.eq("bind_state", DriverCarBindingConstant.DRIVER_CAR_BIND);
+		//司机和车辆没有进行过绑定
+		if (driverCarBindingRelationshipMapper.selectCount(queryWrapper) == 0) {
+			return ResponseResult.fail(CommonStatusEnum.DRIVER_CAR_BIND_NOT_EXISTS.getCode()
+			,CommonStatusEnum.DRIVER_CAR_BIND_NOT_EXISTS.getMessage());
+		}
+		//司机和车辆已经解绑过了
+		queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("driver_id", driverCarBindingRelationshipParam.getDriverId());
+		queryWrapper.eq("car_id", driverCarBindingRelationshipParam.getCarId());
+		queryWrapper.eq("bind_state", DriverCarBindingConstant.DRIVER_CAR_UNBIND);
+		if (driverCarBindingRelationshipMapper.selectCount(queryWrapper) == 1) {
+			return ResponseResult.fail(CommonStatusEnum.DRIVER_CAR_UNBIND_EXISTS.getCode()
+			,CommonStatusEnum.DRIVER_CAR_UNBIND_EXISTS.getMessage());
+		}
+		
+		//查询数据库中的司机和车辆关系
+		DriverCarBindingRelationship driverCarBindingRelationship = driverCarBindingRelationshipMapper.selectById(driverCarBindingRelationshipParam.getId());
+
 		LocalDateTime now = LocalDateTime.now();
 		//设置解绑时间
 		driverCarBindingRelationship.setUnBindingTime(now);

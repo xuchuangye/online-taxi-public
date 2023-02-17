@@ -41,12 +41,15 @@ public enum CommonStatusEnum {
 	/**
 	 * 司机和车辆关系的提示：1501 ~ 1599
 	 */
-	DRIVER_CAR_BIND_EXISTS(1501, "司机和车辆关系已经绑定，请勿重复绑定"),
+	DRIVER_CAR_BIND_EXISTS(1501, "司机和车辆关系已经绑定"),
 
+	DRIVER_CAR_BIND_NOT_EXISTS(1502, "司机和车辆关系没有绑定，无法进行解绑"),
 
-	DRIVER_BIND_EXISTS(1502, "司机已经被绑定过了，请勿重复绑定"),
+	DRIVER_CAR_UNBIND_EXISTS(1503, "司机和车辆关系已经解绑，请勿重复解绑"),
 
-	CAR_BIND_EXISTS(1503, "车辆已经被绑定过了，请勿重复绑定"),
+	DRIVER_BIND_EXISTS(1504, "司机已经被绑定过了"),
+
+	CAR_BIND_EXISTS(1505, "车辆已经被绑定过了"),
 
 	/**
 	 * 请求成功
