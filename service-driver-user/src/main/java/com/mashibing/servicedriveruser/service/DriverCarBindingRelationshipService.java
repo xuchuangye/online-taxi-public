@@ -93,7 +93,6 @@ public class DriverCarBindingRelationshipService {
 			return ResponseResult.fail(CommonStatusEnum.DRIVER_CAR_UNBIND_EXISTS.getCode()
 			,CommonStatusEnum.DRIVER_CAR_UNBIND_EXISTS.getMessage());
 		}
-		
 		//查询数据库中的司机和车辆关系
 		DriverCarBindingRelationship driverCarBindingRelationship = driverCarBindingRelationshipMapper.selectById(driverCarBindingRelationshipParam.getId());
 
