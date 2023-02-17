@@ -39,6 +39,16 @@ public enum CommonStatusEnum {
 	DISTRICT_URL_ERROR(1401, "拉取地图地区字典信息错误"),
 
 	/**
+	 * 司机和车辆关系的提示：1501 ~ 1599
+	 */
+	DRIVER_CAR_BIND_EXISTS(1501, "司机和车辆关系已经绑定，请勿重复绑定"),
+
+
+	DRIVER_BIND_EXISTS(1502, "司机已经被绑定过了，请勿重复绑定"),
+
+	CAR_BIND_EXISTS(1503, "车辆已经被绑定过了，请勿重复绑定"),
+
+	/**
 	 * 请求成功
 	 */
 	SUCCESS(1,"请求响应成功"),

@@ -1,8 +1,5 @@
-package com.mashibing.servicedriveruser.entity;
+package com.mashibing.internalcommon.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,13 +13,11 @@ import java.time.LocalDateTime;
  * @author xuchuangye
  * @since 2023-02-17
  */
-@TableName("driver_car_binding_relationship")
 @Data
 public class DriverCarBindingRelationship implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Long driverId;
