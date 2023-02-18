@@ -27,7 +27,7 @@ public class MySQLGenerator {
 		String outputMapperDir = "I:\\online-taxi-public\\service-driver-user\\src\\main\\java\\com\\mashibing\\servicedriveruser\\mapper";
 
 		//策略配置
-		String tableName = "driver_car_binding_relationship";
+		String tableName = "driver_user_work_status";
 		FastAutoGenerator.create(url, username, password)
 				//全局配置
 				.globalConfig(builder -> {

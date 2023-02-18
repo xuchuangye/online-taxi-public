@@ -2,10 +2,13 @@ package com.mashibing.servicedriveruser.service;
 
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.constant.DriverConstant;
+import com.mashibing.internalcommon.constant.DriverUserWorkStatusConstant;
 import com.mashibing.internalcommon.dto.DriverUser;
+import com.mashibing.internalcommon.dto.DriverUserWorkStatus;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.DriverUserResponse;
 import com.mashibing.servicedriveruser.mapper.DriverUserMapper;
+import com.mashibing.servicedriveruser.mapper.DriverUserWorkStatusMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,9 @@ public class DriverUserService {
 	@Autowired
 	private DriverUserMapper driverUserMapper;
 
+	@Autowired
+	private DriverUserWorkStatusMapper driverUserWorkStatusMapper;
+
 	/**
 	 * 插入司机信息
 	 *
@@ -37,6 +43,17 @@ public class DriverUserService {
 		//更新时间
 		driverUser.setGmtModified(now);
 		driverUserMapper.insert(driverUser);
+
+		//更新司机状态表
+		DriverUserWorkStatus driverUserWorkStatus = new DriverUserWorkStatus();
+		driverUserWorkStatus.setDriverId(driverUser.getId());
+		//目前是收车状态
+		driverUserWorkStatus.setWorkStatus(DriverUserWorkStatusConstant.DRIVER_STATUS_STOP);
+		driverUserWorkStatus.setGmtCreate(now);
+		driverUserWorkStatus.setGmtModified(now);
+
+		driverUserWorkStatusMapper.insert(driverUserWorkStatus);
+
 		return ResponseResult.success("");
 	}
 
