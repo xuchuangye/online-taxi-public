@@ -1,5 +1,6 @@
 package com.mashibing.servicedriveruser.controller;
 
+import com.mashibing.internalcommon.constant.DriverConstant;
 import com.mashibing.internalcommon.dto.DriverUser;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.DriverUserResponse;
@@ -34,9 +35,9 @@ public class DriverUserController {
 		DriverUser driverUserDB = driverUserResponseResult.getData();
 
 		DriverUserResponse driverUserResponse = new DriverUserResponse();
-		int isExists = 1;
+		int isExists = DriverConstant.DRIVER_EXISTS;
 		if (driverUserDB == null) {
-			isExists = 0;
+			isExists = DriverConstant.DRIVER_NOT_EXISTS;
 			//如果司机不存在，返回响应传入的司机手机号
 			driverUserResponse.setDriverPhone(driverPhone);
 		} else {

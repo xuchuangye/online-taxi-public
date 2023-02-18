@@ -3,10 +3,12 @@ package com.mashibing.apidriver.service;
 import com.mashibing.apidriver.remote.ServiceDriverUserClient;
 import com.mashibing.apidriver.remote.ServiceVerificationcodeClient;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
+import com.mashibing.internalcommon.constant.DriverConstant;
 import com.mashibing.internalcommon.dto.DriverUser;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.VerificationcodeDTO;
 import com.mashibing.internalcommon.response.DriverUserResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
  * @date 2023/2/18 - 7:16
  */
 @Service
+@Slf4j
 public class VerificationcodeService {
 	@Autowired
 	private ServiceDriverUserClient serviceDriverUserClient;
@@ -29,17 +32,19 @@ public class VerificationcodeService {
 	 * @return
 	 */
 	public ResponseResult checkAndSendVerificationcode(String driverPhone) {
-		/*//远程调用service-driver-user，从数据库中查询司机信息
+		//远程调用service-driver-user，从数据库中查询司机信息
 		ResponseResult<DriverUserResponse> driverUserResponseResponseResult = serviceDriverUserClient.selectDriverUser(driverPhone);
 
-		String driverPhoneData = driverUserResponseResponseResult.getData().getDriverPhone();
+		String driverPhoneDB = driverUserResponseResponseResult.getData().getDriverPhone();
 		Integer isExists = driverUserResponseResponseResult.getData().getIsExists();
 
 		//如果司机不存在，返回提示信息
-		if (isExists == 0) {
+		if (isExists == DriverConstant.DRIVER_NOT_EXISTS) {
 			return ResponseResult.fail(CommonStatusEnum.DRIVER_NOT_EXISTS.getCode(),
 					CommonStatusEnum.DRIVER_NOT_EXISTS.getMessage());
-		} else {
+		}
+		log.info(driverPhone + "：司机存在");
+		/*else {
 			//如果司机用户存在，远程调用service-verificationcode进行获取验证码
 			serviceVerificationcodeClient.numberCode(6);
 
