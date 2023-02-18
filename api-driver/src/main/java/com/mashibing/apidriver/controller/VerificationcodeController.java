@@ -7,6 +7,7 @@ import com.mashibing.internalcommon.request.VerificationcodeDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,10 +22,28 @@ public class VerificationcodeController {
 	@Autowired
 	private VerificationcodeService verificationcodeService;
 
-	@GetMapping("/verificationcode")
+	/**
+	 * 司机获取验证码
+	 * @param verificationcodeDTO
+	 * @return
+	 */
+	@GetMapping("/verification-code")
 	public ResponseResult getVerificationcode(@RequestBody VerificationcodeDTO verificationcodeDTO) {
 		String driverPhone = verificationcodeDTO.getDriverPhone();
 		log.info("司机手机号：" + driverPhone);
 		return verificationcodeService.checkAndSendVerificationcode(driverPhone);
+	}
+
+	/**
+	 * 司机校验验证码
+	 * @param verificationcodeDTO
+	 * @return
+	 */
+	@PostMapping("/verification-code-check")
+	public ResponseResult checkVerificationcode(@RequestBody VerificationcodeDTO verificationcodeDTO) {
+		String driverPhone = verificationcodeDTO.getDriverPhone();
+		String verificationcode = verificationcodeDTO.getVerificationcode();
+
+		return verificationcodeService.checkVerificationcode(driverPhone, verificationcode);
 	}
 }
