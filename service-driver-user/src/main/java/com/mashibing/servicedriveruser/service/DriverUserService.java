@@ -1,6 +1,7 @@
 package com.mashibing.servicedriveruser.service;
 
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
+import com.mashibing.internalcommon.constant.DriverConstant;
 import com.mashibing.internalcommon.dto.DriverUser;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.DriverUserResponse;
@@ -59,19 +60,16 @@ public class DriverUserService {
 	 * @param driverPhone 司机手机号
 	 * @return
 	 */
-	public ResponseResult selectDriverUser(String driverPhone) {
+	public ResponseResult<DriverUser> selectDriverUser(String driverPhone) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("driver_phone", driverPhone);
+		map.put("state", DriverConstant.DRIVER_STATE_VALID);
 		List<DriverUser> driverUsers = driverUserMapper.selectByMap(map);
-
-		DriverUserResponse driverUserResponse = new DriverUserResponse();
 		if (driverUsers.isEmpty()) {
-			driverUserResponse.setIsExists(0);
-		} else {
-			DriverUser driverUser = driverUsers.get(0);
-			driverUserResponse.setDriverPhone(driverUser.getDriverPhone());
-			driverUserResponse.setIsExists(1);
+			return ResponseResult.fail(CommonStatusEnum.DRIVER_NOT_EXISTS.getCode(),
+					CommonStatusEnum.DRIVER_NOT_EXISTS.getMessage());
 		}
-		return ResponseResult.success(driverUserResponse);
+		DriverUser driverUser = driverUsers.get(0);
+		return ResponseResult.success(driverUser);
 	}
 }
