@@ -8,6 +8,7 @@ import com.mashibing.internalcommon.dto.DriverUser;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.VerificationcodeDTO;
 import com.mashibing.internalcommon.response.DriverUserResponse;
+import com.mashibing.internalcommon.response.NumberCodeResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,14 +44,16 @@ public class VerificationcodeService {
 			return ResponseResult.fail(CommonStatusEnum.DRIVER_NOT_EXISTS.getCode(),
 					CommonStatusEnum.DRIVER_NOT_EXISTS.getMessage());
 		}
-		log.info(driverPhone + "：司机存在");
-		/*else {
+		//log.info(driverPhone + "：司机存在");
+		else {
 			//如果司机用户存在，远程调用service-verificationcode进行获取验证码
-			serviceVerificationcodeClient.numberCode(6);
+			ResponseResult<NumberCodeResponse> numberCodeResponseResponseResult = serviceVerificationcodeClient.numberCode(6);
 
+			int numberCode = numberCodeResponseResponseResult.getData().getNumberCode();
+			log.info("验证码：" + numberCode);
 			//存入到Redis
 
-		}*/
+		}
 		return ResponseResult.success("");
 	}
 }
