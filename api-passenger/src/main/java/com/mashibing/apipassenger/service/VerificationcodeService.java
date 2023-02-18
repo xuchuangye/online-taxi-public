@@ -49,7 +49,7 @@ public class VerificationcodeService {
 		System.out.println("存入Redis");
 
 		//key,value,ttl过期时间
-		String key = RedisKeyUtils.generateVerificationcodeKey(phone);
+		String key = RedisKeyUtils.generateVerificationcodeKey(phone, IdentityConstant.PASSENGER_IDENTITY);
 		stringRedisTemplate.opsForValue().set(key, numberCode + "", 2, TimeUnit.MINUTES);
 
 		//返回值
@@ -66,7 +66,7 @@ public class VerificationcodeService {
 	 */
 	public ResponseResult checkVerificationcode(String phone, String verificationcode) {
 		//key
-		String VerificationcodeKey = RedisKeyUtils.generateVerificationcodeKey(phone);
+		String VerificationcodeKey = RedisKeyUtils.generateVerificationcodeKey(phone, IdentityConstant.PASSENGER_IDENTITY);
 		//value
 		String redisVerificationcode = stringRedisTemplate.opsForValue().get(VerificationcodeKey);
 		System.out.println(redisVerificationcode);

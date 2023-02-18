@@ -13,5 +13,5 @@ public class IdentityConstant {
 	/**
 	 * 司机
 	 */
-	public static final String DRIVER_IDENTITY = "1";
+	public static final String DRIVER_IDENTITY = "2";
 }

@@ -7,7 +7,7 @@ package com.mashibing.internalcommon.utils;
 public class RedisKeyUtils {
 
 	//验证码的前缀
-	private static final String verificationcodePrefix = "passenger-verificationcode-";
+	private static final String verificationcodePrefix = "verificationcode-";
 
 	//token的前缀
 	private static final String tokenPrefix = "token-";
@@ -16,10 +16,11 @@ public class RedisKeyUtils {
 	 * 拼接验证码的前缀 + 手机号作为Redis的key值
 	 *
 	 * @param phone 手机号
+	 * @param identity 身份标识
 	 * @return
 	 */
-	public static String generateVerificationcodeKey(String phone) {
-		return verificationcodePrefix + phone;
+	public static String generateVerificationcodeKey(String phone, String identity) {
+		return verificationcodePrefix + identity + "-" + phone;
 	}
 
 	/**
