@@ -55,4 +55,9 @@ public class MapConfigConstant {
 	 * 街道
 	 */
 	public static final String STREET = "street";
+
+	/**
+	 * 调用第三方接口：高德
+	 */
+	public static final String SERVICE_ADD_URL = "https://tsapi.amap.com/v1/track/service/add";
 }

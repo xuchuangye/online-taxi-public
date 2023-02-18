@@ -1,0 +1,30 @@
+创建服务：
+{
+    "data": {
+        "name": "飞滴出行网约车",
+        "sid": 880995
+    },
+    "errcode": 10000,
+    "errdetail": null,
+    "errmsg": "OK"
+}
+创建终端：
+{
+    "data": {
+        "name": "创建终端",
+        "tid": 637229942,
+        "sid": 880995
+    },
+    "errcode": 10000,
+    "errdetail": null,
+    "errmsg": "OK"
+}
+创建轨迹：
+{
+    "data": {
+        "trid": 60
+    },
+    "errcode": 10000,
+    "errdetail": null,
+    "errmsg": "OK"
+}
