@@ -32,14 +32,17 @@ public class CarService {
 		//车辆和终端进行绑定
 		//将车牌号作为绑定终端的name
 		String name = car.getVehicleNo();
+		//获取车辆终端的id
 		ResponseResult<TerminalResponse> terminalResponse = serviceMapClient.addTerminal(name);
 		String tid = terminalResponse.getData().getTid();
 		car.setTid(tid);
 
-		//车辆和轨迹进行绑定
-		ResponseResult<TraceResponse> traceResponse = serviceMapClient.addTrace();
+		//获取车辆轨迹的id
+		ResponseResult<TraceResponse> traceResponse = serviceMapClient.addTrace(tid);
 		Integer trid = traceResponse.getData().getTrid();
+		String trname = traceResponse.getData().getTrname();
 		car.setTrid(trid);
+		car.setTrname(trname);
 
 		carMapper.insert(car);
 		return ResponseResult.success("");

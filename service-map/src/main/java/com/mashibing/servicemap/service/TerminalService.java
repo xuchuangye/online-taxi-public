@@ -20,4 +20,12 @@ public class TerminalService {
 	public ResponseResult<TerminalResponse> addTerminal(String name) {
 		return terminalClient.addTerminal(name);
 	}
+
+	/*public ResponseResult deleteTerminal(String tid) {
+		return terminalClient.deleteTerminal(tid);
+	}
+
+	public ResponseResult selectTerminal(String... tid) {
+		return terminalClient.selectTerminal(tid);
+	}*/
 }

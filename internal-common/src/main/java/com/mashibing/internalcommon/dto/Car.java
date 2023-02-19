@@ -180,6 +180,11 @@ public class Car implements Serializable {
 	 * 车辆轨迹id
 	 */
 	private Integer trid;
+
+	/**
+	 * 轨迹名称
+	 */
+	private String trname;
 	/**
 	 * 创建时间
 	 */

@@ -68,7 +68,16 @@ public class MapConfigConstant {
 	public static final String TERMINAL_ADD_URL = "https://tsapi.amap.com/v1/track/terminal/add";
 
 	/**
+	 * 删除终端url
+	 */
+	public static final String TERMINAL_DELETE_URL = "https://tsapi.amap.com/v1/track/terminal/delete";
+	/**
+	 * 查询终端url
+	 */
+	public static final String TERMINAL_SELECT_URL = "https://tsapi.amap.com/v1/track/terminal/list";
+	/**
 	 * 创建轨迹url
 	 */
 	public static final String TRACE_ADD_URL = "https://tsapi.amap.com/v1/track/trace/add";
+
 }

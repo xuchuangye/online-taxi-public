@@ -20,7 +20,7 @@ public class TraceController {
 	private TraceService traceService;
 
 	@PostMapping("/add")
-	public ResponseResult<TraceResponse> addTrace(@RequestParam int tid) {
+	public ResponseResult<TraceResponse> addTrace(@RequestParam String tid) {
 		return traceService.addTrace(tid);
 	}
 }

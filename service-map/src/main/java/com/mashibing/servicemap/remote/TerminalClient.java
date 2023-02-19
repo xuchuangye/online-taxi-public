@@ -51,4 +51,44 @@ public class TerminalClient {
 
 		return ResponseResult.success(terminalResponse);
 	}
+
+	/**
+	 * 删除终端
+	 *
+	 * @param tid
+	 * @return
+	 */
+	/*public ResponseResult deleteTerminal(String tid) {
+		StringBuilder url = new StringBuilder();
+		url.append(MapConfigConstant.TERMINAL_DELETE_URL);
+		url.append("?");
+		url.append("key=").append(aMapKey);
+		url.append("&");
+		url.append("sid=").append(sid);
+		url.append("&");
+		url.append("tid=").append(tid);
+		return ResponseResult.success("");
+	}*/
+
+	/**
+	 * 查询终端
+	 * https://tsapi.amap.com/v1/track/terminal/list?key=e0d3379f01867fcdb15286f434e7eaa3&sid=880995&tid=637214693
+	 * @param tid 多个或两个参数
+	 * @return
+	 */
+	/*public ResponseResult selectTerminal(String... tid) {
+		StringBuilder url = new StringBuilder();
+		url.append(MapConfigConstant.TERMINAL_DELETE_URL);
+		url.append("?");
+		url.append("key=").append(aMapKey);
+		url.append("&");
+		url.append("sid=").append(sid);
+		url.append("&");
+		url.append("tid=").append(tid);
+
+		ResponseEntity<String> responseEntity = restTemplate.getForEntity(url.toString(), String.class);
+		JSONObject jsonObject = JSONObject.fromObject(responseEntity.getBody());
+
+		return ResponseResult.success("");
+	}*/
 }

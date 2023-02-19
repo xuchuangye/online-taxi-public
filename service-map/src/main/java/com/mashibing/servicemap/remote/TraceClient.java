@@ -33,7 +33,7 @@ public class TraceClient {
 	 *
 	 * @return
 	 */
-	public ResponseResult<TraceResponse> addTrace(int tid) {
+	public ResponseResult<TraceResponse> addTrace(String tid) {
 		StringBuilder url = new StringBuilder();
 		url.append(MapConfigConstant.TRACE_ADD_URL);
 		url.append("?");

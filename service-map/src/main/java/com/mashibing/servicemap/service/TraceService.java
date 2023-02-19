@@ -16,7 +16,7 @@ public class TraceService {
 	@Autowired
 	private TraceClient traceClient;
 
-	public ResponseResult<TraceResponse> addTrace(int tid) {
+	public ResponseResult<TraceResponse> addTrace(String tid) {
 		return traceClient.addTrace(tid);
 	}
 }
