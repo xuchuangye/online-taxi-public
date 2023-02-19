@@ -80,4 +80,9 @@ public class MapConfigConstant {
 	 */
 	public static final String TRACE_ADD_URL = "https://tsapi.amap.com/v1/track/trace/add";
 
+	/**
+	 * 轨迹点上传url
+	 */
+	public static final String POINT_UPLOAD_URL = "https://tsapi.amap.com/v1/track/point/upload";
+
 }
