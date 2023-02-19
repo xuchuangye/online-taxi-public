@@ -32,7 +32,7 @@ public class TerminalClient {
 	 * @param name
 	 * @return
 	 */
-	public ResponseResult<TerminalResponse> addTerminal(String name) {
+	public ResponseResult<TerminalResponse> addTerminal(String name, String desc) {
 		StringBuilder url = new StringBuilder();
 		url.append(MapConfigConstant.TERMINAL_ADD_URL);
 		url.append("?");
@@ -41,8 +41,13 @@ public class TerminalClient {
 		url.append("sid=").append(sid);
 		url.append("&");
 		url.append("name=").append(name);
+		url.append("&");
+		url.append("desc=").append(desc);
 
+		System.out.println("高德地图的请求：" + url.toString());
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(url.toString(), null, String.class);
+		System.out.println("高德地图的响应：" + responseEntity.getBody());
+
 		JSONObject body = JSONObject.fromObject(responseEntity.getBody());
 		JSONObject data = body.getJSONObject("data");
 		String tid = data.getString("tid");
