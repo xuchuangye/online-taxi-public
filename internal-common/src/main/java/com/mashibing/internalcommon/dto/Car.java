@@ -175,6 +175,11 @@ public class Car implements Serializable {
 	 * 车辆和终端绑定的终端id
 	 */
 	private String tid;
+
+	/**
+	 * 车辆轨迹id
+	 */
+	private Integer trid;
 	/**
 	 * 创建时间
 	 */
