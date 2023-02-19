@@ -33,6 +33,17 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <!-- 远程调用openfeign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <!--  -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+
         <!-- 引入自动生成代码的jar包 -->
         <dependency>
             <groupId>com.baomidou</groupId>
