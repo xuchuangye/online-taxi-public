@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author xcy
@@ -46,5 +49,12 @@ public class CarService {
 
 		carMapper.insert(car);
 		return ResponseResult.success("");
+	}
+
+	public ResponseResult<Car> getCarById(Long carId) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("id", carId);
+		List<Car> cars = carMapper.selectByMap(map);
+		return ResponseResult.success(cars.get(0));
 	}
 }
