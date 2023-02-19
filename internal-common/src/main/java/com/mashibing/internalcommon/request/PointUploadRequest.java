@@ -13,7 +13,7 @@ public class PointUploadRequest {
 	/**
 	 * 终端id
 	 */
-	private String tid;
+	private Integer tid;
 	/**
 	 * 轨迹id
 	 */

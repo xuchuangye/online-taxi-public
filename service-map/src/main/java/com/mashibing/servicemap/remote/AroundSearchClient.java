@@ -2,6 +2,9 @@ package com.mashibing.servicemap.remote;
 
 import com.mashibing.internalcommon.constant.MapConfigConstant;
 import com.mashibing.internalcommon.dto.ResponseResult;
+import com.mashibing.internalcommon.response.TerminalResponse;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author xcy
@@ -44,7 +49,7 @@ public class AroundSearchClient {
 	 */
 	public ResponseResult aroundSearch(String center, String radius) {
 		StringBuilder url = new StringBuilder();
-		url.append(MapConfigConstant.AROUND_SEARCH_URL);
+		url.append(MapConfigConstant.TERMINAL_AROUND_SEARCH_URL);
 		url.append("?");
 		url.append("key=").append(aMapKey);
 		url.append("&");
@@ -54,9 +59,33 @@ public class AroundSearchClient {
 		url.append("&");
 		url.append("radius=").append(radius);
 
-		System.out.println("周边搜索的请求：" + url.toString());
+		System.out.println("终端周边搜索的请求：" + url.toString());
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URI.create(url.toString()), null, String.class);
-		System.out.println("周边搜索的响应：" + responseEntity.getBody());
-		return ResponseResult.success("");
+		System.out.println("终端周边搜索的响应：" + responseEntity.getBody());
+		JSONObject body = JSONObject.fromObject(responseEntity.getBody());
+		JSONObject data = body.getJSONObject("data");
+
+		TerminalResponse aroundSearchResponse = new TerminalResponse();
+		List<TerminalResponse> lists = new ArrayList<>();
+
+		if (data != null) {
+			if (data.has(MapConfigConstant.COUNT)) {
+				int count = data.getInt(MapConfigConstant.COUNT);
+				if (count == 1) {
+					JSONArray resultsArray = data.getJSONArray(MapConfigConstant.RESULTS);
+
+					for (int i = 0; i < resultsArray.size(); i++) {
+						JSONObject result = resultsArray.getJSONObject(i);
+						Integer tid = result.getInt(MapConfigConstant.TID);
+						Integer carId = result.getInt(MapConfigConstant.DESC);
+						aroundSearchResponse.setTid(tid);
+						aroundSearchResponse.setDesc(carId);
+						lists.add(aroundSearchResponse);
+					}
+				}
+			}
+		}
+
+		return ResponseResult.success(lists);
 	}
 }

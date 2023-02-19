@@ -38,7 +38,7 @@ public class CarService {
 		String name = car.getVehicleNo();
 		//获取车辆终端的id
 		ResponseResult<TerminalResponse> terminalResponse = serviceMapClient.addTerminal(name, car.getId() + "");
-		String tid = terminalResponse.getData().getTid();
+		Integer tid = terminalResponse.getData().getTid();
 		car.setTid(tid);
 
 		//获取车辆轨迹的id

@@ -52,7 +52,7 @@ public class PointUploadClient {
 	 * @return
 	 */
 	public ResponseResult pointUpload(PointUploadRequest pointUploadRequest) {
-		String tid = pointUploadRequest.getTid();
+		Integer tid = pointUploadRequest.getTid();
 		String trid = pointUploadRequest.getTrid();
 		PointDTO[] points = pointUploadRequest.getPoints();
 

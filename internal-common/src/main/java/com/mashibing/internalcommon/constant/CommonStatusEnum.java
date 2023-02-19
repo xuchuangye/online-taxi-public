@@ -56,6 +56,8 @@ public enum CommonStatusEnum {
 	 */
 	DRIVER_NOT_EXISTS(1601, "司机用户不存在"),
 
+
+
 	/**
 	 * 请求成功
 	 */

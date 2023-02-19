@@ -50,7 +50,7 @@ public class TerminalClient {
 
 		JSONObject body = JSONObject.fromObject(responseEntity.getBody());
 		JSONObject data = body.getJSONObject("data");
-		String tid = data.getString("tid");
+		Integer tid = data.getInt("tid");
 		TerminalResponse terminalResponse = new TerminalResponse();
 		terminalResponse.setTid(tid);
 

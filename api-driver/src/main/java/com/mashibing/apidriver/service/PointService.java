@@ -27,7 +27,7 @@ public class PointService {
 		Long carId = apiDriverPointRequest.getCarId();
 		//根据carId获取tid和trid，调用service-driver-user的接口
 		ResponseResult<Car> car = serviceDriverUserClient.getCar(carId);
-		String tid = car.getData().getTid();
+		Integer tid = car.getData().getTid();
 		Integer trid = car.getData().getTrid();
 		//调用service-map去上传
 		PointUploadRequest pointUploadRequest = new PointUploadRequest();
