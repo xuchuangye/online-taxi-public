@@ -44,9 +44,9 @@ public class TerminalClient {
 		url.append("&");
 		url.append("desc=").append(desc);
 
-		System.out.println("高德地图的请求：" + url.toString());
+		System.out.println("创建终端的请求：" + url.toString());
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(url.toString(), null, String.class);
-		System.out.println("高德地图的响应：" + responseEntity.getBody());
+		System.out.println("创建终端的响应：" + responseEntity.getBody());
 
 		JSONObject body = JSONObject.fromObject(responseEntity.getBody());
 		JSONObject data = body.getJSONObject("data");

@@ -31,12 +31,13 @@ public class CarService {
 		LocalDateTime now = LocalDateTime.now();
 		car.setGmtCreate(now);
 		car.setGmtModified(now);
-
+		//插入car
+		carMapper.insert(car);
 		//车辆和终端进行绑定
 		//将车牌号作为绑定终端的name
 		String name = car.getVehicleNo();
 		//获取车辆终端的id
-		ResponseResult<TerminalResponse> terminalResponse = serviceMapClient.addTerminal(name);
+		ResponseResult<TerminalResponse> terminalResponse = serviceMapClient.addTerminal(name, car.getId() + "");
 		String tid = terminalResponse.getData().getTid();
 		car.setTid(tid);
 
@@ -46,8 +47,8 @@ public class CarService {
 		String trname = traceResponse.getData().getTrname();
 		car.setTrid(trid);
 		car.setTrname(trname);
-
-		carMapper.insert(car);
+		//更新car
+		carMapper.updateById(car);
 		return ResponseResult.success("");
 	}
 

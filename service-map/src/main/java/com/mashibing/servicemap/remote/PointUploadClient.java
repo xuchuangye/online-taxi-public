@@ -85,10 +85,10 @@ public class PointUploadClient {
 		}
 		//右中括号的URL编码：%5D
 		url.append("%5D");
-		System.out.println("高德地图请求：" + url.toString());
+		System.out.println("轨迹点上传的请求：" + url.toString());
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(URI.create(url.toString()), null, String.class);
 		JSONObject body = JSONObject.fromObject(responseEntity.getBody());
-		System.out.println("高德地图响应：" + body);
+		System.out.println("轨迹点上传的响应：" + body);
 		JSONObject data = body.getJSONObject("data");
 
 		return ResponseResult.success("");
