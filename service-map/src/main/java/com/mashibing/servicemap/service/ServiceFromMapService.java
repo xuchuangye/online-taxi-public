@@ -16,6 +16,6 @@ public class ServiceFromMapService {
 	private ServiceFromMapClient serviceFromMapClient;
 
 	public ResponseResult addService(String name) {
-		return serviceFromMapClient.add(name);
+		return serviceFromMapClient.addService(name);
 	}
 }
