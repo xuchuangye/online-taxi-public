@@ -13,6 +13,16 @@ import java.time.LocalDateTime;
 public class OrderRequest {
 
 	/**
+	 * 乘客id
+	 */
+	private Long passengerId;
+
+	/**
+	 * 乘客手机号
+	 */
+	private String passengerPhone;
+
+	/**
 	 * 发起地行政区划代码
 	 */
 	private String address;
