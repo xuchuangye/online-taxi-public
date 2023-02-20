@@ -29,13 +29,15 @@ public enum CommonStatusEnum {
 	USER_IS_NOT_EXISTS(1201, "用户不存在"),
 
 	/**
-	 * 计价规则不存在
+	 * 计价规则的提示：1301 ~ 1399
 	 */
 	PRICE_RULE_NOT_EXISTS(1301, "计价规则不存在"),
 
 	PRICE_RULE_EXISTS(1302, "计价规则已存在"),
 
 	PRICE_RULE_NOT_CHANGE(1303, "计价规则没有变化"),
+
+	PRICE_RULE_NOT_NEWEST(1304, "计价规则的版本不是最新的"),
 
 	/**
 	 * 拉取地图地区字典信息错误
@@ -59,7 +61,6 @@ public enum CommonStatusEnum {
 	 * 司机用户的提示：1601 ~ 1699
 	 */
 	DRIVER_NOT_EXISTS(1601, "司机用户不存在"),
-
 
 
 	/**
