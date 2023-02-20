@@ -33,6 +33,10 @@ public enum CommonStatusEnum {
 	 */
 	PRICE_RULE_NOT_EXISTS(1301, "计价规则不存在"),
 
+	PRICE_RULE_EXISTS(1302, "计价规则已存在"),
+
+	PRICE_RULE_NOT_CHANGE(1303, "计价规则没有变化"),
+
 	/**
 	 * 拉取地图地区字典信息错误
 	 */

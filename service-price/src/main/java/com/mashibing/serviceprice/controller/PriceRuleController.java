@@ -30,4 +30,9 @@ public class PriceRuleController {
 	public ResponseResult addPriceRule(@RequestBody PriceRule priceRule) {
 		return priceRuleService.addPriceRule(priceRule);
 	}
+
+	@PostMapping("/update")
+	public ResponseResult updatePriceRule(@RequestBody PriceRule priceRule) {
+		return priceRuleService.updatePriceRule(priceRule);
+	}
 }
