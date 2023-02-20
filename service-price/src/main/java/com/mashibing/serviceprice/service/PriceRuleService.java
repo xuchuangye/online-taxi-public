@@ -101,4 +101,46 @@ public class PriceRuleService {
 		priceRuleMapper.insert(priceRule);
 		return ResponseResult.success("");
 	}
+
+	/**
+	 * 获取最新版本的计价规则
+	 *
+	 * @param fareType
+	 * @return
+	 */
+	public ResponseResult<PriceRule> getNewestVersion(String fareType) {
+		QueryWrapper<PriceRule> priceRuleQueryWrapper = new QueryWrapper<>();
+		priceRuleQueryWrapper.eq("fare_type", fareType);
+		//获取最新的，也就是fare_version是最大的，所以进行逆序排序
+		priceRuleQueryWrapper.orderByDesc("fare_version");
+
+		List<PriceRule> priceRules = priceRuleMapper.selectList(priceRuleQueryWrapper);
+		if (priceRules == null || priceRules.size() == 0) {
+			return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getCode(),
+					CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getMessage());
+		} else {
+			return ResponseResult.success(priceRules.get(0));
+		}
+	}
+
+	/**
+	 * 判断当前版本的计价规则是否是最新的
+	 *
+	 * @param fareType
+	 * @param fareVersion
+	 * @return
+	 */
+	public ResponseResult<Boolean> isNewestVersion(String fareType, Integer fareVersion) {
+		ResponseResult<PriceRule> priceRuleResponseResult = getNewestVersion(fareType);
+		if (priceRuleResponseResult.getCode() == CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getCode()) {
+			return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getCode(),
+					CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getMessage());
+		}
+		PriceRule priceRuleDB = priceRuleResponseResult.getData();
+		if (priceRuleDB.getFareVersion() > fareVersion) {
+			return ResponseResult.success(false);
+		}else {
+			return ResponseResult.success(true);
+		}
+	}
 }
