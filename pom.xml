@@ -25,6 +25,7 @@
         <module>service-driver-user</module>
         <module>api-boss</module>
         <module>api-driver</module>
+        <module>service-order</module>
     </modules>
 
     <packaging>pom</packaging>

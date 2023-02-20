@@ -1,7 +1,5 @@
 package com.mashibing.internalcommon.dto;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -29,13 +27,11 @@ public class DriverUserWorkStatus implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime gmtCreate;
 
     /**
      * 更新时间
      */
-    @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime gmtModified;
 
 }
