@@ -19,7 +19,7 @@ public class OrderInfoController {
 	private OrderInfoService orderInfoService;
 
 	@PostMapping("/order/add")
-	public ResponseResult addOrder(@RequestBody OrderRequest orderRequest) {
+	public ResponseResult add(@RequestBody OrderRequest orderRequest) {
 		return orderInfoService.addOrder(orderRequest);
 	}
 }
