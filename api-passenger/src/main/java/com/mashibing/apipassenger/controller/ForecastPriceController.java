@@ -3,6 +3,7 @@ package com.mashibing.apipassenger.controller;
 import com.mashibing.apipassenger.service.ForecastPriceService;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.ForecastPriceDTO;
+import com.mashibing.internalcommon.response.ForecastPriceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,7 @@ public class ForecastPriceController {
 	private ForecastPriceService forecastPriceService;
 
 	@PostMapping("/forecast-price")
-	public ResponseResult forecastPrice(@RequestBody ForecastPriceDTO forecastPriceDTO) {
+	public ResponseResult<ForecastPriceResponse> forecastPrice(@RequestBody ForecastPriceDTO forecastPriceDTO) {
 		String depLongitude = forecastPriceDTO.getDepLongitude();
 		String depLatitude = forecastPriceDTO.getDepLatitude();
 		String destLongitude = forecastPriceDTO.getDestLongitude();

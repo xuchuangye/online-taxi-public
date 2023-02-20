@@ -20,7 +20,7 @@ public class ForecastPriceService {
 	@Autowired
 	private ServicePriceClient servicePriceClient;
 
-	public ResponseResult forecastPrice(String depLongitude,
+	public ResponseResult<ForecastPriceResponse> forecastPrice(String depLongitude,
 	                                    String depLatitude,
 	                                    String destLongitude,
 	                                    String destLatitude,
