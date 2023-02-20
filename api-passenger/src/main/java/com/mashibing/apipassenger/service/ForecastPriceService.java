@@ -5,6 +5,7 @@ import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.ForecastPriceDTO;
 import com.mashibing.internalcommon.response.ForecastPriceResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,19 @@ public class ForecastPriceService {
 	@Autowired
 	private ServicePriceClient servicePriceClient;
 
-	public ResponseResult forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
+	public ResponseResult forecastPrice(String depLongitude,
+	                                    String depLatitude,
+	                                    String destLongitude,
+	                                    String destLatitude,
+	                                    String cityCode,
+	                                    String vehicleType) {
 		ForecastPriceDTO forecastPriceDTO = new ForecastPriceDTO();
 		forecastPriceDTO.setDepLongitude(depLongitude);
 		forecastPriceDTO.setDepLatitude(depLatitude);
 		forecastPriceDTO.setDestLongitude(destLongitude);
 		forecastPriceDTO.setDestLatitude(destLatitude);
+		forecastPriceDTO.setCityCode(cityCode);
+		forecastPriceDTO.setVehicleType(vehicleType);
 
 		log.info("出发地经度: " + depLongitude);
 		log.info("出发低纬度: " + depLatitude);
@@ -33,10 +41,11 @@ public class ForecastPriceService {
 
 
 		log.info("调用地图服务，预估价格");
-		ResponseResult forecastPrice = servicePriceClient.forecastPrice(forecastPriceDTO);
+		ResponseResult<ForecastPriceResponse> priceResponseResponseResult = servicePriceClient.forecastPrice(forecastPriceDTO);
+		ForecastPriceResponse data = priceResponseResponseResult.getData();
 
 		ForecastPriceResponse forecastPriceResponse = new ForecastPriceResponse();
-		forecastPriceResponse.setPrice((Double) forecastPrice.getData());
+		BeanUtils.copyProperties(data, forecastPriceResponse);
 		return ResponseResult.success(forecastPriceResponse);
 	}
 }
