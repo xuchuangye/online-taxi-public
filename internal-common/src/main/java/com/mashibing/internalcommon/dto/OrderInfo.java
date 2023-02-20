@@ -105,6 +105,9 @@ public class OrderInfo implements Serializable {
      */
     private String fareType;
 
+    /**
+     * 运价版本
+     */
     private Integer fareVersion;
 
     /**

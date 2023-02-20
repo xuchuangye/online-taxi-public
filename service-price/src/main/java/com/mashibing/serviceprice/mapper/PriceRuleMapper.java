@@ -5,9 +5,14 @@ import com.mashibing.internalcommon.dto.PriceRule;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author xcy
- * @date 2023/2/14 - 18:48
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
+ * @author xuchuangye
+ * @since 2023-02-20
  */
 @Repository
 public interface PriceRuleMapper extends BaseMapper<PriceRule> {
+
 }
