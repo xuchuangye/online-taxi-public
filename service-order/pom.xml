@@ -33,6 +33,12 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <!-- Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
         <!-- 远程调用openfeign -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

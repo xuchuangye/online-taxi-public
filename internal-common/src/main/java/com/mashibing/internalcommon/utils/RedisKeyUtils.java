@@ -12,6 +12,9 @@ public class RedisKeyUtils {
 	//token的前缀
 	private static final String tokenPrefix = "token-";
 
+	//设备唯一码的前缀
+	public static final String deviceCodePrefix = "black-device-";
+
 	/**
 	 * 拼接验证码的前缀 + 手机号作为Redis的key值
 	 *

@@ -73,4 +73,9 @@ public class OrderRequest {
 	 * 运价版本
 	 */
 	private Integer fareVersion;
+
+	/**
+	 * 设备唯一码
+	 */
+	private String deviceCode;
 }

@@ -65,6 +65,8 @@ public enum CommonStatusEnum {
 	 */
 	ORDER_IN_PROGRESS(1701, "有订单正在进行中"),
 
+	DEVICE_LOGIN_EXCEPTION(1702, "设备登录异常"),
+
 	/**
 	 * 请求成功
 	 */
