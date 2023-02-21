@@ -20,4 +20,7 @@ public interface ServicePriceClient {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/price-rule/is-newest-version")
 	public ResponseResult<Boolean> isNewestVersion(@RequestParam String fareType, @RequestParam Integer fareVersion);
+
+	@RequestMapping(method = RequestMethod.GET, value = "/price-rule/is-exists")
+	public ResponseResult<Boolean> isExists(@RequestParam String cityCode, @RequestParam String vehicleType);
 }

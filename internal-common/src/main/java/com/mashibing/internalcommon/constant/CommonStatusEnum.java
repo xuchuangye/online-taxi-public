@@ -37,6 +37,8 @@ public enum CommonStatusEnum {
 
 	PRICE_RULE_NOT_NEWEST(1304, "计价规则的版本不是最新的"),
 
+	CITY_NOT_PROVIDE_SERVICE(1304, "当前城市不提供叫车服务"),
+
 	/**
 	 * 拉取地图地区字典信息错误
 	 */

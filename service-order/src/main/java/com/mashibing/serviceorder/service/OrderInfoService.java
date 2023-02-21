@@ -43,15 +43,22 @@ public class OrderInfoService {
 	 */
 	public ResponseResult addOrder(OrderRequest orderRequest) {
 		//获取最新版本的计价规则
-		ResponseResult<PriceRule> priceRuleResponseResult = servicePriceClient.getNewestVersion(orderRequest.getFareType());
-		Integer fareVersion = priceRuleResponseResult.getData().getFareVersion();
+		/*ResponseResult<PriceRule> priceRuleResponseResult = servicePriceClient.getNewestVersion(orderRequest.getFareType());
+		PriceRule priceRule = priceRuleResponseResult.getData();
+		if (priceRule == null) {
+			return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getCode(),
+					CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getMessage());
+		}
+		Integer fareVersion = priceRule.getFareVersion();*/
+
+
 		//判断当前版本是否是最新的
 		ResponseResult<Boolean> newestVersionResponseResult = servicePriceClient.isNewestVersion(orderRequest.getFareType(), orderRequest.getFareVersion());
-		boolean isNewestVersion = newestVersionResponseResult.getData();
-		if (!isNewestVersion) {
+		Boolean isNewestVersion = newestVersionResponseResult.getData();
+		if (isNewestVersion == null || !isNewestVersion) {
 			return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_NOT_NEWEST.getCode(),
-					CommonStatusEnum.PRICE_RULE_NOT_NEWEST.getMessage(),
-					"最新的版本是：" + fareVersion);
+					CommonStatusEnum.PRICE_RULE_NOT_NEWEST.getMessage()
+					/*,"最新的版本是：" + fareVersion*/);
 		}
 		//判断当前设备是否是黑名单设备
 		//1.获取deviceCode
@@ -64,6 +71,11 @@ public class OrderInfoService {
 					CommonStatusEnum.DEVICE_LOGIN_EXCEPTION.getMessage());
 		}
 
+		//判断当前城市编码和车辆类型的计价规则是否存在
+		if (!isExistsPriceRule(orderRequest)) {
+			return ResponseResult.fail(CommonStatusEnum.CITY_NOT_PROVIDE_SERVICE.getCode(),
+					CommonStatusEnum.CITY_NOT_PROVIDE_SERVICE.getMessage());
+		}
 
 		//判断是否有正在进行中的订单
 		long count = isOrderGoingon(orderRequest);
@@ -71,7 +83,6 @@ public class OrderInfoService {
 			return ResponseResult.fail(CommonStatusEnum.ORDER_IN_PROGRESS.getCode()
 					, CommonStatusEnum.ORDER_IN_PROGRESS.getMessage());
 		}
-
 
 		OrderInfo orderInfo = new OrderInfo();
 		BeanUtils.copyProperties(orderRequest, orderInfo);
@@ -85,6 +96,21 @@ public class OrderInfoService {
 
 		orderInfoMapper.insert(orderInfo);
 		return ResponseResult.success("");
+	}
+
+	/**
+	 * 判断当前城市编码和车辆类型的计价规则是否存在
+	 *
+	 * @param orderRequest
+	 * @return
+	 */
+	private boolean isExistsPriceRule(OrderRequest orderRequest) {
+		String fareType = orderRequest.getFareType();
+		String[] split = fareType.split("\\$");
+		String cityCode = split[0];
+		String vehicleType = split[1];
+		ResponseResult<Boolean> exists = servicePriceClient.isExists(cityCode, vehicleType);
+		return exists.getData();
 	}
 
 	/**
