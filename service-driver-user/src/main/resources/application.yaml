@@ -14,3 +14,6 @@ spring:
 
   application:
     name: service-driver-user
+mybatis-plus:
+  #Mapper的配置路径
+  mapper-locations: classpath:mapper/*.xml
