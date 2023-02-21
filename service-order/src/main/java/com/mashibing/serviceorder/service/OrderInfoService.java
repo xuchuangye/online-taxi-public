@@ -7,9 +7,11 @@ import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.PriceRule;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.OrderRequest;
+import com.mashibing.internalcommon.response.TerminalResponse;
 import com.mashibing.internalcommon.utils.RedisKeyUtils;
 import com.mashibing.serviceorder.mapper.OrderInfoMapper;
 import com.mashibing.serviceorder.remote.ServiceDriverUserClient;
+import com.mashibing.serviceorder.remote.ServiceMapClient;
 import com.mashibing.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +20,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -94,7 +97,7 @@ public class OrderInfoService {
 		}
 
 		//判断是否有正在进行中的订单
-		long count = isOrderGoingon(orderRequest);
+		int count = isOrderGoingon(orderRequest.getPassengerId());
 		if (count > 0) {
 			return ResponseResult.fail(CommonStatusEnum.ORDER_IN_PROGRESS.getCode()
 					, CommonStatusEnum.ORDER_IN_PROGRESS.getMessage());
@@ -111,7 +114,35 @@ public class OrderInfoService {
 		orderInfo.setGmtModified(now);
 
 		orderInfoMapper.insert(orderInfo);
+		aroundSearch(orderRequest);
 		return ResponseResult.success("");
+	}
+
+	@Autowired
+	private ServiceMapClient serviceMapClient;
+	public void aroundSearch(OrderRequest orderRequest) {
+		//出发地纬度
+		String depLatitude = orderRequest.getDepLatitude();
+		//出发地经度
+		String depLongitude = orderRequest.getDepLongitude();
+		String center = depLatitude + "," + depLongitude;
+		int radius = 2000;
+
+		ResponseResult<List<TerminalResponse>> listResponseResult = serviceMapClient.aroundSearch(center, radius);
+		List<TerminalResponse> list = listResponseResult.getData();
+		if (list.size() == 0) {
+			radius = 4000;
+			listResponseResult = serviceMapClient.aroundSearch(center, radius);
+			list = listResponseResult.getData();
+			if (list.size() == 0) {
+				radius = 5000;
+				listResponseResult = serviceMapClient.aroundSearch(center, radius);
+				list = listResponseResult.getData();
+				if (list.size() == 0) {
+					log.info("此次派单没有找到司机终端，终端搜索2KM、4KM、5KM");
+				}
+			}
+		}
 	}
 
 	/**
@@ -155,18 +186,17 @@ public class OrderInfoService {
 		return false;
 	}
 
-	private long isOrderGoingon(OrderRequest orderRequest) {
+	private int isOrderGoingon(Long passengerId) {
 		QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("passenger_id", orderRequest.getPassengerId());
-		queryWrapper.and(wrapper -> {
-			wrapper.eq("order_status", OrderConstant.ORDER_START)
+		queryWrapper.eq("passenger_id", passengerId);
+		queryWrapper.and(wrapper -> wrapper.eq("order_status", OrderConstant.ORDER_START)
 					.or().eq("order_status", OrderConstant.DRIVER_RECEIVE_ORDER)
 					.or().eq("order_status", OrderConstant.DRIVER_TO_PICK_UP_PASSENGER)
 					.or().eq("order_status", OrderConstant.DRIVER_ARRIVED_DEPARTURE)
 					.or().eq("order_status", OrderConstant.DRIVER_PICK_UP_PASSENGER)
 					.or().eq("order_status", OrderConstant.PASSENGER_GET_OFF)
-					.or().eq("order_status", OrderConstant.INITIATE_COLLECTIONS);
-		});
+					.or().eq("order_status", OrderConstant.INITIATE_COLLECTIONS)
+		);
 
 		return orderInfoMapper.selectCount(queryWrapper);
 	}

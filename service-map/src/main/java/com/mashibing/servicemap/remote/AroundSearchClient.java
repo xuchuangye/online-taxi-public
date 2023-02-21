@@ -47,7 +47,7 @@ public class AroundSearchClient {
 	 * @param radius 半径
 	 * @return
 	 */
-	public ResponseResult aroundSearch(String center, String radius) {
+	public ResponseResult<List<TerminalResponse>> aroundSearch(String center, Integer radius) {
 		StringBuilder url = new StringBuilder();
 		url.append(MapConfigConstant.TERMINAL_AROUND_SEARCH_URL);
 		url.append("?");
