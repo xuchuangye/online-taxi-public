@@ -139,6 +139,27 @@ public class PriceRuleService {
 		PriceRule priceRuleDB = priceRuleResponseResult.getData();
 		if (priceRuleDB.getFareVersion() > fareVersion) {
 			return ResponseResult.success(false);
+		} else {
+			return ResponseResult.success(true);
+		}
+	}
+
+	/**
+	 * 判断当前城市编码和车辆类型的计价规则是否存在
+	 *
+	 * @param cityCode    城市编码
+	 * @param vehicleType 车辆类型
+	 * @return
+	 */
+	public ResponseResult<Boolean> isExists(String cityCode, String vehicleType) {
+		QueryWrapper<PriceRule> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("city_code", cityCode);
+		queryWrapper.eq("vehicle_type", vehicleType);
+		queryWrapper.orderByDesc("fare_version");
+
+		List<PriceRule> priceRules = priceRuleMapper.selectList(queryWrapper);
+		if (priceRules.isEmpty()) {
+			return ResponseResult.success(false);
 		}else {
 			return ResponseResult.success(true);
 		}

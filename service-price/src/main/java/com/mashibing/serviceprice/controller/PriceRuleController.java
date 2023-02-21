@@ -42,4 +42,9 @@ public class PriceRuleController {
 	public ResponseResult<Boolean> isNewestVersion(@RequestParam String fareType, @RequestParam Integer fareVersion) {
 		return priceRuleService.isNewestVersion(fareType, fareVersion);
 	}
+
+	@GetMapping("/is-exists")
+	public ResponseResult<Boolean> isExists(@RequestParam String cityCode, @RequestParam String vehicleType) {
+		return priceRuleService.isExists(cityCode, vehicleType);
+	}
 }
