@@ -77,7 +77,7 @@ public class AroundSearchClient {
 					for (int i = 0; i < resultsArray.size(); i++) {
 						JSONObject result = resultsArray.getJSONObject(i);
 						Integer tid = result.getInt(MapConfigConstant.TID);
-						Integer carId = result.getInt(MapConfigConstant.DESC);
+						Long carId = Long.parseLong(result.getString(MapConfigConstant.DESC));
 						aroundSearchResponse.setTid(tid);
 						aroundSearchResponse.setDesc(carId);
 						lists.add(aroundSearchResponse);

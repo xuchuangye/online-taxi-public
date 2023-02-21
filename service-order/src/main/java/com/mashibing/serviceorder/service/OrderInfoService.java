@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.constant.OrderConstant;
 import com.mashibing.internalcommon.dto.OrderInfo;
-import com.mashibing.internalcommon.dto.PriceRule;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.OrderRequest;
 import com.mashibing.internalcommon.response.TerminalResponse;
@@ -14,6 +13,7 @@ import com.mashibing.serviceorder.remote.ServiceDriverUserClient;
 import com.mashibing.serviceorder.remote.ServiceMapClient;
 import com.mashibing.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONArray;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -114,21 +114,27 @@ public class OrderInfoService {
 		orderInfo.setGmtModified(now);
 
 		orderInfoMapper.insert(orderInfo);
-		aroundSearch(orderRequest);
+		aroundSearchAvailableDriver(orderRequest);
 		return ResponseResult.success("");
 	}
 
 	@Autowired
 	private ServiceMapClient serviceMapClient;
-	public void aroundSearch(OrderRequest orderRequest) {
+
+	/**
+	 * 终端周边搜索可用司机
+	 *
+	 * @param orderRequest
+	 */
+	public void aroundSearchAvailableDriver(OrderRequest orderRequest) {
 		//出发地纬度
 		String depLatitude = orderRequest.getDepLatitude();
 		//出发地经度
 		String depLongitude = orderRequest.getDepLongitude();
 		String center = depLatitude + "," + depLongitude;
-		int radius = 2000;
 
-		ResponseResult<List<TerminalResponse>> listResponseResult = serviceMapClient.aroundSearch(center, radius);
+
+		/*ResponseResult<List<TerminalResponse>> listResponseResult = serviceMapClient.aroundSearch(center, radius);
 		List<TerminalResponse> list = listResponseResult.getData();
 		if (list.size() == 0) {
 			radius = 4000;
@@ -142,7 +148,31 @@ public class OrderInfoService {
 					log.info("此次派单没有找到司机终端，终端搜索2KM、4KM、5KM");
 				}
 			}
+		}*/
+		ResponseResult<List<TerminalResponse>> listResponseResult = null;
+		List<TerminalResponse> list = null;
+		for (int radius = 2000; radius < 6000; ) {
+			listResponseResult = serviceMapClient.aroundSearch(center, radius);
+			log.info("" + JSONArray.fromObject(listResponseResult.getData()));
+			log.info("此次派单的终端周边搜索在" + radius + "KM范围内进行搜索");
+			//查询终端
+
+			//解析终端
+
+			//根据解析终端获取车辆信息
+
+			//找到符合的车辆，进行派单
+
+			//如果派单成功，则退出循环
+
+			list = listResponseResult.getData();
+			if (list.size() == 0) {
+				radius += 2000;
+			}else {
+				break;
+			}
 		}
+
 	}
 
 	/**
@@ -190,12 +220,12 @@ public class OrderInfoService {
 		QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("passenger_id", passengerId);
 		queryWrapper.and(wrapper -> wrapper.eq("order_status", OrderConstant.ORDER_START)
-					.or().eq("order_status", OrderConstant.DRIVER_RECEIVE_ORDER)
-					.or().eq("order_status", OrderConstant.DRIVER_TO_PICK_UP_PASSENGER)
-					.or().eq("order_status", OrderConstant.DRIVER_ARRIVED_DEPARTURE)
-					.or().eq("order_status", OrderConstant.DRIVER_PICK_UP_PASSENGER)
-					.or().eq("order_status", OrderConstant.PASSENGER_GET_OFF)
-					.or().eq("order_status", OrderConstant.INITIATE_COLLECTIONS)
+				.or().eq("order_status", OrderConstant.DRIVER_RECEIVE_ORDER)
+				.or().eq("order_status", OrderConstant.DRIVER_TO_PICK_UP_PASSENGER)
+				.or().eq("order_status", OrderConstant.DRIVER_ARRIVED_DEPARTURE)
+				.or().eq("order_status", OrderConstant.DRIVER_PICK_UP_PASSENGER)
+				.or().eq("order_status", OrderConstant.PASSENGER_GET_OFF)
+				.or().eq("order_status", OrderConstant.INITIATE_COLLECTIONS)
 		);
 
 		return orderInfoMapper.selectCount(queryWrapper);

@@ -14,5 +14,5 @@ public class TerminalResponse {
 	 */
 	private Integer tid;
 
-	private Integer desc;
+	private Long desc;
 }
