@@ -1,16 +1,22 @@
 package com.mashibing.servicedriveruser.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
+import com.mashibing.internalcommon.constant.DriverCarBindingConstant;
 import com.mashibing.internalcommon.constant.DriverConstant;
 import com.mashibing.internalcommon.constant.DriverUserWorkStatusConstant;
+import com.mashibing.internalcommon.dto.DriverCarBindingRelationship;
 import com.mashibing.internalcommon.dto.DriverUser;
 import com.mashibing.internalcommon.dto.DriverUserWorkStatus;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.DriverUserResponse;
+import com.mashibing.internalcommon.response.OrderAboutDriverResponse;
+import com.mashibing.servicedriveruser.mapper.DriverCarBindingRelationshipMapper;
 import com.mashibing.servicedriveruser.mapper.DriverUserMapper;
 import com.mashibing.servicedriveruser.mapper.DriverUserWorkStatusMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -29,6 +35,9 @@ public class DriverUserService {
 
 	@Autowired
 	private DriverUserWorkStatusMapper driverUserWorkStatusMapper;
+
+	@Autowired
+	private DriverCarBindingRelationshipMapper driverCarBindingRelationshipMapper;
 
 	/**
 	 * 插入司机信息
@@ -88,5 +97,46 @@ public class DriverUserService {
 		}
 		DriverUser driverUser = driverUsers.get(0);
 		return ResponseResult.success(driverUser);
+	}
+
+	/**
+	 * 根据车辆id查询可以派单的司机信息
+	 *
+	 * @param carId
+	 * @return
+	 */
+	public ResponseResult<OrderAboutDriverResponse> getAvailableDriver(Long carId) {
+		QueryWrapper<DriverCarBindingRelationship> driverCarBindingRelationshipQueryWrapper = new QueryWrapper<>();
+		driverCarBindingRelationshipQueryWrapper.eq("car_id", carId);
+		driverCarBindingRelationshipQueryWrapper.eq("bind_state", DriverCarBindingConstant.DRIVER_CAR_BIND);
+
+		DriverCarBindingRelationship driverCarBindingRelationship = driverCarBindingRelationshipMapper.selectOne(driverCarBindingRelationshipQueryWrapper);
+		Long driverId = driverCarBindingRelationship.getDriverId();
+		//NOT_AVAILABLE_DRIVER
+		QueryWrapper<DriverUserWorkStatus> driverUserWorkStatusQueryWrapper = new QueryWrapper<>();
+		driverUserWorkStatusQueryWrapper.eq("driver_id", driverId);
+		driverUserWorkStatusQueryWrapper.eq("work_status", DriverUserWorkStatusConstant.DRIVER_STATUS_STAR);
+
+		int count = driverUserWorkStatusMapper.selectCount(driverUserWorkStatusQueryWrapper);
+		if (count == 0) {
+			return ResponseResult.fail(CommonStatusEnum.NOT_AVAILABLE_DRIVER.getCode(),
+					CommonStatusEnum.NOT_AVAILABLE_DRIVER.getMessage());
+		}else {
+			QueryWrapper<DriverUser> driverUserQueryWrapper = new QueryWrapper<>();
+			driverUserQueryWrapper.eq("id", driverId);
+			DriverUser driverUser = driverUserMapper.selectOne(driverUserQueryWrapper);
+			if (driverUser == null) {
+				return ResponseResult.fail(CommonStatusEnum.DRIVER_NOT_EXISTS.getCode(),
+						CommonStatusEnum.DRIVER_NOT_EXISTS.getMessage());
+			}
+			String driverPhone = driverUser.getDriverPhone();
+			OrderAboutDriverResponse orderAboutDriverResponse = new OrderAboutDriverResponse();
+			orderAboutDriverResponse.setCarId(carId);
+			orderAboutDriverResponse.setDriverId(driverId);
+			orderAboutDriverResponse.setDriverPhone(driverPhone);
+			return ResponseResult.success(orderAboutDriverResponse);
+		}
+
+
 	}
 }

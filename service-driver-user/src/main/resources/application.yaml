@@ -14,6 +14,12 @@ spring:
 
   application:
     name: service-driver-user
+
+logging:
+  level:
+    com.baomidou.mybatispuls: debug
 mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   #Mapper的配置路径
   mapper-locations: classpath:mapper/*.xml

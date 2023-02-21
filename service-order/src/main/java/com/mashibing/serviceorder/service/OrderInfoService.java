@@ -2,6 +2,7 @@ package com.mashibing.serviceorder.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
+import com.mashibing.internalcommon.constant.MapConfigConstant;
 import com.mashibing.internalcommon.constant.OrderConstant;
 import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.ResponseResult;
@@ -14,6 +15,7 @@ import com.mashibing.serviceorder.remote.ServiceMapClient;
 import com.mashibing.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -157,9 +159,17 @@ public class OrderInfoService {
 			log.info("此次派单的终端周边搜索在" + radius + "KM范围内进行搜索");
 			//查询终端
 
-			//解析终端
-
+			//解析终端，carId: 1627234296248999938, tid:637818785
+			JSONArray jsonArray = JSONArray.fromObject(listResponseResult.getData());
 			//根据解析终端获取车辆信息
+			//1.司机是出车状态
+			//2.司机没有正在进行的订单
+			for (int i = 0; i < jsonArray.size(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				String tid = jsonObject.getString(MapConfigConstant.TID);
+				Long carId = Long.parseLong(jsonObject.getString(MapConfigConstant.DESC));
+
+			}
 
 			//找到符合的车辆，进行派单
 
