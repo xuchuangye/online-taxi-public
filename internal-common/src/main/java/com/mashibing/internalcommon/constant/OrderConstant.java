@@ -18,6 +18,8 @@ public class OrderConstant {
 	8：支付完成
 	9：订单取消
 	 */
+
+	public static final int ORDER_INVALID = 0;
 	/**
 	 * 1.订单开始
 	 */

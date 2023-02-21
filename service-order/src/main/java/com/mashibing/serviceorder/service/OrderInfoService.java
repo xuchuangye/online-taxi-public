@@ -1,5 +1,6 @@
 package com.mashibing.serviceorder.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.constant.OrderConstant;
 import com.mashibing.internalcommon.dto.OrderInfo;
@@ -27,6 +28,12 @@ public class OrderInfoService {
 	@Autowired
 	private ServicePriceClient servicePriceClient;
 
+	/**
+	 * 乘客下单
+	 *
+	 * @param orderRequest
+	 * @return
+	 */
 	public ResponseResult addOrder(OrderRequest orderRequest) {
 		//获取最新版本的计价规则
 		ResponseResult<PriceRule> priceRuleResponseResult = servicePriceClient.getNewestVersion(orderRequest.getFareType());
@@ -40,6 +47,15 @@ public class OrderInfoService {
 					"最新的版本是：" + fareVersion);
 		}
 
+
+		//校验乘客是否能够下单
+		long count = isOrderGoingon(orderRequest);
+		if (count > 0) {
+			return ResponseResult.fail(CommonStatusEnum.ORDER_IN_PROGRESS.getCode()
+					, CommonStatusEnum.ORDER_IN_PROGRESS.getMessage());
+		}
+
+
 		OrderInfo orderInfo = new OrderInfo();
 		BeanUtils.copyProperties(orderRequest, orderInfo);
 
@@ -52,5 +68,21 @@ public class OrderInfoService {
 
 		orderInfoMapper.insert(orderInfo);
 		return ResponseResult.success("");
+	}
+
+	private long isOrderGoingon(OrderRequest orderRequest) {
+		QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("passenger_id", orderRequest.getPassengerId());
+		queryWrapper.and(wrapper -> {
+			wrapper.eq("order_status", OrderConstant.ORDER_START)
+					.or().eq("order_status", OrderConstant.DRIVER_RECEIVE_ORDER)
+					.or().eq("order_status", OrderConstant.DRIVER_TO_PICK_UP_PASSENGER)
+					.or().eq("order_status", OrderConstant.DRIVER_ARRIVED_DEPARTURE)
+					.or().eq("order_status", OrderConstant.DRIVER_PICK_UP_PASSENGER)
+					.or().eq("order_status", OrderConstant.PASSENGER_GET_OFF)
+					.or().eq("order_status", OrderConstant.INITIATE_COLLECTIONS);
+		});
+
+		return orderInfoMapper.selectCount(queryWrapper);
 	}
 }

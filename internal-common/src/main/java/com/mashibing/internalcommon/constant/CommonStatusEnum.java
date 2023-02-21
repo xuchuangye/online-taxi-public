@@ -10,13 +10,11 @@ import lombok.Getter;
 public enum CommonStatusEnum {
 
 	/**
+	 * 验证码类的提示：1001 ~ 1099
 	 * 验证码已过期
 	 */
 	VERIFICATIONCODE_OVERDUE(1001, "验证码已过期"),
-	/**
-	 * 验证码类的提示：1001 ~ 1099
-	 * 验证码不正确
-	 */
+
 	VERIFICATIONCODE_ERROR(1099, "验证码不正确"),
 	/**
 	 * token类的提示：1101 ~ 1199
@@ -62,6 +60,10 @@ public enum CommonStatusEnum {
 	 */
 	DRIVER_NOT_EXISTS(1601, "司机用户不存在"),
 
+	/**
+	 * 订单类的提示：1701 ~ 1799
+	 */
+	ORDER_IN_PROGRESS(1701, "有订单正在进行中"),
 
 	/**
 	 * 请求成功
@@ -72,8 +74,8 @@ public enum CommonStatusEnum {
 	 * 请求失败
 	 */
 	FAIL(0, "请求响应失败");;
-	private int code;
-	private String message;
+	private final int code;
+	private final String message;
 
 	CommonStatusEnum(int code, String message) {
 		this.code = code;
