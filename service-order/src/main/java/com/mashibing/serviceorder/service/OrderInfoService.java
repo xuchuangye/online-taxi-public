@@ -9,7 +9,9 @@ import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.OrderRequest;
 import com.mashibing.internalcommon.utils.RedisKeyUtils;
 import com.mashibing.serviceorder.mapper.OrderInfoMapper;
+import com.mashibing.serviceorder.remote.ServiceDriverUserClient;
 import com.mashibing.serviceorder.remote.ServicePriceClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -24,16 +26,20 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/2/20 - 7:55
  */
 @Service
+@Slf4j
 public class OrderInfoService {
 
 	@Autowired
 	private OrderInfoMapper orderInfoMapper;
 
 	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
+
+	@Autowired
 	private ServicePriceClient servicePriceClient;
 
 	@Autowired
-	private StringRedisTemplate stringRedisTemplate;
+	private ServiceDriverUserClient serviceDriverUserClient;
 
 	/**
 	 * 乘客下单
@@ -50,6 +56,16 @@ public class OrderInfoService {
 					CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getMessage());
 		}
 		Integer fareVersion = priceRule.getFareVersion();*/
+
+		//根据城市编码查询当前城市是否有可用司机
+		String cityCode = orderRequest.getAddress();
+		ResponseResult<Boolean> isAvailableDriver = serviceDriverUserClient.isAvailableDriver(cityCode);
+
+		if (isAvailableDriver == null || !isAvailableDriver.getData()) {
+			return ResponseResult.fail(CommonStatusEnum.CITY_NOT_IS_AVAILABLE_DRIVER.getCode(),
+					CommonStatusEnum.CITY_NOT_IS_AVAILABLE_DRIVER.getMessage());
+		}
+		log.info("根据城市编码查询当前城市是否有可用司机的代码测试成功" + isAvailableDriver.getData());
 
 
 		//判断当前版本是否是最新的

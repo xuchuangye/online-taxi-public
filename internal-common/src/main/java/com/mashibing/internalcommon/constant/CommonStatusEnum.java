@@ -37,7 +37,6 @@ public enum CommonStatusEnum {
 
 	PRICE_RULE_NOT_NEWEST(1304, "计价规则的版本不是最新的"),
 
-	CITY_NOT_PROVIDE_SERVICE(1304, "当前城市不提供叫车服务"),
 
 	/**
 	 * 拉取地图地区字典信息错误
@@ -69,6 +68,9 @@ public enum CommonStatusEnum {
 
 	DEVICE_LOGIN_EXCEPTION(1702, "设备登录异常"),
 
+	CITY_NOT_PROVIDE_SERVICE(1703, "当前城市不提供叫车服务"),
+
+	CITY_NOT_IS_AVAILABLE_DRIVER(1704, "当前城市没有可用的司机"),
 	/**
 	 * 请求成功
 	 */

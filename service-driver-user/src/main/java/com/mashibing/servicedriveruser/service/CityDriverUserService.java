@@ -16,11 +16,17 @@ public class CityDriverUserService {
 	@Autowired
 	private DriverUserMapper driverUserMapper;
 
-	public ResponseResult<Boolean> isAvailableDriver(@RequestParam String cityCode) {
+	/**
+	 * 根据城市编码判断当前城市是否有可用的司机
+	 *
+	 * @param cityCode
+	 * @return
+	 */
+	public ResponseResult<Boolean> isAvailableDriver(String cityCode) {
 		Integer count = driverUserMapper.selectDriverUserCountByCityCode(cityCode);
 		if (count > 0) {
 			return ResponseResult.success(true);
-		}else {
+		} else {
 			return ResponseResult.success(false);
 		}
 	}
