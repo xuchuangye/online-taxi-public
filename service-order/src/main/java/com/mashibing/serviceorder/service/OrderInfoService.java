@@ -191,36 +191,39 @@ public class OrderInfoService {
 					String licenseId = orderAboutDriverResponse.getLicenseId();
 					String vehicleNo = orderAboutDriverResponse.getVehicleNo();
 
-					//判断司机是否有正在进行的订单
-					int count = isDriverOrderGoingon(driverId);
-					//如果司机有正在进行的订单，那么继续下一次循环查找司机
-					if (count > 0) {
-						continue;
-					}
-					//如果司机没有正在进行的订单，表示该司机可以出车派遣，证明找到了合适的司机
+					//synchronized (OrderInfoService.class) {
+					//synchronized ((driverId + "").intern()) {
+						//判断司机是否有正在进行的订单
+						int count = isDriverOrderGoingon(driverId);
+						//如果司机有正在进行的订单，那么继续下一次循环查找司机
+						if (count > 0) {
+							continue;
+						}
+						//如果司机没有正在进行的订单，表示该司机可以出车派遣，证明找到了合适的司机
 
-					//订单直接匹配司机
-					//查询当前司机信息
-					QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
-					carQueryWrapper.eq("car_id", carId);
+						//订单直接匹配司机
+						//查询当前司机信息
+						QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
+						carQueryWrapper.eq("car_id", carId);
 
-					//查询当前车辆信息
-					orderInfo.setDriverId(driverId);
-					orderInfo.setDriverPhone(driverPhone);
-					orderInfo.setCarId(carId);
+						//查询当前车辆信息
+						orderInfo.setDriverId(driverId);
+						orderInfo.setDriverPhone(driverPhone);
+						orderInfo.setCarId(carId);
 
-					//
-					orderInfo.setReceiveOrderTime(LocalDateTime.now());
-					orderInfo.setReceiveOrderCarLongitude(longitude);
-					orderInfo.setReceiveOrderCarLatitude(latitude);
+						//
+						orderInfo.setReceiveOrderTime(LocalDateTime.now());
+						orderInfo.setReceiveOrderCarLongitude(longitude);
+						orderInfo.setReceiveOrderCarLatitude(latitude);
 
-					orderInfo.setLicenseId(licenseId);
-					orderInfo.setVehicleNo(vehicleNo);
-					orderInfo.setOrderStatus(OrderConstant.DRIVER_RECEIVE_ORDER);
+						orderInfo.setLicenseId(licenseId);
+						orderInfo.setVehicleNo(vehicleNo);
+						orderInfo.setOrderStatus(OrderConstant.DRIVER_RECEIVE_ORDER);
 
-					orderInfoMapper.updateById(orderInfo);
+						orderInfoMapper.updateById(orderInfo);
 
-					break radius;
+						break radius;
+					//}
 				}
 			}
 

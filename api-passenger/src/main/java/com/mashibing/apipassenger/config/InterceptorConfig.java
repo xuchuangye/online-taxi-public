@@ -32,7 +32,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
 				"/noauthTest",
 				"/verification-code",
 				"/verification-code-check",
-				"/token-refresh");
+				"/token-refresh",
+				"/test-real-time-order/**");
 		registry.addInterceptor(jwtInterceptor())
 				//拦截的路径
 				.addPathPatterns("/**")
