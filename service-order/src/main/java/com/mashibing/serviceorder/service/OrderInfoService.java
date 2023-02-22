@@ -2,7 +2,6 @@ package com.mashibing.serviceorder.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
-import com.mashibing.internalcommon.constant.MapConfigConstant;
 import com.mashibing.internalcommon.constant.OrderConstant;
 import com.mashibing.internalcommon.dto.Car;
 import com.mashibing.internalcommon.dto.OrderInfo;
@@ -16,8 +15,6 @@ import com.mashibing.serviceorder.remote.ServiceDriverUserClient;
 import com.mashibing.serviceorder.remote.ServiceMapClient;
 import com.mashibing.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -119,7 +116,7 @@ public class OrderInfoService {
 		orderInfo.setGmtModified(now);
 
 		orderInfoMapper.insert(orderInfo);
-		aroundSearchAvailableDriver(orderInfo);
+		dispatchRealTimeOrder(orderInfo);
 		return ResponseResult.success("");
 	}
 
@@ -131,7 +128,7 @@ public class OrderInfoService {
 	 *
 	 * @param orderInfo
 	 */
-	public void aroundSearchAvailableDriver(OrderInfo orderInfo) {
+	public synchronized void dispatchRealTimeOrder(OrderInfo orderInfo) {
 		//出发地纬度
 		String depLatitude = orderInfo.getDepLatitude();
 		//出发地经度

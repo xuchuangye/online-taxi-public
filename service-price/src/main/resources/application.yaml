@@ -17,4 +17,4 @@ spring:
 
 logging:
   level:
-    com.mashibing: debug
+    com.baomidou: debug

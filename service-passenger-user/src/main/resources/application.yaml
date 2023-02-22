@@ -20,4 +20,4 @@ spring:
 
 logging:
   level:
-    root: debug
+    com.baomidou: debug
