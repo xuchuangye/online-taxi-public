@@ -15,6 +15,8 @@ import com.mashibing.serviceorder.remote.ServiceDriverUserClient;
 import com.mashibing.serviceorder.remote.ServiceMapClient;
 import com.mashibing.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -45,6 +47,9 @@ public class OrderInfoService {
 
 	@Autowired
 	private ServiceDriverUserClient serviceDriverUserClient;
+
+	@Autowired
+	private RedissonClient redissonClient;
 
 	/**
 	 * 乘客下单
@@ -128,7 +133,7 @@ public class OrderInfoService {
 	 *
 	 * @param orderInfo
 	 */
-	public synchronized void dispatchRealTimeOrder(OrderInfo orderInfo) {
+	public void dispatchRealTimeOrder(OrderInfo orderInfo) {
 		//出发地纬度
 		String depLatitude = orderInfo.getDepLatitude();
 		//出发地经度
@@ -191,38 +196,43 @@ public class OrderInfoService {
 					String licenseId = orderAboutDriverResponse.getLicenseId();
 					String vehicleNo = orderAboutDriverResponse.getVehicleNo();
 
+					String lockKey = (driverId + "").intern();
+					RLock lock = redissonClient.getLock(lockKey);
+					lock.lock();
+
 					//synchronized (OrderInfoService.class) {
 					//synchronized ((driverId + "").intern()) {
-						//判断司机是否有正在进行的订单
-						int count = isDriverOrderGoingon(driverId);
-						//如果司机有正在进行的订单，那么继续下一次循环查找司机
-						if (count > 0) {
-							continue;
-						}
-						//如果司机没有正在进行的订单，表示该司机可以出车派遣，证明找到了合适的司机
+					//判断司机是否有正在进行的订单
+					int count = isDriverOrderGoingon(driverId);
+					//如果司机有正在进行的订单，那么继续下一次循环查找司机
+					if (count > 0) {
+						lock.unlock();
+						continue;
+					}
+					//如果司机没有正在进行的订单，表示该司机可以出车派遣，证明找到了合适的司机
 
-						//订单直接匹配司机
-						//查询当前司机信息
-						QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
-						carQueryWrapper.eq("car_id", carId);
+					//订单直接匹配司机
+					//查询当前司机信息
+					QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
+					carQueryWrapper.eq("car_id", carId);
 
-						//查询当前车辆信息
-						orderInfo.setDriverId(driverId);
-						orderInfo.setDriverPhone(driverPhone);
-						orderInfo.setCarId(carId);
+					//查询当前车辆信息
+					orderInfo.setDriverId(driverId);
+					orderInfo.setDriverPhone(driverPhone);
+					orderInfo.setCarId(carId);
 
-						//
-						orderInfo.setReceiveOrderTime(LocalDateTime.now());
-						orderInfo.setReceiveOrderCarLongitude(longitude);
-						orderInfo.setReceiveOrderCarLatitude(latitude);
+					//
+					orderInfo.setReceiveOrderTime(LocalDateTime.now());
+					orderInfo.setReceiveOrderCarLongitude(longitude);
+					orderInfo.setReceiveOrderCarLatitude(latitude);
 
-						orderInfo.setLicenseId(licenseId);
-						orderInfo.setVehicleNo(vehicleNo);
-						orderInfo.setOrderStatus(OrderConstant.DRIVER_RECEIVE_ORDER);
+					orderInfo.setLicenseId(licenseId);
+					orderInfo.setVehicleNo(vehicleNo);
+					orderInfo.setOrderStatus(OrderConstant.DRIVER_RECEIVE_ORDER);
 
-						orderInfoMapper.updateById(orderInfo);
+					orderInfoMapper.updateById(orderInfo);
 
-						break radius;
+					break radius;
 					//}
 				}
 			}
