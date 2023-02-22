@@ -15,4 +15,8 @@ public class TerminalResponse {
 	private Integer tid;
 
 	private Long desc;
+
+	private Long longitude;
+
+	private Long latitude;
 }

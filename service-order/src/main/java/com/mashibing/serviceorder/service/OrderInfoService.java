@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.constant.MapConfigConstant;
 import com.mashibing.internalcommon.constant.OrderConstant;
+import com.mashibing.internalcommon.dto.Car;
 import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.OrderRequest;
@@ -100,8 +101,8 @@ public class OrderInfoService {
 					CommonStatusEnum.CITY_NOT_PROVIDE_SERVICE.getMessage());
 		}
 
-		//判断是否有正在进行中的订单
-		int count = isOrderGoingon(orderRequest.getPassengerId());
+		//判断乘客是否有正在进行中的订单
+		int count = isPassengerOrderGoingon(orderRequest.getPassengerId());
 		if (count > 0) {
 			return ResponseResult.fail(CommonStatusEnum.ORDER_IN_PROGRESS.getCode()
 					, CommonStatusEnum.ORDER_IN_PROGRESS.getMessage());
@@ -118,7 +119,7 @@ public class OrderInfoService {
 		orderInfo.setGmtModified(now);
 
 		orderInfoMapper.insert(orderInfo);
-		aroundSearchAvailableDriver(orderRequest);
+		aroundSearchAvailableDriver(orderInfo);
 		return ResponseResult.success("");
 	}
 
@@ -128,13 +129,13 @@ public class OrderInfoService {
 	/**
 	 * 终端周边搜索可用司机
 	 *
-	 * @param orderRequest
+	 * @param orderInfo
 	 */
-	public void aroundSearchAvailableDriver(OrderRequest orderRequest) {
+	public void aroundSearchAvailableDriver(OrderInfo orderInfo) {
 		//出发地纬度
-		String depLatitude = orderRequest.getDepLatitude();
+		String depLatitude = orderInfo.getDepLatitude();
 		//出发地经度
-		String depLongitude = orderRequest.getDepLongitude();
+		String depLongitude = orderInfo.getDepLongitude();
 		String center = depLatitude + "," + depLongitude;
 
 
@@ -158,11 +159,13 @@ public class OrderInfoService {
 		radiusLists.add(4000);
 		radiusLists.add(6000);
 		ResponseResult<List<TerminalResponse>> listResponseResult = null;
+
+		radius:
 		for (int i = 0; i < radiusLists.size(); i++) {
 			int radius = radiusLists.get(i);
 			listResponseResult = serviceMapClient.aroundSearch(center, radius);
 			log.info("此次派单的终端周边搜索在" + radius + "KM范围内进行搜索，搜索的结果是："
-			+ listResponseResult.getData().toString());
+					+ listResponseResult.getData().toString());
 			//查询终端
 
 			//解析终端，carId: 1627234296248999938, tid:637818785
@@ -172,15 +175,55 @@ public class OrderInfoService {
 			JSONArray result = JSONArray.fromObject(listResponseResult.getData());
 			for (int j = 0; j < result.size(); j++) {
 				JSONObject jsonObject = result.getJSONObject(i);
-				String tid = jsonObject.getString(MapConfigConstant.TID);
 				Long carId = Long.parseLong(jsonObject.getString(MapConfigConstant.DESC));
+				//获取经度
+				Long longitude = jsonObject.getLong("longitude");
+				//获取经度
+				Long latitude = jsonObject.getLong("latitude");
 
 				ResponseResult<OrderAboutDriverResponse> availableDriver = serviceDriverUserClient.getAvailableDriver(carId);
 				if (availableDriver.getCode() == CommonStatusEnum.NOT_AVAILABLE_DRIVER.getCode()) {
 					log.info("没有车辆" + carId + "可以派单的司机");
 					continue;
-				}else {
+				} else {
 					log.info("车辆" + carId + "有可以派单的司机");
+					//获取订单中关于司机的信息
+					OrderAboutDriverResponse orderAboutDriverResponse = availableDriver.getData();
+					Long driverId = orderAboutDriverResponse.getDriverId();
+					String driverPhone = orderAboutDriverResponse.getDriverPhone();
+					String licenseId = orderAboutDriverResponse.getLicenseId();
+					String vehicleNo = orderAboutDriverResponse.getVehicleNo();
+
+					//判断司机是否有正在进行的订单
+					int count = isDriverOrderGoingon(driverId);
+					//如果司机有正在进行的订单，那么继续下一次循环查找司机
+					if (count > 0) {
+						continue;
+					}
+					//如果司机没有正在进行的订单，表示该司机可以出车派遣，证明找到了合适的司机
+
+					//订单直接匹配司机
+					//查询当前司机信息
+					QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
+					carQueryWrapper.eq("car_id", carId);
+
+					//查询当前车辆信息
+					orderInfo.setDriverId(driverId);
+					orderInfo.setDriverPhone(driverPhone);
+					orderInfo.setCarId(carId);
+
+					//
+					orderInfo.setReceiveOrderTime(LocalDateTime.now());
+					orderInfo.setReceiveOrderCarLongitude(longitude + "");
+					orderInfo.setReceiveOrderCarLatitude(latitude + "");
+
+					orderInfo.setLicenseId(licenseId);
+					orderInfo.setVehicleNo(vehicleNo);
+					orderInfo.setOrderStatus(OrderConstant.DRIVER_RECEIVE_ORDER);
+
+					orderInfoMapper.updateById(orderInfo);
+
+					break radius;
 				}
 			}
 
@@ -232,7 +275,32 @@ public class OrderInfoService {
 		return false;
 	}
 
-	private int isOrderGoingon(Long passengerId) {
+	/**
+	 * 判断司机正在进行的订单
+	 *
+	 * @param driverId
+	 * @return
+	 */
+	private int isDriverOrderGoingon(Long driverId) {
+		QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("driver_id", driverId);
+		queryWrapper.and(wrapper -> wrapper.eq("order_status", OrderConstant.DRIVER_RECEIVE_ORDER)
+				.or().eq("order_status", OrderConstant.DRIVER_TO_PICK_UP_PASSENGER)
+				.or().eq("order_status", OrderConstant.DRIVER_ARRIVED_DEPARTURE)
+				.or().eq("order_status", OrderConstant.DRIVER_PICK_UP_PASSENGER)
+		);
+		Integer availableDriverCount = orderInfoMapper.selectCount(queryWrapper);
+		log.info("司机id" + driverId + "，正在接单的数量：" + availableDriverCount);
+		return availableDriverCount;
+	}
+
+	/**
+	 * 判断乘客正在进行的订单
+	 *
+	 * @param passengerId
+	 * @return
+	 */
+	private int isPassengerOrderGoingon(Long passengerId) {
 		QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("passenger_id", passengerId);
 		queryWrapper.and(wrapper -> wrapper.eq("order_status", OrderConstant.ORDER_START)

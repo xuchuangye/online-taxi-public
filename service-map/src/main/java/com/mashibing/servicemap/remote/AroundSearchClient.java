@@ -65,7 +65,7 @@ public class AroundSearchClient {
 		JSONObject body = JSONObject.fromObject(responseEntity.getBody());
 		JSONObject data = body.getJSONObject("data");
 
-		TerminalResponse aroundSearchResponse = new TerminalResponse();
+		TerminalResponse terminalResponse = new TerminalResponse();
 		List<TerminalResponse> lists = new ArrayList<>();
 
 		if (data != null) {
@@ -77,10 +77,20 @@ public class AroundSearchClient {
 					for (int i = 0; i < resultsArray.size(); i++) {
 						JSONObject result = resultsArray.getJSONObject(i);
 						Integer tid = result.getInt(MapConfigConstant.TID);
+						//desc是carId
 						Long carId = Long.parseLong(result.getString(MapConfigConstant.DESC));
-						aroundSearchResponse.setTid(tid);
-						aroundSearchResponse.setDesc(carId);
-						lists.add(aroundSearchResponse);
+
+						JSONObject location = result.getJSONObject("location");
+						//获取经度
+						Long longitude = location.getLong("longitude");
+						//获取经度
+						Long latitude = location.getLong("latitude");
+
+						terminalResponse.setTid(tid);
+						terminalResponse.setDesc(carId);
+						terminalResponse.setLongitude(longitude);
+						terminalResponse.setLatitude(latitude);
+						lists.add(terminalResponse);
 					}
 				}
 			}
