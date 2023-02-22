@@ -232,6 +232,8 @@ public class OrderInfoService {
 
 					orderInfoMapper.updateById(orderInfo);
 
+					lock.unlock();
+
 					break radius;
 					//}
 				}
