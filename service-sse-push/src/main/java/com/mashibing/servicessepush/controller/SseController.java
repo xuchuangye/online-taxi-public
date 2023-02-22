@@ -1,5 +1,6 @@
-package com.mashibing.ssedriverclientweb.controller;
+package com.mashibing.servicessepush.controller;
 
+import com.mashibing.internalcommon.utils.SseKeyUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,45 +25,50 @@ public class SseController {
 	/**
 	 * 建立连接
 	 *
-	 * @param driverId
+	 * @param userId
+	 * @param identity
 	 * @return
 	 */
-	@GetMapping("/connect/{driverId}")
-	public SseEmitter connect(@PathVariable("driverId") String driverId) {
-		log.info("司机的id：" + driverId);
+	@GetMapping("/connect")
+	public SseEmitter connect(@RequestParam Long userId, @RequestParam String identity) {
+		String sseMapKey = SseKeyUtils.generator(userId, identity);
+		log.info("司机的id：" + sseMapKey);
 		//0L表示连接永不超时
 		SseEmitter sseEmitter = new SseEmitter(0L);
-		sseEmitterMap.put(driverId, sseEmitter);
+		sseEmitterMap.put(sseMapKey, sseEmitter);
 		return sseEmitter;
 	}
 
 	/**
 	 * 推送消息
 	 *
-	 * @param driverId 消息接收者
-	 * @param content  消息内容
+	 * @param userId
+	 * @param identity
+	 * @param content
 	 * @return
 	 */
 	@GetMapping("/push")
-	public String push(@RequestParam String driverId, @RequestParam String content) {
+	public String push(@RequestParam Long userId, @RequestParam String identity, @RequestParam String content) {
+		String sseMapKey = SseKeyUtils.generator(userId, identity);
 		try {
 			//这个Map的value存的是SseEmitter对象，这个对象是SpringMVC提供的一种技术,可以实现服务端向客户端实时推送数据。
 			//这个对象的send方法就是发送数据给到司机客户端。
-			if (sseEmitterMap.containsKey(driverId)) {
-				sseEmitterMap.get(driverId).send(content);
-			}else {
-				return "此用户：" + driverId + "不存在，推送失败";
+			if (sseEmitterMap.containsKey(sseMapKey)) {
+				sseEmitterMap.get(sseMapKey).send(content);
+			} else {
+				return "此用户：" + sseMapKey + "不存在，推送失败";
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "推送给了：" + driverId + "，消息内容是：" + content;
+		return "推送给了：" + sseMapKey + "，消息内容是：" + content;
 	}
 
-	@GetMapping("/close/{driverId}")
-	public String close(@PathVariable String driverId) {
-		if (sseEmitterMap.containsKey(driverId)) {
-			sseEmitterMap.remove(driverId);
+	@GetMapping("/close")
+	public String close(@RequestParam Long userId, @RequestParam String identity) {
+		String sseMapKey = SseKeyUtils.generator(userId, identity);
+		if (sseEmitterMap.containsKey(sseMapKey)) {
+			sseEmitterMap.remove(sseMapKey);
 		}
 		return "close success";
 	}

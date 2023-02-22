@@ -8,4 +8,4 @@ service-driver-user/target/
 service-passenger-user/target/
 service-verificationcode/target/
 service-order/target/
-sse-driver-client-web/target/
+service-sse-push/target/

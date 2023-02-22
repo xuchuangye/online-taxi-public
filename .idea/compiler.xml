@@ -9,12 +9,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="internal-common" />
         <module name="api-boss" />
+        <module name="service-sse-push" />
         <module name="api-passenger" />
         <module name="service-driver-user" />
         <module name="service-verificationcode" />
         <module name="service-price" />
         <module name="service-map" />
-        <module name="sse-driver-client-web" />
         <module name="service-order" />
         <module name="service-passenger-user" />
         <module name="api-driver" />
@@ -32,8 +32,8 @@
       <module name="service-order" options="-parameters" />
       <module name="service-passenger-user" options="-parameters" />
       <module name="service-price" options="-parameters" />
+      <module name="service-sse-push" options="-parameters" />
       <module name="service-verificationcode" options="-parameters" />
-      <module name="sse-driver-client-web" options="-parameters" />
     </option>
   </component>
 </project>
