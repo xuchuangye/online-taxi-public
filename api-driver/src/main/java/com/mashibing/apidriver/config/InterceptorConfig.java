@@ -28,7 +28,9 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	//protected void addInterceptors(InterceptorRegistry registry) {
 	public void addInterceptors(InterceptorRegistry registry) {
 		List<String> list = Arrays.asList(
-				"/noauth")
+				"/noauth",
+				"/verification-code",
+				"/verification-code-check")
 				;
 		registry.addInterceptor(jwtInterceptor())
 				//拦截的路径

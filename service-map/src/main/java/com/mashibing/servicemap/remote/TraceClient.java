@@ -4,6 +4,7 @@ import com.mashibing.internalcommon.constant.MapConfigConstant;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.TerminalResponse;
 import com.mashibing.internalcommon.response.TraceResponse;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
  * @date 2023/2/19 - 9:25
  */
 @Service
+@Slf4j
 public class TraceClient {
 
 	@Value("${amap.key}")
@@ -42,8 +44,9 @@ public class TraceClient {
 		url.append("sid=").append(sid);
 		url.append("&");
 		url.append("tid=").append(tid);
-
+		log.info("创建轨迹的请求：" + url.toString());
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(url.toString(), null, String.class);
+		log.info("创建轨迹的响应：" + responseEntity.getBody());
 		JSONObject body = JSONObject.fromObject(responseEntity.getBody());
 		JSONObject data = body.getJSONObject("data");
 		int trid = data.getInt("trid");

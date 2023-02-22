@@ -20,3 +20,6 @@ spring:
 
   application:
     name: api-driver
+logging:
+  level:
+    com.mashibing: debug

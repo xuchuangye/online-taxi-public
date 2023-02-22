@@ -7,6 +7,7 @@ import com.mashibing.internalcommon.constant.OrderConstant;
 import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.OrderRequest;
+import com.mashibing.internalcommon.response.OrderAboutDriverResponse;
 import com.mashibing.internalcommon.response.TerminalResponse;
 import com.mashibing.internalcommon.utils.RedisKeyUtils;
 import com.mashibing.serviceorder.mapper.OrderInfoMapper;
@@ -22,6 +23,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -151,36 +153,40 @@ public class OrderInfoService {
 				}
 			}
 		}*/
+		List<Integer> radiusLists = new ArrayList<>();
+		radiusLists.add(2000);
+		radiusLists.add(4000);
+		radiusLists.add(6000);
 		ResponseResult<List<TerminalResponse>> listResponseResult = null;
-		List<TerminalResponse> list = null;
-		for (int radius = 2000; radius < 6000; ) {
+		for (int i = 0; i < radiusLists.size(); i++) {
+			int radius = radiusLists.get(i);
 			listResponseResult = serviceMapClient.aroundSearch(center, radius);
-			log.info("" + JSONArray.fromObject(listResponseResult.getData()));
-			log.info("此次派单的终端周边搜索在" + radius + "KM范围内进行搜索");
+			log.info("此次派单的终端周边搜索在" + radius + "KM范围内进行搜索，搜索的结果是："
+			+ listResponseResult.getData().toString());
 			//查询终端
 
 			//解析终端，carId: 1627234296248999938, tid:637818785
-			JSONArray jsonArray = JSONArray.fromObject(listResponseResult.getData());
 			//根据解析终端获取车辆信息
 			//1.司机是出车状态
 			//2.司机没有正在进行的订单
-			for (int i = 0; i < jsonArray.size(); i++) {
-				JSONObject jsonObject = jsonArray.getJSONObject(i);
+			JSONArray result = JSONArray.fromObject(listResponseResult.getData());
+			for (int j = 0; j < result.size(); j++) {
+				JSONObject jsonObject = result.getJSONObject(i);
 				String tid = jsonObject.getString(MapConfigConstant.TID);
 				Long carId = Long.parseLong(jsonObject.getString(MapConfigConstant.DESC));
 
+				ResponseResult<OrderAboutDriverResponse> availableDriver = serviceDriverUserClient.getAvailableDriver(carId);
+				if (availableDriver.getCode() == CommonStatusEnum.NOT_AVAILABLE_DRIVER.getCode()) {
+					log.info("没有车辆" + carId + "可以派单的司机");
+					continue;
+				}else {
+					log.info("车辆" + carId + "有可以派单的司机");
+				}
 			}
 
 			//找到符合的车辆，进行派单
 
 			//如果派单成功，则退出循环
-
-			list = listResponseResult.getData();
-			if (list.size() == 0) {
-				radius += 2000;
-			}else {
-				break;
-			}
 		}
 
 	}

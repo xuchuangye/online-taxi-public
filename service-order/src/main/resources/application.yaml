@@ -13,3 +13,7 @@ spring:
     database: 0
   application:
     name: service-order
+
+logging:
+  level:
+    com.mashibing: debug

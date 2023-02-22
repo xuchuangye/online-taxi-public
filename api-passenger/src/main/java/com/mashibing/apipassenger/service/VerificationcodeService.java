@@ -11,6 +11,7 @@ import com.mashibing.internalcommon.response.NumberCodeResponse;
 import com.mashibing.internalcommon.response.TokenResponse;
 import com.mashibing.internalcommon.utils.JWTUtils;
 import com.mashibing.internalcommon.utils.RedisKeyUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/2/6 - 9:39
  */
 @Service
+@Slf4j
 public class VerificationcodeService {
 	@Autowired
 	private ServiceVerificationcodeClient serviceVerificationcodeClient;
@@ -40,13 +42,13 @@ public class VerificationcodeService {
 	 * @return
 	 */
 	public ResponseResult generateVerificationcode(String phone) {
-		System.out.println("乘客获取验证码，调用验证码服务");
+		log.info("乘客获取验证码，调用验证码服务");
 		ResponseResult<NumberCodeResponse> numberCodeResponse = serviceVerificationcodeClient.getNumberCode(6);
 		int numberCode = numberCodeResponse.getData().getNumberCode();
-		System.out.println("远程调用的numberCode: " + numberCode);
+		log.info("远程调用的numberCode: " + numberCode);
 
 		//存入Redis
-		System.out.println("存入Redis");
+		log.info("存入Redis");
 
 		//key,value,ttl过期时间
 		String key = RedisKeyUtils.generateVerificationcodeKey(phone, IdentityConstant.PASSENGER_IDENTITY);

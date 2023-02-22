@@ -1,8 +1,10 @@
-service-price/target/
-internal-common/target/
 api-passenger/target/
-service-map/target/
-service-driver-user/target/
 api-boss/target/
 api-driver/target/
+internal-common/target/
+service-price/target/
+service-map/target/
+service-driver-user/target/
+service-passenger-user/target/
+service-verificationcode/target/
 service-order/target/

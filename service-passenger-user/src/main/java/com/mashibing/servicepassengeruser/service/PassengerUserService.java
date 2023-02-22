@@ -4,6 +4,7 @@ import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.dto.PassengerUser;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.servicepassengeruser.mapper.PassengerUserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.Map;
  * @date 2023/2/11 - 10:10
  */
 @Service
+@Slf4j
 public class PassengerUserService {
 
 	@Autowired
@@ -24,7 +26,7 @@ public class PassengerUserService {
 
 
 	public ResponseResult loginOrRegister(String passengerPhone) {
-		System.out.println("获取到的手机号：" + passengerPhone);
+		log.info("获取到的手机号：" + passengerPhone);
 
 		//根据手机号获取用户信息
 		Map<String, Object> map = new HashMap<>();
@@ -33,13 +35,14 @@ public class PassengerUserService {
 
 		//判断用户信息是否存在
 		if (passengerUsers == null || passengerUsers.size() == 0) {
-			System.out.println("根据手机号获取的用户信息为空");
+			log.info("根据手机号获取的用户信息为空");
 
 			//如果用户信息不存在，插入用户
 			PassengerUser passengerUser = new PassengerUser();
 			passengerUser.setPassengerName("李四");
 			passengerUser.setPassengerGender((byte) 1);
 			passengerUser.setPassengerPhone(passengerPhone);
+			passengerUser.setState((byte) 0);
 			LocalDateTime now = LocalDateTime.now();
 			passengerUser.setGmtCreate(now);
 			passengerUser.setGmtModified(now);
