@@ -16,7 +16,7 @@ public class TerminalResponse {
 
 	private Long desc;
 
-	private Long longitude;
+	private String longitude;
 
-	private Long latitude;
+	private String latitude;
 }

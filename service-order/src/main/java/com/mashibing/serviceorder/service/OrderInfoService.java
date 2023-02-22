@@ -172,14 +172,14 @@ public class OrderInfoService {
 			//根据解析终端获取车辆信息
 			//1.司机是出车状态
 			//2.司机没有正在进行的订单
-			JSONArray result = JSONArray.fromObject(listResponseResult.getData());
-			for (int j = 0; j < result.size(); j++) {
-				JSONObject jsonObject = result.getJSONObject(i);
-				Long carId = Long.parseLong(jsonObject.getString(MapConfigConstant.DESC));
+			List<TerminalResponse> data = listResponseResult.getData();
+			for (int j = 0; j < data.size(); j++) {
+				TerminalResponse terminalResponse = data.get(i);
+				Long carId = terminalResponse.getDesc();
 				//获取经度
-				Long longitude = jsonObject.getLong("longitude");
+				String longitude = terminalResponse.getLongitude();
 				//获取经度
-				Long latitude = jsonObject.getLong("latitude");
+				String latitude = terminalResponse.getLatitude();
 
 				ResponseResult<OrderAboutDriverResponse> availableDriver = serviceDriverUserClient.getAvailableDriver(carId);
 				if (availableDriver.getCode() == CommonStatusEnum.NOT_AVAILABLE_DRIVER.getCode()) {
@@ -214,8 +214,8 @@ public class OrderInfoService {
 
 					//
 					orderInfo.setReceiveOrderTime(LocalDateTime.now());
-					orderInfo.setReceiveOrderCarLongitude(longitude + "");
-					orderInfo.setReceiveOrderCarLatitude(latitude + "");
+					orderInfo.setReceiveOrderCarLongitude(longitude);
+					orderInfo.setReceiveOrderCarLatitude(latitude);
 
 					orderInfo.setLicenseId(licenseId);
 					orderInfo.setVehicleNo(vehicleNo);

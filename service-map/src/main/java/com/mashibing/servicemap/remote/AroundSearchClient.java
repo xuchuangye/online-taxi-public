@@ -82,9 +82,9 @@ public class AroundSearchClient {
 
 						JSONObject location = result.getJSONObject("location");
 						//获取经度
-						Long longitude = location.getLong("longitude");
+						String longitude = location.getString("longitude");
 						//获取经度
-						Long latitude = location.getLong("latitude");
+						String latitude = location.getString("latitude");
 
 						terminalResponse.setTid(tid);
 						terminalResponse.setDesc(carId);
