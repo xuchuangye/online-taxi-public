@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+<button onclick="setMessage('鼠标点击我了！')">测试按钮</br></button>
+<h1>乘客：监听测试页面-模拟客户端</br></h1>
+<div id="message">展示服务的推送消息</br></div>
+<button onclick="sourceClose()">关闭连接</br></button>
+</body>
+<script>
+    //全局变量
+    userId = "1628179771122790413";
+    identity = 1;
+    source = null;
+
+    if (window.EventSource) {
+        //连接的建立
+        source = new EventSource("http://localhost:9000/connect?userId=" + userId + "&identity=" + identity);
+
+
+        //监听服务推送的消息
+        source.addEventListener("message", function (e) {
+            const content = e.data;
+            console.log("消息内容：" + content);
+
+            setMessage(content);
+        });
+
+    } else {
+        setMessage("此浏览器不支持");
+    }
+
+    function setMessage(content) {
+        document.getElementById('message').innerHTML += (content + '</br>');
+    }
+
+    function sourceClose() {
+        console.log("sourceClose方法执行");
+        //1.关闭http客户端的source
+        source.close();
+
+        //2.移除map中key：driverId
+        const httpRequest = new XMLHttpRequest();
+        httpRequest.open("get", "http://localhost:9000/close?userId=" + userId + "&identity=" + identity);
+        httpRequest.send();
+    }
+</script>
+</html>

@@ -239,18 +239,36 @@ public class OrderInfoService {
 					orderInfoMapper.updateById(orderInfo);
 
 					//向司机客户端推送消息
-					JSONObject content = new JSONObject();
-					content.put("passengerId", orderInfo.getPassengerId());
-					content.put("passengerPhone", orderInfo.getPassengerPhone());
-					content.put("departTime", orderInfo.getDepartTime());
-					content.put("depLongitude", orderInfo.getDepLongitude());
-					content.put("depLatitude", orderInfo.getDepLatitude());
-					content.put("destination", orderInfo.getDestination());
-					content.put("destLongitude", orderInfo.getDestLongitude());
-					content.put("destLatitude", orderInfo.getDestLatitude());
+					JSONObject driverContent = new JSONObject();
+					driverContent.put("passengerId", orderInfo.getPassengerId());
+					driverContent.put("passengerPhone", orderInfo.getPassengerPhone());
+					driverContent.put("departTime", orderInfo.getDepartTime());
+					driverContent.put("depLongitude", orderInfo.getDepLongitude());
+					driverContent.put("depLatitude", orderInfo.getDepLatitude());
+					driverContent.put("destination", orderInfo.getDestination());
+					driverContent.put("destLongitude", orderInfo.getDestLongitude());
+					driverContent.put("destLatitude", orderInfo.getDestLatitude());
 
-					serviceSsePushClient.push(driverId, IdentityConstant.DRIVER_IDENTITY, content.toString());
+					serviceSsePushClient.push(driverId, IdentityConstant.DRIVER_IDENTITY, driverContent.toString());
 
+
+					//向乘客客户端推送消息
+					JSONObject passengerContent = new JSONObject();
+					//司机信息
+					passengerContent.put("driverId", driverId);
+					passengerContent.put("driverPhone", orderInfo.getDriverPhone());
+					ResponseResult<Car> carResponseResult = serviceDriverUserClient.getCar(carId);
+					Car car = carResponseResult.getData();
+					//车辆信息
+					passengerContent.put("vehicleNo", car.getVehicleNo());
+					passengerContent.put("brand", car.getBrand());
+					passengerContent.put("model", car.getModel());
+					passengerContent.put("vehicleColor", car.getVehicleColor());
+					//司机接单信息
+					passengerContent.put("receiveOrderCarLongitude", orderInfo.getReceiveOrderCarLongitude());
+					passengerContent.put("receiveOrderCarLatitude", orderInfo.getReceiveOrderCarLatitude());
+
+					serviceSsePushClient.push(orderInfo.getPassengerId(), IdentityConstant.PASSENGER_IDENTITY, passengerContent.toString());
 
 					lock.unlock();
 

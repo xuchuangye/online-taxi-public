@@ -1,5 +1,6 @@
 package com.mashibing.serviceorder.remote;
 
+import com.mashibing.internalcommon.dto.Car;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.OrderAboutDriverResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -17,4 +18,7 @@ public interface ServiceDriverUserClient {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/get-available-driver/{carId}")
 	public ResponseResult<OrderAboutDriverResponse> getAvailableDriver(@PathVariable("carId") Long carId);
+
+	@RequestMapping(method = RequestMethod.GET, value = "/car")
+	public ResponseResult<Car> getCar(@RequestParam Long carId);
 }
