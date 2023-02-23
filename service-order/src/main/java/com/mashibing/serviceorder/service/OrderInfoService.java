@@ -55,7 +55,7 @@ public class OrderInfoService {
 	private RedissonClient redissonClient;
 
 	/**
-	 * 乘客下单
+	 * 乘客下单，创建订单
 	 *
 	 * @param orderRequest
 	 * @return
@@ -364,5 +364,40 @@ public class OrderInfoService {
 		);
 
 		return orderInfoMapper.selectCount(queryWrapper);
+	}
+
+
+	/**
+	 * 司机去接乘客
+	 * @param orderRequest
+	 * @return
+	 */
+	public ResponseResult toPickUpPassenger(OrderRequest orderRequest) {
+		//获取订单id
+		Long orderId = orderRequest.getOrderId();
+		//司机去接乘客的时间
+		LocalDateTime toPickUpPassengerTime = orderRequest.getToPickUpPassengerTime();
+		//司机去接乘客的经度
+		String toPickUpPassengerLongitude = orderRequest.getToPickUpPassengerLongitude();
+		//司机去接乘客的维度
+		String toPickUpPassengerLatitude = orderRequest.getToPickUpPassengerLatitude();
+		//司机去接乘客的地址
+		String toPickUpPassengerAddress = orderRequest.getToPickUpPassengerAddress();
+
+		QueryWrapper<OrderInfo> orderInfoQueryWrapper = new QueryWrapper<>();
+		orderInfoQueryWrapper.eq("id", orderId);
+		OrderInfo orderInfo = orderInfoMapper.selectOne(orderInfoQueryWrapper);
+
+		orderInfo.setToPickUpPassengerTime(LocalDateTime.now());
+		orderInfo.setToPickUpPassengerLongitude(toPickUpPassengerLongitude);
+		orderInfo.setToPickUpPassengerLatitude(toPickUpPassengerLatitude);
+		orderInfo.setToPickUpPassengerAddress(toPickUpPassengerAddress);
+
+		//设置订单的状态为：司机去接乘客
+		orderInfo.setOrderStatus(OrderConstant.DRIVER_TO_PICK_UP_PASSENGER);
+
+		orderInfoMapper.updateById(orderInfo);
+
+		return ResponseResult.success("");
 	}
 }

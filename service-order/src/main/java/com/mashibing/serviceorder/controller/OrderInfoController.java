@@ -21,11 +21,15 @@ public class OrderInfoController {
 	private OrderInfoService orderInfoService;
 
 	@PostMapping("/order/add")
-	public ResponseResult add(@RequestBody OrderRequest orderRequest
-	                          /*, HttpServletRequest httpServletRequest*/) {
+	public ResponseResult add(@RequestBody OrderRequest orderRequest/*, HttpServletRequest httpServletRequest*/) {
 		//下面代码通过测试
 		/*String deviceCode = httpServletRequest.getHeader("deviceCode");
 		orderRequest.setDeviceCode(deviceCode);*/
 		return orderInfoService.addOrder(orderRequest);
+	}
+
+	@PostMapping("/to-pick-up-passenger")
+	public ResponseResult toPickUpPassenger(@RequestBody OrderRequest orderRequest) {
+		return orderInfoService.toPickUpPassenger(orderRequest);
 	}
 }
