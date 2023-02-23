@@ -237,7 +237,7 @@ public class OrderInfoService {
 
 					//向司机客户端推送消息
 					JSONObject driverContent = new JSONObject();
-					driverContent.put("orderId",orderInfo.getId());
+					driverContent.put("orderId", orderInfo.getId());
 					driverContent.put("passengerId", orderInfo.getPassengerId());
 					driverContent.put("passengerPhone", orderInfo.getPassengerPhone());
 					driverContent.put("departTime", orderInfo.getDepartTime());
@@ -253,7 +253,7 @@ public class OrderInfoService {
 					//向乘客客户端推送消息
 					JSONObject passengerContent = new JSONObject();
 					//司机信息
-					passengerContent.put("orderId",orderInfo.getId());
+					passengerContent.put("orderId", orderInfo.getId());
 					passengerContent.put("driverId", driverId);
 					passengerContent.put("driverPhone", orderInfo.getDriverPhone());
 					ResponseResult<Car> carResponseResult = serviceDriverUserClient.getCar(carId);
@@ -369,6 +369,7 @@ public class OrderInfoService {
 
 	/**
 	 * 司机去接乘客
+	 *
 	 * @param orderRequest
 	 * @return
 	 */
@@ -395,6 +396,29 @@ public class OrderInfoService {
 
 		//设置订单的状态为：司机去接乘客
 		orderInfo.setOrderStatus(OrderConstant.DRIVER_TO_PICK_UP_PASSENGER);
+
+		orderInfoMapper.updateById(orderInfo);
+
+		return ResponseResult.success("");
+	}
+
+	/**
+	 * 司机到达乘客出发点
+	 *
+	 * @param orderRequest
+	 * @return
+	 */
+	public ResponseResult driverArrivedDeparture(OrderRequest orderRequest) {
+		Long orderId = orderRequest.getOrderId();
+
+		QueryWrapper<OrderInfo> orderInfoQueryWrapper = new QueryWrapper<>();
+		orderInfoQueryWrapper.eq("id", orderId);
+		OrderInfo orderInfo = orderInfoMapper.selectOne(orderInfoQueryWrapper);
+
+		//设置司机到达乘客出发点的时间
+		orderInfo.setDriverArrivedDepartureTime(LocalDateTime.now());
+		//设置订单状态：司机到达乘客出发点
+		orderInfo.setOrderStatus(OrderConstant.DRIVER_ARRIVED_DEPARTURE);
 
 		orderInfoMapper.updateById(orderInfo);
 
