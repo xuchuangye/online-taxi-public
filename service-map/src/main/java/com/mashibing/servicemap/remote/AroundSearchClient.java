@@ -65,37 +65,30 @@ public class AroundSearchClient {
 		JSONObject body = JSONObject.fromObject(responseEntity.getBody());
 		JSONObject data = body.getJSONObject("data");
 
-		TerminalResponse terminalResponse = new TerminalResponse();
 		List<TerminalResponse> lists = new ArrayList<>();
+		JSONArray resultsArray = data.getJSONArray(MapConfigConstant.RESULTS);
 
-		if (data != null) {
-			if (data.has(MapConfigConstant.COUNT)) {
-				int count = data.getInt(MapConfigConstant.COUNT);
-				if (count == 1) {
-					JSONArray resultsArray = data.getJSONArray(MapConfigConstant.RESULTS);
+		for (int i = 0; i < resultsArray.size(); i++) {
+			TerminalResponse terminalResponse = new TerminalResponse();
 
-					for (int i = 0; i < resultsArray.size(); i++) {
-						JSONObject result = resultsArray.getJSONObject(i);
-						Integer tid = result.getInt(MapConfigConstant.TID);
-						//desc是carId
-						Long carId = Long.parseLong(result.getString(MapConfigConstant.DESC));
+			JSONObject result = resultsArray.getJSONObject(i);
 
-						JSONObject location = result.getJSONObject("location");
-						//获取经度
-						String longitude = location.getString("longitude");
-						//获取经度
-						String latitude = location.getString("latitude");
+			//desc是carId
+			Integer tid = result.getInt(MapConfigConstant.TID);
+			Long carId = Long.parseLong(result.getString(MapConfigConstant.DESC));
 
-						terminalResponse.setTid(tid);
-						terminalResponse.setDesc(carId);
-						terminalResponse.setLongitude(longitude);
-						terminalResponse.setLatitude(latitude);
-						lists.add(terminalResponse);
-					}
-				}
-			}
+			JSONObject location = result.getJSONObject("location");
+			//获取经度
+			String longitude = location.getString("longitude");
+			//获取经度
+			String latitude = location.getString("latitude");
+
+			terminalResponse.setTid(tid);
+			terminalResponse.setDesc(carId);
+			terminalResponse.setLongitude(longitude);
+			terminalResponse.setLatitude(latitude);
+			lists.add(terminalResponse);
 		}
-
 		return ResponseResult.success(lists);
 	}
 }

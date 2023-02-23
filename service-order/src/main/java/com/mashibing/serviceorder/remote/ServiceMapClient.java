@@ -18,5 +18,5 @@ import java.util.List;
 public interface ServiceMapClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/around-search")
-	public ResponseResult<List<TerminalResponse>> aroundSearch(@RequestParam String center, @RequestParam Integer radius);
+	public ResponseResult<List<TerminalResponse>> terminalAroundSearch(@RequestParam String center, @RequestParam Integer radius);
 }

@@ -124,7 +124,18 @@ public class OrderInfoService {
 		orderInfo.setGmtModified(now);
 
 		orderInfoMapper.insert(orderInfo);
-		dispatchRealTimeOrder(orderInfo);
+
+		for (int i = 0; i < 6; i++) {
+			int result = dispatchRealTimeOrder(orderInfo);
+			if (result == 1) {
+				break;
+			}
+			try {
+				Thread.sleep(2);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		return ResponseResult.success("");
 	}
 
@@ -135,33 +146,19 @@ public class OrderInfoService {
 	private ServiceSsePushClient serviceSsePushClient;
 
 	/**
-	 * 终端周边搜索可用司机
+	 * 实时订单派单逻辑
 	 *
 	 * @param orderInfo
 	 */
-	public void dispatchRealTimeOrder(OrderInfo orderInfo) {
+	public int dispatchRealTimeOrder(OrderInfo orderInfo) {
+		log.info("循环一次");
+		int result = 0;
 		//出发地纬度
 		String depLatitude = orderInfo.getDepLatitude();
 		//出发地经度
 		String depLongitude = orderInfo.getDepLongitude();
 		String center = depLatitude + "," + depLongitude;
 
-
-		/*ResponseResult<List<TerminalResponse>> listResponseResult = serviceMapClient.aroundSearch(center, radius);
-		List<TerminalResponse> list = listResponseResult.getData();
-		if (list.size() == 0) {
-			radius = 4000;
-			listResponseResult = serviceMapClient.aroundSearch(center, radius);
-			list = listResponseResult.getData();
-			if (list.size() == 0) {
-				radius = 5000;
-				listResponseResult = serviceMapClient.aroundSearch(center, radius);
-				list = listResponseResult.getData();
-				if (list.size() == 0) {
-					log.info("此次派单没有找到司机终端，终端搜索2KM、4KM、5KM");
-				}
-			}
-		}*/
 		List<Integer> radiusLists = new ArrayList<>();
 		radiusLists.add(2000);
 		radiusLists.add(4000);
@@ -171,7 +168,7 @@ public class OrderInfoService {
 		radius:
 		for (int i = 0; i < radiusLists.size(); i++) {
 			int radius = radiusLists.get(i);
-			listResponseResult = serviceMapClient.aroundSearch(center, radius);
+			listResponseResult = serviceMapClient.terminalAroundSearch(center, radius);
 			log.info("此次派单的终端周边搜索在" + radius + "KM范围内进行搜索，搜索的结果是："
 					+ listResponseResult.getData().toString());
 			//查询终端
@@ -181,6 +178,7 @@ public class OrderInfoService {
 			//1.司机是出车状态
 			//2.司机没有正在进行的订单
 			List<TerminalResponse> data = listResponseResult.getData();
+			//List<TerminalResponse> data = new ArrayList<>();
 			for (int j = 0; j < data.size(); j++) {
 				TerminalResponse terminalResponse = data.get(i);
 				Long carId = terminalResponse.getDesc();
@@ -209,9 +207,8 @@ public class OrderInfoService {
 					//synchronized (OrderInfoService.class) {
 					//synchronized ((driverId + "").intern()) {
 					//判断司机是否有正在进行的订单
-					int count = isDriverOrderGoingon(driverId);
 					//如果司机有正在进行的订单，那么继续下一次循环查找司机
-					if (count > 0) {
+					if (isDriverOrderGoingon(driverId) > 0) {
 						lock.unlock();
 						continue;
 					}
@@ -240,6 +237,7 @@ public class OrderInfoService {
 
 					//向司机客户端推送消息
 					JSONObject driverContent = new JSONObject();
+					driverContent.put("orderId",orderInfo.getId());
 					driverContent.put("passengerId", orderInfo.getPassengerId());
 					driverContent.put("passengerPhone", orderInfo.getPassengerPhone());
 					driverContent.put("departTime", orderInfo.getDepartTime());
@@ -255,6 +253,7 @@ public class OrderInfoService {
 					//向乘客客户端推送消息
 					JSONObject passengerContent = new JSONObject();
 					//司机信息
+					passengerContent.put("orderId",orderInfo.getId());
 					passengerContent.put("driverId", driverId);
 					passengerContent.put("driverPhone", orderInfo.getDriverPhone());
 					ResponseResult<Car> carResponseResult = serviceDriverUserClient.getCar(carId);
@@ -270,6 +269,8 @@ public class OrderInfoService {
 
 					serviceSsePushClient.push(orderInfo.getPassengerId(), IdentityConstant.PASSENGER_IDENTITY, passengerContent.toString());
 
+					result = 1;
+
 					lock.unlock();
 
 					break radius;
@@ -281,7 +282,7 @@ public class OrderInfoService {
 
 			//如果派单成功，则退出循环
 		}
-
+		return result;
 	}
 
 	/**
