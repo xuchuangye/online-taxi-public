@@ -474,7 +474,7 @@ public class OrderInfoService {
 		orderInfo.setPassengerGetoffLatitude(passengerGetoffLatitude);
 
 		//司机行程结束时，订单中行驶的总路程和总时长
-		
+
 
 		orderInfoMapper.updateById(orderInfo);
 		return ResponseResult.success("");

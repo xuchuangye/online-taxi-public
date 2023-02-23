@@ -32,7 +32,7 @@ public class TraceClient {
 
 	/**
 	 * 创建轨迹
-	 *
+	 * https://tsapi.amap.com/v1/track/trace/add?key=e0d3379f01867fcdb15286f434e7eaa3&sid=880995&tid=637612857
 	 * @return
 	 */
 	public ResponseResult<TraceResponse> addTrace(String tid) {

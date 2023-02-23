@@ -19,4 +19,5 @@ public class TerminalResponse {
 	private String longitude;
 
 	private String latitude;
+
 }

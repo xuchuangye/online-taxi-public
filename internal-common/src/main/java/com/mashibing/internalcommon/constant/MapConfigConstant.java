@@ -91,6 +91,11 @@ public class MapConfigConstant {
 	public static final String TERMINAL_AROUND_SEARCH_URL = "https://tsapi.amap.com/v1/track/terminal/aroundsearch";
 
 	/**
+	 * 查询轨迹信息url
+	 */
+	public static final String TRSEARCH_TERMINAL = "https://tsapi.amap.com/v1/track/terminal/trsearch";
+
+	/**
 	 * 终端周边搜索的JSON对象相关属性
 	 */
 	public static final String COUNT = "count";
