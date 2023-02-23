@@ -2,6 +2,7 @@ package com.mashibing.serviceorder.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
+import com.mashibing.internalcommon.constant.IdentityConstant;
 import com.mashibing.internalcommon.constant.OrderConstant;
 import com.mashibing.internalcommon.dto.Car;
 import com.mashibing.internalcommon.dto.OrderInfo;
@@ -11,10 +12,12 @@ import com.mashibing.internalcommon.response.OrderAboutDriverResponse;
 import com.mashibing.internalcommon.response.TerminalResponse;
 import com.mashibing.internalcommon.utils.RedisKeyUtils;
 import com.mashibing.serviceorder.mapper.OrderInfoMapper;
+import com.mashibing.serviceorder.mapper.ServiceSsePushClient;
 import com.mashibing.serviceorder.remote.ServiceDriverUserClient;
 import com.mashibing.serviceorder.remote.ServiceMapClient;
 import com.mashibing.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
@@ -128,6 +131,9 @@ public class OrderInfoService {
 	@Autowired
 	private ServiceMapClient serviceMapClient;
 
+	@Autowired
+	private ServiceSsePushClient serviceSsePushClient;
+
 	/**
 	 * 终端周边搜索可用司机
 	 *
@@ -231,6 +237,20 @@ public class OrderInfoService {
 					orderInfo.setOrderStatus(OrderConstant.DRIVER_RECEIVE_ORDER);
 
 					orderInfoMapper.updateById(orderInfo);
+
+					//向司机客户端推送消息
+					JSONObject content = new JSONObject();
+					content.put("passengerId", orderInfo.getPassengerId());
+					content.put("passengerPhone", orderInfo.getPassengerPhone());
+					content.put("departTime", orderInfo.getDepartTime());
+					content.put("depLongitude", orderInfo.getDepLongitude());
+					content.put("depLatitude", orderInfo.getDepLatitude());
+					content.put("destination", orderInfo.getDestination());
+					content.put("destLongitude", orderInfo.getDestLongitude());
+					content.put("destLatitude", orderInfo.getDestLatitude());
+
+					serviceSsePushClient.push(driverId, IdentityConstant.DRIVER_IDENTITY, content.toString());
+
 
 					lock.unlock();
 

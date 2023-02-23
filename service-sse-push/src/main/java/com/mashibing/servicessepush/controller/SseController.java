@@ -49,6 +49,7 @@ public class SseController {
 	 */
 	@GetMapping("/push")
 	public String push(@RequestParam Long userId, @RequestParam String identity, @RequestParam String content) {
+		log.info("此用户：" + userId + "，身份标识：" + identity);
 		String sseMapKey = SseKeyUtils.generator(userId, identity);
 		try {
 			//这个Map的value存的是SseEmitter对象，这个对象是SpringMVC提供的一种技术,可以实现服务端向客户端实时推送数据。
