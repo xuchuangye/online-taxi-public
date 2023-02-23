@@ -10,6 +10,7 @@ import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.OrderRequest;
 import com.mashibing.internalcommon.response.OrderAboutDriverResponse;
 import com.mashibing.internalcommon.response.TerminalResponse;
+import com.mashibing.internalcommon.response.TrsearchTerminalResponse;
 import com.mashibing.internalcommon.utils.RedisKeyUtils;
 import com.mashibing.serviceorder.mapper.OrderInfoMapper;
 import com.mashibing.serviceorder.mapper.ServiceSsePushClient;
@@ -26,6 +27,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -427,6 +429,7 @@ public class OrderInfoService {
 
 	/**
 	 * 司机接到乘客
+	 *
 	 * @param orderRequest
 	 * @return
 	 */
@@ -453,6 +456,7 @@ public class OrderInfoService {
 
 	/**
 	 * 司机行程结束，乘客下车
+	 *
 	 * @param orderRequest
 	 * @return
 	 */
@@ -473,9 +477,20 @@ public class OrderInfoService {
 		orderInfo.setPassengerGetoffLongitude(passengerGetoffLongitude);
 		orderInfo.setPassengerGetoffLatitude(passengerGetoffLatitude);
 
+		//获取终端id
+		ResponseResult<Car> car = serviceDriverUserClient.getCar(orderInfo.getCarId());
+		Integer tid = car.getData().getTid();
+		//载客起始时间戳 = 司机接到乘客，乘客上车的时间
+		Long startTime = orderInfo.getPickUpPassengerTime().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+		//载客截止时间戳 = 乘客下车的时间，也就是现在
+		Long endTime = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
 		//司机行程结束时，订单中行驶的总路程和总时长
-
-
+		ResponseResult<TrsearchTerminalResponse> trsearchTerminalResponseResponseResult = serviceMapClient.trsearchTerminal(tid + "", startTime, endTime);
+		TrsearchTerminalResponse trsearchTerminalResponse = trsearchTerminalResponseResponseResult.getData();
+		//获取订单中载客里程
+		orderInfo.setDriveMile(trsearchTerminalResponse.getDriverMile());
+		//获取订单中载客时长
+		orderInfo.setDriveTime(trsearchTerminalResponse.getDriverTime());
 		orderInfoMapper.updateById(orderInfo);
 		return ResponseResult.success("");
 	}
