@@ -438,7 +438,6 @@ public class OrderInfoService {
 
 		QueryWrapper<OrderInfo> orderInfoQueryWrapper = new QueryWrapper<>();
 		orderInfoQueryWrapper.eq("id", orderId);
-
 		OrderInfo orderInfo = orderInfoMapper.selectOne(orderInfoQueryWrapper);
 
 		//设置订单的状态：司机接到乘客，乘客上车
@@ -449,6 +448,35 @@ public class OrderInfoService {
 
 		orderInfoMapper.updateById(orderInfo);
 
+		return ResponseResult.success("");
+	}
+
+	/**
+	 * 司机行程结束，乘客下车
+	 * @param orderRequest
+	 * @return
+	 */
+	public ResponseResult passengerGetoff(OrderRequest orderRequest) {
+		Long orderId = orderRequest.getOrderId();
+
+		//获取乘客下车时的经度和纬度
+		String passengerGetoffLongitude = orderRequest.getPassengerGetoffLongitude();
+		String passengerGetoffLatitude = orderRequest.getPassengerGetoffLatitude();
+
+		QueryWrapper<OrderInfo> orderInfoQueryWrapper = new QueryWrapper<>();
+		orderInfoQueryWrapper.eq("id", orderId);
+		OrderInfo orderInfo = orderInfoMapper.selectOne(orderInfoQueryWrapper);
+
+		orderInfo.setOrderStatus(OrderConstant.PASSENGER_GET_OFF);
+		//设置订单的状态：乘客下车
+		orderInfo.setPassengerGetoffTime(LocalDateTime.now());
+		orderInfo.setPassengerGetoffLongitude(passengerGetoffLongitude);
+		orderInfo.setPassengerGetoffLatitude(passengerGetoffLatitude);
+
+		//司机行程结束时，订单中行驶的总路程和总时长
+		
+
+		orderInfoMapper.updateById(orderInfo);
 		return ResponseResult.success("");
 	}
 }

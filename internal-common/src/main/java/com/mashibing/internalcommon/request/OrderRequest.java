@@ -114,4 +114,14 @@ public class OrderRequest {
 	 * 接到乘客，乘客上车的纬度
 	 */
 	private String pickUpPassengerLatitude;
+
+	/**
+	 * 乘客下车的经度
+	 */
+	private String passengerGetoffLongitude;
+
+	/**
+	 * 乘客下车的纬度
+	 */
+	private String passengerGetoffLatitude;
 }
