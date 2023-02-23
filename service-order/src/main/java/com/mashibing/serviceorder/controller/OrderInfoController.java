@@ -4,10 +4,7 @@ import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.OrderRequest;
 import com.mashibing.serviceorder.service.OrderInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2023/2/20 - 7:54
  */
 @RestController
+@RequestMapping("/order")
 public class OrderInfoController {
 
 	@Autowired
@@ -26,7 +24,7 @@ public class OrderInfoController {
 	 * @param orderRequest
 	 * @return
 	 */
-	@PostMapping("/order/add")
+	@PostMapping("/add")
 	public ResponseResult add(@RequestBody OrderRequest orderRequest/*, HttpServletRequest httpServletRequest*/) {
 		//下面代码通过测试
 		/*String deviceCode = httpServletRequest.getHeader("deviceCode");
@@ -52,5 +50,15 @@ public class OrderInfoController {
 	@PostMapping("/driver-arrived-departure")
 	public ResponseResult driverArrivedDeparture(@RequestBody OrderRequest orderRequest) {
 		return orderInfoService.driverArrivedDeparture(orderRequest);
+	}
+
+	/**
+	 * 司机接到乘客
+	 * @param orderRequest
+	 * @return
+	 */
+	@PostMapping("/pick-up-passenger")
+	public ResponseResult pickUpPassenger(@RequestBody OrderRequest orderRequest) {
+		return orderInfoService.pickUpPassenger(orderRequest);
 	}
 }

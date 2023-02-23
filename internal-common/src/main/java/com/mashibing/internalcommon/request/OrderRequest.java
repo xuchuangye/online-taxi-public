@@ -104,4 +104,14 @@ public class OrderRequest {
 	 * 去接乘客时，司机的地点
 	 */
 	private String toPickUpPassengerAddress;
+
+	/**
+	 * 接到乘客，乘客上车的经度
+	 */
+	private String pickUpPassengerLongitude;
+
+	/**
+	 * 接到乘客，乘客上车的纬度
+	 */
+	private String pickUpPassengerLatitude;
 }

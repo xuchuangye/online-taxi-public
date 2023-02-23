@@ -424,4 +424,31 @@ public class OrderInfoService {
 
 		return ResponseResult.success("");
 	}
+
+	/**
+	 * 司机接到乘客
+	 * @param orderRequest
+	 * @return
+	 */
+	public ResponseResult pickUpPassenger(OrderRequest orderRequest) {
+		Long orderId = orderRequest.getOrderId();
+		//司机接到乘客的经度和维度
+		String pickUpPassengerLongitude = orderRequest.getPickUpPassengerLongitude();
+		String pickUpPassengerLatitude = orderRequest.getPickUpPassengerLatitude();
+
+		QueryWrapper<OrderInfo> orderInfoQueryWrapper = new QueryWrapper<>();
+		orderInfoQueryWrapper.eq("id", orderId);
+
+		OrderInfo orderInfo = orderInfoMapper.selectOne(orderInfoQueryWrapper);
+
+		//设置订单的状态：司机接到乘客，乘客上车
+		orderInfo.setPickUpPassengerTime(LocalDateTime.now());
+		orderInfo.setOrderStatus(OrderConstant.DRIVER_PICK_UP_PASSENGER);
+		orderInfo.setPickUpPassengerLongitude(pickUpPassengerLongitude);
+		orderInfo.setPickUpPassengerLatitude(pickUpPassengerLatitude);
+
+		orderInfoMapper.updateById(orderInfo);
+
+		return ResponseResult.success("");
+	}
 }
