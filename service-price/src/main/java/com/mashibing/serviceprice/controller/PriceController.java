@@ -42,7 +42,7 @@ public class PriceController {
 	 * @return
 	 */
 	@PostMapping("/calculate-price")
-	public ResponseResult calculatePrice(@RequestBody CalculatePriceRequest calculatePriceRequest) {
+	public ResponseResult<Double> calculatePrice(@RequestBody CalculatePriceRequest calculatePriceRequest) {
 		Integer distance = calculatePriceRequest.getDistance();
 		Integer duration = calculatePriceRequest.getDuration();
 		String cityCode = calculatePriceRequest.getCityCode();

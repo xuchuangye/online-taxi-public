@@ -7,6 +7,7 @@ import com.mashibing.internalcommon.constant.OrderConstant;
 import com.mashibing.internalcommon.dto.Car;
 import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.ResponseResult;
+import com.mashibing.internalcommon.request.CalculatePriceRequest;
 import com.mashibing.internalcommon.request.OrderRequest;
 import com.mashibing.internalcommon.response.OrderAboutDriverResponse;
 import com.mashibing.internalcommon.response.TerminalResponse;
@@ -495,10 +496,33 @@ public class OrderInfoService {
 		//司机行程结束时，订单中行驶的总路程和总时长
 		ResponseResult<TrsearchTerminalResponse> trsearchTerminalResponseResponseResult = serviceMapClient.trsearchTerminal(tid + "", startTime, endTime);
 		TrsearchTerminalResponse trsearchTerminalResponse = trsearchTerminalResponseResponseResult.getData();
+
+		//距离
+		Long driverMile = trsearchTerminalResponse.getDriverMile();
+		//时长
+		Long driverTime = trsearchTerminalResponse.getDriverTime();
 		//获取订单中载客里程
-		orderInfo.setDriveMile(trsearchTerminalResponse.getDriverMile());
+		orderInfo.setDriveMile(driverMile);
 		//获取订单中载客时长
-		orderInfo.setDriveTime(trsearchTerminalResponse.getDriverTime());
+		orderInfo.setDriveTime(driverTime);
+
+		//距离
+		int mile = driverMile.intValue();
+		//时长
+		int time = driverTime.intValue();
+		//城市编码
+		String cityCode = orderInfo.getAddress();
+		//车辆类型
+		String vehicleType = orderInfo.getVehicleType();
+		CalculatePriceRequest calculatePriceRequest = new CalculatePriceRequest();
+		calculatePriceRequest.setDistance(mile);
+		calculatePriceRequest.setDuration(time);
+		calculatePriceRequest.setCityCode(cityCode);
+		calculatePriceRequest.setVehicleType(vehicleType);
+		ResponseResult<Double> doubleResponseResult = servicePriceClient.calculatePrice(calculatePriceRequest);
+		double price = doubleResponseResult.getData();
+
+		orderInfo.setPrice(price);
 		orderInfoMapper.updateById(orderInfo);
 		return ResponseResult.success("");
 	}

@@ -2,11 +2,9 @@ package com.mashibing.serviceorder.remote;
 
 import com.mashibing.internalcommon.dto.PriceRule;
 import com.mashibing.internalcommon.dto.ResponseResult;
+import com.mashibing.internalcommon.request.CalculatePriceRequest;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author xcy
@@ -23,4 +21,14 @@ public interface ServicePriceClient {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/price-rule/is-exists")
 	public ResponseResult<Boolean> isExists(@RequestParam String cityCode, @RequestParam String vehicleType);
+
+
+	/**
+	 * 计算实际价格
+	 *
+	 * @param calculatePriceRequest
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/calculate-price")
+	public ResponseResult<Double> calculatePrice(@RequestBody CalculatePriceRequest calculatePriceRequest);
 }

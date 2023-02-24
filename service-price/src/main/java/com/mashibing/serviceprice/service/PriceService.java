@@ -138,7 +138,7 @@ public class PriceService {
 	 * @param cityCode
 	 * @param vehicleType
 	 */
-	public ResponseResult calculatePrice(Integer distance, Integer duration, String cityCode, String vehicleType) {
+	public ResponseResult<Double> calculatePrice(Integer distance, Integer duration, String cityCode, String vehicleType) {
 		QueryWrapper<PriceRule> priceRuleQueryWrapper = new QueryWrapper<>();
 		//city_code和vehicle_type组成联合索引
 		priceRuleQueryWrapper.eq("city_code", cityCode);
