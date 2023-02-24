@@ -15,6 +15,7 @@
         <module name="service-verificationcode" />
         <module name="service-price" />
         <module name="service-map" />
+        <module name="service-alipay" />
         <module name="service-order" />
         <module name="service-passenger-user" />
         <module name="api-driver" />
@@ -27,6 +28,7 @@
       <module name="api-driver" options="-parameters" />
       <module name="api-passenger" options="-parameters" />
       <module name="internal-common" options="-parameters" />
+      <module name="service-alipay" options="-parameters" />
       <module name="service-driver-user" options="-parameters" />
       <module name="service-map" options="-parameters" />
       <module name="service-order" options="-parameters" />

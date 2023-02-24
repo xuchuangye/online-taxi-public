@@ -27,6 +27,7 @@
         <module>api-driver</module>
         <module>service-order</module>
         <module>service-sse-push</module>
+        <module>service-alipay</module>
     </modules>
 
     <packaging>pom</packaging>
