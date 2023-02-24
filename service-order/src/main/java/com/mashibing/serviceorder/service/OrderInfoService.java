@@ -378,8 +378,6 @@ public class OrderInfoService {
 	public ResponseResult toPickUpPassenger(OrderRequest orderRequest) {
 		//获取订单id
 		Long orderId = orderRequest.getOrderId();
-		//司机去接乘客的时间
-		LocalDateTime toPickUpPassengerTime = orderRequest.getToPickUpPassengerTime();
 		//司机去接乘客的经度
 		String toPickUpPassengerLongitude = orderRequest.getToPickUpPassengerLongitude();
 		//司机去接乘客的维度
@@ -391,6 +389,7 @@ public class OrderInfoService {
 		orderInfoQueryWrapper.eq("id", orderId);
 		OrderInfo orderInfo = orderInfoMapper.selectOne(orderInfoQueryWrapper);
 
+		//司机去接乘客的时间
 		orderInfo.setToPickUpPassengerTime(LocalDateTime.now());
 		orderInfo.setToPickUpPassengerLongitude(toPickUpPassengerLongitude);
 		orderInfo.setToPickUpPassengerLatitude(toPickUpPassengerLatitude);

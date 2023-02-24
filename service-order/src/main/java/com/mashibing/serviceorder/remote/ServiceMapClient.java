@@ -18,6 +18,6 @@ public interface ServiceMapClient {
 	@RequestMapping(method = RequestMethod.POST, value = "/around-search")
 	public ResponseResult<List<TerminalResponse>> terminalAroundSearch(@RequestParam String center, @RequestParam Integer radius);
 
-	@RequestMapping(method = RequestMethod.GET, value = "/terminal/trsearch")
+	@RequestMapping(method = RequestMethod.POST, value = "/terminal/trsearch")
 	public ResponseResult<TrsearchTerminalResponse> trsearchTerminal(@RequestParam String tid, @RequestParam Long startTime, @RequestParam Long endTime);
 }
