@@ -33,7 +33,7 @@ public interface ServiceOrderClient {
 	public ResponseResult driverArrivedDeparture(@RequestBody OrderRequest orderRequest);
 
 	/**
-	 * 司机接到乘客
+	 * 司机接到乘客，乘客上车
 	 *
 	 * @param orderRequest
 	 * @return
@@ -42,7 +42,7 @@ public interface ServiceOrderClient {
 	public ResponseResult pickUpPassenger(@RequestBody OrderRequest orderRequest);
 
 	/**
-	 * 乘客下车
+	 * 乘客下车到达目的地，行程结束
 	 *
 	 * @param orderRequest
 	 * @return
