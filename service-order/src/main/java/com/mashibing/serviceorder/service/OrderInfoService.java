@@ -201,6 +201,15 @@ public class OrderInfoService {
 					String driverPhone = orderAboutDriverResponse.getDriverPhone();
 					String licenseId = orderAboutDriverResponse.getLicenseId();
 					String vehicleNo = orderAboutDriverResponse.getVehicleNo();
+					String vehicleTypeFromCar = orderAboutDriverResponse.getVehicleType();
+
+					String vehicleType = orderInfo.getVehicleType();
+					//判断车辆类型是否匹配
+					if (!vehicleType.trim().equals(vehicleTypeFromCar.trim())) {
+						log.info("没有车辆可以进行匹配");
+						continue;
+					}
+
 
 					String lockKey = (driverId + "").intern();
 					RLock lock = redissonClient.getLock(lockKey);

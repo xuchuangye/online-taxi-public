@@ -147,6 +147,7 @@ public class DriverUserService {
 			orderAboutDriverResponse.setDriverId(driverId);
 			orderAboutDriverResponse.setDriverPhone(driverPhone);
 			orderAboutDriverResponse.setLicenseId(driverUser.getLicenseId());
+			orderAboutDriverResponse.setVehicleType(car.getVehicleType());
 
 			orderAboutDriverResponse.setVehicleNo(car.getVehicleNo());
 

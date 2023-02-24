@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class ForecastPriceService {
+public class PriceService {
 
 	@Autowired
 	private ServiceMapClient serviceMapClient;
@@ -33,8 +33,19 @@ public class ForecastPriceService {
 	@Autowired
 	private PriceRuleMapper priceRuleMapper;
 
+	/**
+	 * 计算预估价格
+	 *
+	 * @param depLongitude
+	 * @param depLatitude
+	 * @param destLongitude
+	 * @param destLatitude
+	 * @param cityCode
+	 * @param vehicleType
+	 * @return
+	 */
 	public ResponseResult<ForecastPriceResponse> forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude,
-	                                    String cityCode, String vehicleType) {
+	                                                           String cityCode, String vehicleType) {
 		log.info("出发地经度: " + depLongitude);
 		log.info("出发低纬度: " + depLatitude);
 		log.info("目的地经度: " + destLongitude);
@@ -117,6 +128,33 @@ public class ForecastPriceService {
 
 		price = BigDecimal.valueOf(price).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		return price;
+	}
+
+	/**
+	 * 计算实际价格
+	 *
+	 * @param distance
+	 * @param duration
+	 * @param cityCode
+	 * @param vehicleType
+	 */
+	public ResponseResult calculatePrice(Integer distance, Integer duration, String cityCode, String vehicleType) {
+		QueryWrapper<PriceRule> priceRuleQueryWrapper = new QueryWrapper<>();
+		//city_code和vehicle_type组成联合索引
+		priceRuleQueryWrapper.eq("city_code", cityCode);
+		priceRuleQueryWrapper.eq("vehicle_type", vehicleType);
+		priceRuleQueryWrapper.orderByDesc("fare_version");
+		List<PriceRule> priceRules = priceRuleMapper.selectList(priceRuleQueryWrapper);
+		//每一个城市的计价规则应该都只有一个
+		if (priceRules.size() == 0) {
+			return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getCode(), CommonStatusEnum.PRICE_RULE_NOT_EXISTS.getMessage());
+		}
+		PriceRule priceRule = priceRules.get(0);
+
+		log.info("根据距离、时长、计价规则，计算价格");
+		double price = getPrice(distance, duration, priceRule);
+
+		return ResponseResult.success(price);
 	}
 
 	/*public static void main(String[] args) {
