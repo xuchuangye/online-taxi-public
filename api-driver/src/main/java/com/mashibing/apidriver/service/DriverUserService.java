@@ -4,6 +4,7 @@ import com.mashibing.apidriver.remote.ServiceDriverUserClient;
 import com.mashibing.apidriver.remote.ServiceVerificationcodeClient;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.dto.DriverUser;
+import com.mashibing.internalcommon.dto.DriverUserWorkStatus;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.DriverUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,14 @@ public class DriverUserService {
 	 */
 	public ResponseResult updateUser(DriverUser driverUser) {
 		return serviceDriverUserClient.updateDriverUser(driverUser);
+	}
+
+	/**
+	 * 修改司机工作状态
+	 * @param driverUserWorkStatus
+	 * @return
+	 */
+	public ResponseResult changeWorkStatus(DriverUserWorkStatus driverUserWorkStatus) {
+		return serviceDriverUserClient.changeWorkStatus(driverUserWorkStatus);
 	}
 }

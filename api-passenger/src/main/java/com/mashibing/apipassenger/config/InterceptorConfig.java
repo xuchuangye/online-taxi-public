@@ -33,6 +33,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 				"/verification-code",
 				"/verification-code-check",
 				"/token-refresh",
+				"/error",
 				"/test-real-time-order/**");
 		registry.addInterceptor(jwtInterceptor())
 				//拦截的路径

@@ -2,6 +2,7 @@ package com.mashibing.apidriver.controller;
 
 import com.mashibing.apidriver.service.DriverUserService;
 import com.mashibing.internalcommon.dto.DriverUser;
+import com.mashibing.internalcommon.dto.DriverUserWorkStatus;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,5 +23,10 @@ public class DriverUserController {
 	@PutMapping("/user")
 	public ResponseResult updateUser(@RequestBody DriverUser driverUser) {
 		return driverUserService.updateUser(driverUser);
+	}
+
+	@PutMapping("/driver-user-work-status")
+	public ResponseResult changeWorkStatus(@RequestBody DriverUserWorkStatus driverUserWorkStatus) {
+		return driverUserService.changeWorkStatus(driverUserWorkStatus);
 	}
 }
