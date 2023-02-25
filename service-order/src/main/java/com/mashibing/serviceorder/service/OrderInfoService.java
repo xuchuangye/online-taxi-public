@@ -526,4 +526,22 @@ public class OrderInfoService {
 		orderInfoMapper.updateById(orderInfo);
 		return ResponseResult.success("");
 	}
+
+	/**
+	 * 乘客下车，订单支付完成
+	 * @param orderRequest
+	 * @return
+	 */
+	public ResponseResult pay(OrderRequest orderRequest) {
+		Long orderId = orderRequest.getOrderId();
+
+		QueryWrapper<OrderInfo> orderInfoQueryWrapper = new QueryWrapper<>();
+		orderInfoQueryWrapper.eq("id", orderId);
+		OrderInfo orderInfo = orderInfoMapper.selectOne(orderInfoQueryWrapper);
+
+		orderInfo.setOrderStatus(OrderConstant.SUCCESS_PAY);
+
+		orderInfoMapper.updateById(orderInfo);
+		return ResponseResult.success("");
+	}
 }
