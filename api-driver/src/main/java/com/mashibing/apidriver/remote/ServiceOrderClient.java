@@ -50,6 +50,13 @@ public interface ServiceOrderClient {
 
 
 	/**
+	 * 司机发起收款
+	 * @param orderRequest
+	 * @return
+	 */
+	@RequestMapping(method =  RequestMethod.POST, value = "/order/push-pay-info")
+	public ResponseResult pushPayInfo(@RequestBody OrderRequest orderRequest);
+	/**
 	 * 司机取消订单
 	 *
 	 * @param orderId

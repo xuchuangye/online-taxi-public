@@ -2,11 +2,9 @@ package com.mashibing.apidriver.controller;
 
 import com.mashibing.apidriver.service.PayService;
 import com.mashibing.internalcommon.dto.ResponseResult;
+import com.mashibing.internalcommon.request.OrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author xcy
@@ -18,10 +16,8 @@ public class PayController {
 	@Autowired
 	private PayService payService;
 
-	@GetMapping("/pay/push-pay-info")
-	public ResponseResult pushPayInfo(@RequestParam String orderId,
-	                                  @RequestParam String passengerId,
-	                                  @RequestParam String price) {
-		return payService.pushPayInfo(orderId, passengerId, price);
+	@PostMapping("/pay/push-pay-info")
+	public ResponseResult pushPayInfo(@RequestBody OrderRequest orderRequest) {
+		return payService.pushPayInfo(orderRequest);
 	}
 }

@@ -536,6 +536,23 @@ public class OrderInfoService {
 	}
 
 	/**
+	 * 司机发起收款
+	 * @param orderRequest
+	 * @return
+	 */
+	public ResponseResult pushPayInfo(OrderRequest orderRequest) {
+		Long orderId = orderRequest.getOrderId();
+
+		QueryWrapper<OrderInfo> orderInfoQueryWrapper = new QueryWrapper<>();
+		orderInfoQueryWrapper.eq("id", orderId);
+		OrderInfo orderInfo = orderInfoMapper.selectOne(orderInfoQueryWrapper);
+
+		orderInfo.setOrderStatus(OrderConstant.INITIATE_COLLECTIONS);
+		orderInfoMapper.updateById(orderInfo);
+		return ResponseResult.success("");
+	}
+
+	/**
 	 * 乘客下车，订单支付完成
 	 *
 	 * @param orderRequest
@@ -674,4 +691,6 @@ public class OrderInfoService {
 			return ResponseResult.success("");
 		}
 	}
+
+
 }

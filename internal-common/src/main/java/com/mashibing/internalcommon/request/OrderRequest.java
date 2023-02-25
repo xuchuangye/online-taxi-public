@@ -129,4 +129,6 @@ public class OrderRequest {
 	 * 乘客下车的纬度
 	 */
 	private String passengerGetoffLatitude;
+
+	private String price;
 }
