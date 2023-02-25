@@ -19,17 +19,31 @@ public class DriverUserController {
 	@Autowired
 	private DriverUserService driverUserService;
 
-
+	/**
+	 * 添加司机信息
+	 * @param driverUser
+	 * @return
+	 */
 	@PostMapping("/user")
 	public ResponseResult addDriverUser(@RequestBody DriverUser driverUser) {
 		return driverUserService.addDriverUser(driverUser);
 	}
 
+	/**
+	 * 修改司机信息
+	 * @param driverUser
+	 * @return
+	 */
 	@PutMapping("/user")
 	public ResponseResult updateDriverUser(@RequestBody DriverUser driverUser) {
 		return driverUserService.updateDriverUser(driverUser);
 	}
 
+	/**
+	 * 查询司机信息
+	 * @param driverPhone
+	 * @return
+	 */
 	@GetMapping("/user/{driver-phone}")
 	public ResponseResult<DriverUser> selectDriverUser(@PathVariable("driver-phone") String driverPhone) {
 		ResponseResult<DriverUser> driverUserResponseResult = driverUserService.selectDriverUser(driverPhone);
@@ -50,6 +64,11 @@ public class DriverUserController {
 		return ResponseResult.success(driverUserResponse);
 	}
 
+	/**
+	 * 获取可用的司机
+	 * @param carId
+	 * @return
+	 */
 	@GetMapping("/get-available-driver/{carId}")
 	public ResponseResult<OrderAboutDriverResponse> getAvailableDriver(@PathVariable("carId") Long carId) {
 		return driverUserService.getAvailableDriver(carId);

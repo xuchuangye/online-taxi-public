@@ -1,14 +1,12 @@
 package com.mashibing.apidriver.controller;
 
 import com.mashibing.apidriver.service.DriverUserService;
-import com.mashibing.internalcommon.dto.DriverUser;
-import com.mashibing.internalcommon.dto.DriverUserWorkStatus;
-import com.mashibing.internalcommon.dto.ResponseResult;
+import com.mashibing.internalcommon.dto.*;
+import com.mashibing.internalcommon.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author xcy
@@ -28,5 +26,23 @@ public class DriverUserController {
 	@PutMapping("/driver-user-work-status")
 	public ResponseResult changeWorkStatus(@RequestBody DriverUserWorkStatus driverUserWorkStatus) {
 		return driverUserService.changeWorkStatus(driverUserWorkStatus);
+	}
+
+	/**
+	 * 因为token是根据手机号、身份标识生成的，所以解析token可以获取手机号。因此不需要参数
+	 * 1.解析token获取司机手机号
+	 * 2.根据司机手机号获取司机id
+	 * 3.根据司机di获取司机和车辆的绑定关系
+	 *
+	 * @param request
+	 * @return
+	 */
+	@GetMapping(value = "/driver-car-binding-relationship")
+	public ResponseResult<DriverCarBindingRelationship> getDriverCarBindingRelationship(HttpServletRequest request) {
+		String token = request.getHeader("Authorization");
+		TokenResult tokenResult = JWTUtils.checkToken(token);
+		String driverPhone = tokenResult.getPhone();
+
+		return driverUserService.getDriverCarBindingRelationship(driverPhone);
 	}
 }
