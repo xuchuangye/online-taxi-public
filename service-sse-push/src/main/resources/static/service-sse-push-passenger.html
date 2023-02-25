@@ -10,13 +10,13 @@
 </body>
 <script>
     //全局变量
-    userId = "1628179771122790403";
+    userId = "1629321777140232193";
     identity = 1;
     source = null;
 
     if (window.EventSource) {
         //连接的建立
-        source = new EventSource("http://localhost:9000/connect?userId=" + userId + "&identity=" + identity);
+        source = new EventSource("http://localhost:9002/connect?userId=" + userId + "&identity=" + identity);
 
 
         //监听服务推送的消息
@@ -42,7 +42,7 @@
 
         //2.移除map中key：driverId
         const httpRequest = new XMLHttpRequest();
-        httpRequest.open("get", "http://localhost:9000/close?userId=" + userId + "&identity=" + identity);
+        httpRequest.open("get", "http://localhost:9002/close?userId=" + userId + "&identity=" + identity);
         httpRequest.send();
     }
 </script>
