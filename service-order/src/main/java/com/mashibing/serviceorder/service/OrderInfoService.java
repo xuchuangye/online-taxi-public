@@ -134,11 +134,18 @@ public class OrderInfoService {
 			if (result == 1) {
 				break;
 			}
-			try {
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+
+			if (i == 5) {
+				orderInfo.setOrderStatus(OrderConstant.ORDER_INVALID);
+				orderInfoMapper.updateById(orderInfo);
+			} else {
+				try {
+					Thread.sleep(2);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
+
 		}
 		return ResponseResult.success("");
 	}
@@ -166,7 +173,7 @@ public class OrderInfoService {
 		List<Integer> radiusLists = new ArrayList<>();
 		radiusLists.add(2000);
 		radiusLists.add(4000);
-		radiusLists.add(6000);
+		radiusLists.add(5000);
 		ResponseResult<List<TerminalResponse>> listResponseResult = null;
 
 		radius:
