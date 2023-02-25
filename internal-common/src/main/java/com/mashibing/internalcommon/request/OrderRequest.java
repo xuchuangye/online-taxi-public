@@ -80,6 +80,11 @@ public class OrderRequest {
 	private Integer fareVersion;
 
 	/**
+	 * 车辆类型
+	 */
+	private String vehicleType;
+
+	/**
 	 * 设备唯一码
 	 */
 	private String deviceCode;

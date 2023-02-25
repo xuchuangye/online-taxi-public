@@ -11,4 +11,14 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6IjE4NTM4MjgwNTgwIiwiaWRlbnRpdHk
 手机号：18633286826
 验证码：582694
 accessToken：
-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6IjE4NjMzMjg2ODI2IiwiaWRlbnRpdHkiOiIyIiwidG9rZW5UaW1lIjoiU2F0IEZlYiAyNSAxNDoxMjoyNCBDU1QgMjAyMyIsInRva2VuVHlwZSI6ImFjY2Vzc1Rva2VuIn0.V3RluJwCRNome4AmvFcgDF-2fRk-yiyNiWh60Y3ZSWE
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6IjE4NjMzMjg2ODIzIiwiaWRlbnRpdHkiOiIyIiwidG9rZW5UaW1lIjoiU2F0IEZlYiAyNSAxNTo1OToxOCBDU1QgMjAyMyIsInRva2VuVHlwZSI6ImFjY2Vzc1Rva2VuIn0.pSIcrlHIUaPYzmDtY7WIW9hz6v4lCuV7jhQ-vwppQLc
+
+
+{
+    "cityCode": "110000",
+    "vehicleType": "1",
+    "depLongitude": "116.32327",
+    "depLatitude": "39.889212",
+    "destLongitude": "116.509351",
+    "destLatitude": "39.943457"
+}
