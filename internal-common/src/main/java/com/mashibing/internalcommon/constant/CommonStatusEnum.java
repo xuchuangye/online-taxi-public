@@ -73,6 +73,8 @@ public enum CommonStatusEnum {
 	CITY_NOT_IS_AVAILABLE_DRIVER(1704, "当前城市没有可用的司机"),
 
 	NOT_AVAILABLE_DRIVER(1705, "没有可以派单的司机"),
+
+	CANCEL_ORDER_FAIL(1706, "取消订单失败"),
 	/**
 	 * 请求成功
 	 */

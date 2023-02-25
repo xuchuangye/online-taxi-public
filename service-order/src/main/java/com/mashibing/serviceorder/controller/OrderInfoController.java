@@ -21,6 +21,7 @@ public class OrderInfoController {
 
 	/**
 	 * 创建订单
+	 *
 	 * @param orderRequest
 	 * @return
 	 */
@@ -34,6 +35,7 @@ public class OrderInfoController {
 
 	/**
 	 * 司机去接乘客
+	 *
 	 * @param orderRequest
 	 * @return
 	 */
@@ -44,6 +46,7 @@ public class OrderInfoController {
 
 	/**
 	 * 司机到达乘客出发点
+	 *
 	 * @param orderRequest
 	 * @return
 	 */
@@ -54,6 +57,7 @@ public class OrderInfoController {
 
 	/**
 	 * 司机接到乘客
+	 *
 	 * @param orderRequest
 	 * @return
 	 */
@@ -64,6 +68,7 @@ public class OrderInfoController {
 
 	/**
 	 * 乘客下车
+	 *
 	 * @param orderRequest
 	 * @return
 	 */
@@ -72,8 +77,26 @@ public class OrderInfoController {
 		return orderInfoService.passengerGetoff(orderRequest);
 	}
 
+	/**
+	 * 订单支付完成
+	 *
+	 * @param orderRequest
+	 * @return
+	 */
 	@PostMapping("/pay")
 	public ResponseResult pay(@RequestBody OrderRequest orderRequest) {
 		return orderInfoService.pay(orderRequest);
+	}
+
+	/**
+	 * 订单取消
+	 *
+	 * @param orderId  订单id
+	 * @param identity 发起订单取消的身份标识
+	 * @return
+	 */
+	@PostMapping("/cancel")
+	public ResponseResult cancel(@RequestParam Long orderId, @RequestParam String identity) {
+		return  orderInfoService.cancel(orderId, identity);
 	}
 }

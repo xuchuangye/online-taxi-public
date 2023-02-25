@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -529,6 +530,7 @@ public class OrderInfoService {
 
 	/**
 	 * 乘客下车，订单支付完成
+	 *
 	 * @param orderRequest
 	 * @return
 	 */
@@ -543,5 +545,126 @@ public class OrderInfoService {
 
 		orderInfoMapper.updateById(orderInfo);
 		return ResponseResult.success("");
+	}
+
+	/**
+	 * 取消订单
+	 *
+	 * @param orderId
+	 * @param identity
+	 * @return
+	 */
+	public ResponseResult cancel(Long orderId, String identity) {
+		OrderInfo orderInfo = orderInfoMapper.selectById(orderId);
+		Integer orderStatus = orderInfo.getOrderStatus();
+
+		LocalDateTime cancelTime = LocalDateTime.now();
+		Integer cancelOperator = null;
+		Integer cancelTypeCode = null;
+
+		int cancelOrder = 1;
+
+		//司机接单时间
+		LocalDateTime receiveOrderTime = null;
+		//从司机接时间单到取消订单时间的中间时间差
+		long between = 0L;
+		//如果是乘客取消
+		if (identity.trim().equals(IdentityConstant.PASSENGER_IDENTITY)) {
+			cancelOperator = Integer.parseInt(IdentityConstant.PASSENGER_IDENTITY);
+			switch (orderStatus) {
+				//1.订单开始
+				case OrderConstant.ORDER_START:
+					//乘客提前取消
+					cancelTypeCode = OrderConstant.CANCEL_PASSENGER_BEFORE;
+					break;
+				//2.司机接单
+				case OrderConstant.DRIVER_RECEIVE_ORDER:
+					//司机接单的时间
+					receiveOrderTime = orderInfo.getReceiveOrderTime();
+					between = ChronoUnit.MINUTES.between(receiveOrderTime, cancelTime);
+					if (between > 1) {
+						//乘客违约取消
+						cancelTypeCode = OrderConstant.CANCEL_PASSENGER_DEFAULT;
+					} else {
+						//乘客提前取消
+						cancelTypeCode = OrderConstant.CANCEL_PASSENGER_BEFORE;
+					}
+					break;
+				//3.司机去接乘客
+				case OrderConstant.DRIVER_TO_PICK_UP_PASSENGER:
+					//4.到达乘客出发点
+				case OrderConstant.DRIVER_ARRIVED_DEPARTURE:
+					//乘客违约取消
+					cancelTypeCode = OrderConstant.CANCEL_PASSENGER_DEFAULT;
+					break;
+				default:
+					log.info("取消订单失败");
+					cancelOrder = 0;
+					break;
+			}
+		}
+		//如果是司机取消
+		if (identity.trim().equals(IdentityConstant.DRIVER_IDENTITY)) {
+			cancelOperator = Integer.parseInt(IdentityConstant.DRIVER_IDENTITY);
+			switch (orderStatus) {
+				//2.司机接单
+				case OrderConstant.DRIVER_RECEIVE_ORDER:
+					//司机接单的时间
+					receiveOrderTime = orderInfo.getReceiveOrderTime();
+					between = ChronoUnit.MINUTES.between(receiveOrderTime, cancelTime);
+					if (between > 1) {
+						//司机违约取消
+						cancelTypeCode = OrderConstant.CANCEL_DRIVER_DEFAULT;
+					} else {
+						//司机提前取消
+						cancelTypeCode = OrderConstant.CANCEL_DRIVER_BEFORE;
+					}
+					break;
+				//3.司机去接乘客
+				case OrderConstant.DRIVER_TO_PICK_UP_PASSENGER:
+					//司机去接乘客的时间
+					LocalDateTime toPickUpPassengerTime = orderInfo.getToPickUpPassengerTime();
+					between = ChronoUnit.MINUTES.between(toPickUpPassengerTime, cancelTime);
+					if (between > 1) {
+						//司机违约取消
+						cancelTypeCode = OrderConstant.CANCEL_DRIVER_DEFAULT;
+					} else {
+						//司机提前取消
+						cancelTypeCode = OrderConstant.CANCEL_DRIVER_BEFORE;
+					}
+					break;
+				//4.到达乘客出发点
+				case OrderConstant.DRIVER_ARRIVED_DEPARTURE:
+					//司机到达乘客出发点的时间
+					LocalDateTime driverArrivedDepartureTime = orderInfo.getDriverArrivedDepartureTime();
+					between = ChronoUnit.MINUTES.between(driverArrivedDepartureTime, cancelTime);
+					if (between > 1) {
+						//司机违约取消
+						cancelTypeCode = OrderConstant.CANCEL_DRIVER_DEFAULT;
+					} else {
+						//司机提前取消
+						cancelTypeCode = OrderConstant.CANCEL_DRIVER_BEFORE;
+					}
+					break;
+				default:
+					log.info("取消订单失败");
+					cancelOrder = 0;
+					break;
+			}
+		}
+
+		//如果取消订单失败
+		if (cancelOrder == 0) {
+			return ResponseResult.fail(CommonStatusEnum.CANCEL_ORDER_FAIL.getCode(),
+					CommonStatusEnum.CANCEL_ORDER_FAIL.getMessage());
+		} else {
+			orderInfo.setCancelTime(cancelTime);
+			orderInfo.setCancelOperator(cancelOperator);
+			orderInfo.setCancelTypeCode(cancelTypeCode);
+			orderInfo.setOrderStatus(OrderConstant.ORDER_CANCEL);
+
+			orderInfoMapper.updateById(orderInfo);
+			return ResponseResult.success("");
+		}
 	}
 }
