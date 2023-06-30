@@ -76,7 +76,7 @@ public class VerificationcodeService {
 	/**
 	 * 校验验证码
 	 *
-	 * @param driverPhone            手机号
+	 * @param driverPhone      手机号
 	 * @param verificationcode 验证码
 	 * @return
 	 */
@@ -85,14 +85,14 @@ public class VerificationcodeService {
 		String VerificationcodeKey = RedisKeyUtils.generateVerificationcodeKey(driverPhone, IdentityConstant.DRIVER_IDENTITY);
 		//value
 		String redisVerificationcode = stringRedisTemplate.opsForValue().get(VerificationcodeKey);
-		System.out.println(redisVerificationcode);
+		System.out.println("reids中获取的验证码：" + redisVerificationcode);
 		//根据乘客手机号，从Redis中获取验证码
 		//校验验证码
 		if (StringUtils.isBlank(redisVerificationcode)) {
 			return ResponseResult.fail(CommonStatusEnum.VERIFICATIONCODE_OVERDUE.getCode(), CommonStatusEnum.VERIFICATIONCODE_OVERDUE.getMessage());
 		}
-
-		if (!verificationcode.trim().equals(redisVerificationcode.trim())) {
+		System.out.println("传入的验证码：" + verificationcode);
+		if (!verificationcode.trim().equals(redisVerificationcode)) {
 			return ResponseResult.fail(CommonStatusEnum.VERIFICATIONCODE_ERROR.getCode(), CommonStatusEnum.VERIFICATIONCODE_ERROR.getMessage());
 		}
 

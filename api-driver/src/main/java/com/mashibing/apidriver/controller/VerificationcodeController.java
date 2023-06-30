@@ -27,7 +27,7 @@ public class VerificationcodeController {
 	 * @param verificationcodeDTO
 	 * @return
 	 */
-	@GetMapping("/verification-code")
+	@PostMapping("/verification-code")
 	public ResponseResult getVerificationcode(@RequestBody VerificationcodeDTO verificationcodeDTO) {
 		String driverPhone = verificationcodeDTO.getDriverPhone();
 		log.info("司机手机号：" + driverPhone);

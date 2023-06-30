@@ -41,7 +41,6 @@ public class AlipayController {
 			e.printStackTrace();
 		}
 
-		assert alipayTradePagePayResponse != null;
 		return alipayTradePagePayResponse.getBody();
 	}
 
