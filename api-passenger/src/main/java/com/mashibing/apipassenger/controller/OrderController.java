@@ -21,17 +21,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @RestController
+@RequestMapping("/order")
 public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
 
-	@PostMapping("/order/add")
+	@PostMapping("/add")
 	public ResponseResult add(@RequestBody OrderRequest orderRequest) {
 		return orderService.add(orderRequest);
 	}
 
-	@PostMapping("/order/cancel")
+	@PostMapping("/cancel")
 	public ResponseResult cancel(@RequestParam Long orderId) {
 		return orderService.cancel(orderId);
 	}
