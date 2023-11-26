@@ -30,9 +30,4 @@ public class CheckVerificationcodeDTO {
 	//表示使用6位数字，组成6位验证码
 	@Pattern(regexp = "^\\d{6}$", message = "请填写6位数字的验证码")
 	private String verificationcode;
-
-	/**
-	 * 司机手机号
-	 */
-	private String driverPhone;
 }
