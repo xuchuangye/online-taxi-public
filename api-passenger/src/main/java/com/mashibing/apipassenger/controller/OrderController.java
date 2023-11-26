@@ -14,6 +14,7 @@ import com.mashibing.internalcommon.dto.TokenResult;
 import com.mashibing.internalcommon.request.OrderRequest;
 import com.mashibing.internalcommon.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,8 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("/order")
+//如果在类中使用验证框架Validation，需要在类上使用@Validated注解进行声明
+@Validated
 public class OrderController {
 
 	@Autowired
@@ -33,12 +36,16 @@ public class OrderController {
 	}
 
 	@PostMapping("/cancel")
-	public ResponseResult cancel(@RequestParam Long orderId) {
+	public ResponseResult cancel(@NotNull(message = "订单id不能为空")
+	                                 @Positive(message = "订单id格式不正确")
+	                                 @RequestParam Long orderId) {
 		return orderService.cancel(orderId);
 	}
 
 	@GetMapping("/detail")
-	public ResponseResult<OrderInfo> detail(@NotNull(message = "订单id不能为空") @Positive(message = "订单id格式不正确") Long orderId){
+	public ResponseResult<OrderInfo> detail(@NotNull(message = "订单id不能为空")
+	                                            @Positive(message = "订单id格式不正确")
+			                                            Long orderId){
 		return orderService.detail(orderId);
 	}
 
