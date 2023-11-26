@@ -2,7 +2,6 @@ package com.mashibing.apipassenger.service;
 
 import com.mashibing.apipassenger.remote.ServiceOrderClient;
 import com.mashibing.internalcommon.constant.IdentityConstant;
-import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.request.OrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,24 +33,5 @@ public class OrderService {
 	 */
 	public ResponseResult cancel(Long orderId) {
 		return serviceOrderClient.cancel(orderId, IdentityConstant.PASSENGER_IDENTITY);
-	}
-
-	/**
-	 * 订单详情
-	 * @param orderId
-	 * @return
-	 */
-	public ResponseResult<OrderInfo> detail(Long orderId){
-		return serviceOrderClient.detail(orderId);
-	}
-
-	/**
-	 * 当前订单
-	 * @param phone
-	 * @param identity
-	 * @return
-	 */
-	public ResponseResult<OrderInfo> currentOrder(String phone , String identity){
-		return serviceOrderClient.current(phone,identity);
 	}
 }

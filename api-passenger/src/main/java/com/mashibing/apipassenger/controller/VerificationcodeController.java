@@ -2,7 +2,10 @@ package com.mashibing.apipassenger.controller;
 
 import com.mashibing.apipassenger.request.CheckVerificationcodeDTO;
 import com.mashibing.apipassenger.request.SendVerificationcodeDTO;
+import com.mashibing.apipassenger.request.ValidationGroupVerificationcodeDTO;
 import com.mashibing.apipassenger.service.VerificationcodeService;
+import com.mashibing.apipassenger.validationgroup.CheckVerificationcodeValidationGroup;
+import com.mashibing.apipassenger.validationgroup.SendVerificationcodeValidationGroup;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -23,24 +26,24 @@ public class VerificationcodeController {
 
 	/**
 	 * 乘客获取验证码
-	 * @param sendVerificationcodeDTO
+	 * @param validationGroupVerificationcodeDTO
 	 * @return
 	 */
 	@GetMapping("/verification-code")
-	public ResponseResult verificationcode(@Validated @RequestBody SendVerificationcodeDTO sendVerificationcodeDTO) {
-		String passengerPhone = sendVerificationcodeDTO.getPassengerPhone();
+	public ResponseResult verificationcode(@Validated(SendVerificationcodeValidationGroup.class) @RequestBody ValidationGroupVerificationcodeDTO validationGroupVerificationcodeDTO) {
+		String passengerPhone = validationGroupVerificationcodeDTO.getPassengerPhone();
 		return verificationcodeService.generateVerificationcode(passengerPhone);
 	}
 
 	/**
 	 * 乘客校验验证码
-	 * @param checkVerificationcodeDTO
+	 * @param validationGroupVerificationcodeDTO
 	 * @return
 	 */
 	@PostMapping("/verification-code-check")
-	public ResponseResult checkVerificationcode(@Validated @RequestBody CheckVerificationcodeDTO checkVerificationcodeDTO) {
-		String passengerPhone = checkVerificationcodeDTO.getPassengerPhone();
-		String verificationcode = checkVerificationcodeDTO.getVerificationcode();
+	public ResponseResult checkVerificationcode(@Validated(CheckVerificationcodeValidationGroup.class) @RequestBody ValidationGroupVerificationcodeDTO validationGroupVerificationcodeDTO) {
+		String passengerPhone = validationGroupVerificationcodeDTO.getPassengerPhone();
+		String verificationcode = validationGroupVerificationcodeDTO.getVerificationcode();
 
 		return verificationcodeService.checkVerificationcode(passengerPhone, verificationcode);
 	}
