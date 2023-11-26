@@ -6,6 +6,7 @@ import lombok.Data;
  * @author xcy
  * @date 2023/2/13 - 17:31
  */
+//TODO 目前该类暂时不用
 @Data
 public class ForecastPriceDTO {
 	/**
