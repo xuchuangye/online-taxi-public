@@ -10,7 +10,7 @@ spring:
     nacos:
       discovery:
         #Nacos的地址
-        server-addr: 127.0.0.1:8848
+        server-addr: 127.0.0.1:8849
   application:
     #服务名称
     name: api-passenger

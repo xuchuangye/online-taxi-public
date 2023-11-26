@@ -75,6 +75,13 @@ public enum CommonStatusEnum {
 	NOT_AVAILABLE_DRIVER(1705, "没有可以派单的司机"),
 
 	CANCEL_ORDER_FAIL(1706, "取消订单失败"),
+
+	/**
+	 * Validation验证框架的响应值统一进行处理
+	 */
+	VALIDATION_EXCEPTION(1801, "Validation验证框架的响应值统一进行处理"),
+
+
 	/**
 	 * 请求成功
 	 */
