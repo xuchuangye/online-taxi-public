@@ -1,5 +1,6 @@
 package com.mashibing.apipassenger.request;
 
+import com.mashibing.apipassenger.constraints.VehicleTypeCheck;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -73,6 +74,7 @@ public class ForecastPriceDTO {
 	 * 车辆类型
 	 */
 	@NotBlank(message = "车辆类型不能为空")
-	@Pattern(regexp = "^1$", message = "请输入正确的车辆类型")
+	//@Pattern(regexp = "^1$", message = "请输入正确的车辆类型")
+	@VehicleTypeCheck(vehicleTypeValue = {"1,2"}, message = "请输入正确的车辆类型")
 	private String vehicleType;
 }
