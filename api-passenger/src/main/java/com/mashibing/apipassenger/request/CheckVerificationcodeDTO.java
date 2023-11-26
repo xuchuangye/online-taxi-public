@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
  * @description  TODO
  */
 @Data
-public class VerificationcodeDTO {
+public class CheckVerificationcodeDTO {
 	/**
 	 * 乘客手机号
 	 */
@@ -25,6 +25,10 @@ public class VerificationcodeDTO {
 	/**
 	 * 验证码
 	 */
+	//表示不能为空白
+	@NotBlank(message = "验证码不能为空")
+	//表示使用6位数字，组成6位验证码
+	@Pattern(regexp = "^\\d{6}$", message = "请填写6位数字的验证码")
 	private String verificationcode;
 
 	/**
