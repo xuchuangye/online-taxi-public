@@ -6,13 +6,19 @@ package com.mashibing.apipassenger.controller;
  */
 
 import com.mashibing.apipassenger.service.OrderService;
+import com.mashibing.internalcommon.constant.CommonStatusEnum;
+import com.mashibing.internalcommon.constant.IdentityConstant;
+import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.ResponseResult;
+import com.mashibing.internalcommon.dto.TokenResult;
 import com.mashibing.internalcommon.request.OrderRequest;
+import com.mashibing.internalcommon.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @RestController
 public class OrderController {
@@ -28,5 +34,23 @@ public class OrderController {
 	@PostMapping("/order/cancel")
 	public ResponseResult cancel(@RequestParam Long orderId) {
 		return orderService.cancel(orderId);
+	}
+
+	@GetMapping("/detail")
+	public ResponseResult<OrderInfo> detail(@NotNull(message = "订单id不能为空") @Positive(message = "订单id格式不正确") Long orderId){
+		return orderService.detail(orderId);
+	}
+
+	@GetMapping("/current")
+	public ResponseResult<OrderInfo> currentOrder(HttpServletRequest httpServletRequest){
+		String authorization = httpServletRequest.getHeader("Authorization");
+		TokenResult tokenResult = JWTUtils.parseToken(authorization);
+		String identity = tokenResult.getIdentity();
+		if (!identity.equals(IdentityConstant.PASSENGER_IDENTITY)){
+			return ResponseResult.fail(CommonStatusEnum.TOKEN_ERROR.getCode(),CommonStatusEnum.TOKEN_ERROR.getMessage());
+		}
+		String phone = tokenResult.getPhone();
+
+		return orderService.currentOrder(phone,IdentityConstant.PASSENGER_IDENTITY);
 	}
 }

@@ -692,5 +692,39 @@ public class OrderInfoService {
 		}
 	}
 
+	public ResponseResult<OrderInfo> detail(Long orderId){
+		OrderInfo orderInfo =  orderInfoMapper.selectById(orderId);
+		return ResponseResult.success(orderInfo);
+	}
 
+
+	public ResponseResult<OrderInfo> current(String phone, String identity){
+		QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+
+		if (identity.equals(IdentityConstant.DRIVER_IDENTITY)){
+			queryWrapper.eq("driver_phone",phone);
+
+			queryWrapper.and(wrapper->wrapper
+					.eq("order_status",OrderConstant.DRIVER_RECEIVE_ORDER)
+					.or().eq("order_status",OrderConstant.DRIVER_TO_PICK_UP_PASSENGER)
+					.or().eq("order_status",OrderConstant.DRIVER_ARRIVED_DEPARTURE)
+					.or().eq("order_status",OrderConstant.DRIVER_PICK_UP_PASSENGER)
+
+			);
+		}
+		if (identity.equals(IdentityConstant.PASSENGER_IDENTITY)){
+			queryWrapper.eq("passenger_phone",phone);
+			queryWrapper.and(wrapper->wrapper.eq("order_status",OrderConstant.ORDER_START)
+					.or().eq("order_status",OrderConstant.DRIVER_RECEIVE_ORDER)
+					.or().eq("order_status",OrderConstant.DRIVER_TO_PICK_UP_PASSENGER)
+					.or().eq("order_status",OrderConstant.DRIVER_ARRIVED_DEPARTURE)
+					.or().eq("order_status",OrderConstant.DRIVER_PICK_UP_PASSENGER)
+					.or().eq("order_status",OrderConstant.PASSENGER_GET_OFF)
+					.or().eq("order_status",OrderConstant.INITIATE_COLLECTIONS)
+			);
+		}
+
+		OrderInfo orderInfo = orderInfoMapper.selectOne(queryWrapper);
+		return ResponseResult.success(orderInfo);
+	}
 }
