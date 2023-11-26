@@ -1,10 +1,10 @@
 package com.mashibing.apipassenger.service;
 
 import com.mashibing.apipassenger.remote.ServiceOrderClient;
+import com.mashibing.apipassenger.request.OrderRequest;
 import com.mashibing.internalcommon.constant.IdentityConstant;
 import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.ResponseResult;
-import com.mashibing.internalcommon.request.OrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

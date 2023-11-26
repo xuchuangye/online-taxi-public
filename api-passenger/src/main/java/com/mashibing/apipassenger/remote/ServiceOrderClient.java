@@ -1,8 +1,8 @@
 package com.mashibing.apipassenger.remote;
 
+import com.mashibing.apipassenger.request.OrderRequest;
 import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.ResponseResult;
-import com.mashibing.internalcommon.request.OrderRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

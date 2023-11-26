@@ -8,22 +8,29 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 自定义Validation注解
+ * 自定义Validation对于时间判断的注解
  * @author xuchuangye
  * @version 1.0
- * @date 2023/11/26-16:40
+ * @date 2023/11/27-9:27
  * @description TODO
  */
-@Target(ElementType.FIELD)
+@Target(value = ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = VehicleTypeCheckParser.class)
-public @interface VehicleTypeCheck {
+@Constraint(validatedBy = DateTimeRangeParser.class)
+public @interface DateTimeRange {
 
 	Class<?>[] groups() default { };
 
 	Class<? extends Payload>[] payload() default { };
 
-	String[] vehicleTypeValue() default {};
+	/**
+	 * 在当前时间之后：isAfter
+	 * 在当前时间之前：isBefore
+	 * @return
+	 */
+	String judge() default "isAfter";
 
-	String message() default "输入的车辆类型不正确";
+	String pattern() default "yyyy-MM-dd HH:mm:ss";
+
+	String message() default "日期范围不正确";
 }

@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2023/11/26-16:43
  * @description TODO
  */
-public class VehicleTypeParser implements ConstraintValidator<VehicleTypeCheck, String> {
+public class VehicleTypeCheckParser implements ConstraintValidator<VehicleTypeCheck, String> {
 
 	private List<String> vehicleTypeArray = null;
 

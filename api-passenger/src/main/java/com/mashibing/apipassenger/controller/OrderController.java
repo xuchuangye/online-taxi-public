@@ -5,13 +5,13 @@ package com.mashibing.apipassenger.controller;
  * @date 2023/2/20 - 7:22
  */
 
+import com.mashibing.apipassenger.request.OrderRequest;
 import com.mashibing.apipassenger.service.OrderService;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.constant.IdentityConstant;
 import com.mashibing.internalcommon.dto.OrderInfo;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.dto.TokenResult;
-import com.mashibing.internalcommon.request.OrderRequest;
 import com.mashibing.internalcommon.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,8 +30,13 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 
+	/**
+	 * 乘客下订单
+	 * @param orderRequest
+	 * @return
+	 */
 	@PostMapping("/add")
-	public ResponseResult add(@RequestBody OrderRequest orderRequest) {
+	public ResponseResult add(@Validated @RequestBody OrderRequest orderRequest) {
 		return orderService.add(orderRequest);
 	}
 
