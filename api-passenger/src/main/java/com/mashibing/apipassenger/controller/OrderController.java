@@ -36,7 +36,8 @@ public class OrderController {
 	 * @return
 	 */
 	@PostMapping("/add")
-	public ResponseResult add(@Validated @RequestBody OrderRequest orderRequest) {
+	public ResponseResult add(@Validated @
+			RequestBody OrderRequest orderRequest) {
 		return orderService.add(orderRequest);
 	}
 

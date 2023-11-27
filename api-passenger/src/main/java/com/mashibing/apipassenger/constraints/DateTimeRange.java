@@ -28,9 +28,19 @@ public @interface DateTimeRange {
 	 * 在当前时间之前：isBefore
 	 * @return
 	 */
-	String judge() default "isAfter";
+	String judge() default IS_AFTER;
 
 	String pattern() default "yyyy-MM-dd HH:mm:ss";
 
 	String message() default "日期范围不正确";
+
+	/**
+	 * 用户传入的日期参数在当前时间之后
+	 */
+	public final static String IS_AFTER = "isAfter";
+
+	/**
+	 * 用户传入的日期参数在当前时间之前
+	 */
+	public final static String IS_BEFORE = "isBefore";
 }

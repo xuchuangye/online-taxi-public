@@ -16,8 +16,8 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = VehicleTypeCheckParser.class)
-public @interface VehicleTypeCheck {
+@Constraint(validatedBy = DicCheckParser.class)
+public @interface DicCheck {
 
 	Class<?>[] groups() default { };
 

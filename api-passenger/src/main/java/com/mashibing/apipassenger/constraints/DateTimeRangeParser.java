@@ -18,9 +18,11 @@ import java.util.List;
 public class DateTimeRangeParser implements ConstraintValidator<DateTimeRange, Object> {
 
 	private DateTimeRange dateTimeRange;
+	private String paramJudge;
 
 	@Override
 	public void initialize(DateTimeRange constraintAnnotation) {
+		paramJudge = constraintAnnotation.judge();
 		ConstraintValidator.super.initialize(constraintAnnotation);
 	}
 
@@ -34,6 +36,7 @@ public class DateTimeRangeParser implements ConstraintValidator<DateTimeRange, O
 	@Override
 	public boolean isValid(Object paramDate, ConstraintValidatorContext context) {
 		LocalDateTime localDateTime = null;
+
 
 		//如果用户传入的日期参数为空，不需要进行判断，直接返回true
 		if (paramDate == null) {
@@ -50,8 +53,15 @@ public class DateTimeRangeParser implements ConstraintValidator<DateTimeRange, O
 
 		LocalDateTime now = LocalDateTime.now();
 
+		if (DateTimeRange.IS_AFTER.equals(paramJudge) && localDateTime != null && localDateTime.isAfter(now)) {
+			return true;
+		}
 
-		return localDateTime != null && localDateTime.isAfter(now);
+		if (DateTimeRange.IS_BEFORE.equals(paramJudge) && localDateTime != null && localDateTime.isBefore(now)) {
+			return true;
+		}
+
+		return false;
 	}
 
 }
