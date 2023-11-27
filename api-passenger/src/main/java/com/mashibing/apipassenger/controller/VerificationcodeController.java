@@ -30,8 +30,7 @@ public class VerificationcodeController {
 	 * @return
 	 */
 	@GetMapping("/verification-code")
-	public ResponseResult verificationcode(@Validated
-	                                           @RequestBody SendVerificationcodeDTO sendVerificationcodeDTO) {
+	public ResponseResult verificationcode(@Validated @RequestBody SendVerificationcodeDTO sendVerificationcodeDTO) {
 		String passengerPhone = sendVerificationcodeDTO.getPassengerPhone();
 		return verificationcodeService.generateVerificationcode(passengerPhone);
 	}
@@ -42,8 +41,7 @@ public class VerificationcodeController {
 	 * @return
 	 */
 	@PostMapping("/verification-code-check")
-	public ResponseResult checkVerificationcode(@Validated
-	                                                @RequestBody CheckVerificationcodeDTO checkVerificationcodeDTO) {
+	public ResponseResult checkVerificationcode(@Validated @RequestBody CheckVerificationcodeDTO checkVerificationcodeDTO) {
 		String passengerPhone = checkVerificationcodeDTO.getPassengerPhone();
 		String verificationcode = checkVerificationcodeDTO.getVerificationcode();
 

@@ -94,7 +94,9 @@ public enum CommonStatusEnum {
 	/**
 	 * 请求失败
 	 */
-	FAIL(0, "请求响应失败");;
+	FAIL(0, "请求响应失败");
+
+
 	private final int code;
 	private final String message;
 

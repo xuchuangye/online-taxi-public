@@ -89,7 +89,7 @@ public class VerificationcodeService {
 		VerificationcodeDTO verificationcodeDTO = new VerificationcodeDTO();
 		verificationcodeDTO.setPassengerPhone(phone);
 
-		//给调用方一个友好的提示信息
+		//给调用方一个友好的提示信息，SpringCloud中是通过熔断降级
 		try {
 			servicePassengerUserClient.loginOrRegister(verificationcodeDTO);
 		} catch (Exception e) {

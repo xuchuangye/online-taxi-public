@@ -2,6 +2,7 @@ package com.mashibing.apipassenger.interceptor;
 
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
 import com.mashibing.internalcommon.dto.ResponseResult;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,6 +19,7 @@ import java.util.Set;
  * @description TODO
  */
 @RestControllerAdvice
+@Order(1)
 public class GlobalValidationExceptionHandler {
 	/**
 	 * Validation对于属性的验证虽然进行了封装，但是用户不可见，并且提示信息对用户来说并不友好，所以对响应值做统一处理
