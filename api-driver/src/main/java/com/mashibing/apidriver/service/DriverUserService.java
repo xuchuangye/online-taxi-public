@@ -2,10 +2,10 @@ package com.mashibing.apidriver.service;
 
 import com.mashibing.apidriver.remote.ServiceDriverUserClient;
 import com.mashibing.apidriver.remote.ServiceVerificationcodeClient;
+import com.mashibing.apidriver.request.DriverCarBindingRelationship;
+import com.mashibing.apidriver.request.DriverUser;
+import com.mashibing.apidriver.request.DriverUserWorkStatus;
 import com.mashibing.internalcommon.constant.CommonStatusEnum;
-import com.mashibing.internalcommon.dto.DriverCarBindingRelationship;
-import com.mashibing.internalcommon.dto.DriverUser;
-import com.mashibing.internalcommon.dto.DriverUserWorkStatus;
 import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.DriverUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;

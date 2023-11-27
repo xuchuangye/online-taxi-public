@@ -68,15 +68,15 @@ public class OrderRequest {
 	/**
 	 * 预计出发地点经度
 	 */
-	@NotBlank(message = "起点经度不能为空")
-	@Pattern(regexp = "^[\\-\\+]?(0?\\d{1,2}\\.\\d{1,6}|1[0-7]\\d{1}\\.\\d{1,6}|180\\.0{1,6})$",message = "请输入正确的起点经度")
+	@NotBlank(message = "出发地经度不能为空")
+	@Pattern(regexp = "^[\\-\\+]?(0?\\d{1,2}\\.\\d{1,6}|1[0-7]\\d{1}\\.\\d{1,6}|180\\.0{1,6})$",message = "请输入正确的出发地经度")
 	private String depLongitude;
 
 	/**
 	 * 预计出发地点纬度
 	 */
-	@NotBlank(message = "起点纬度不能为空")
-	@Pattern(regexp = "^[\\-\\+]?([0-8]?\\d{1}\\.\\d{1,6}|90\\.0{1,6})$",message = "请输入正确的起点纬度")
+	@NotBlank(message = "出发地纬度不能为空")
+	@Pattern(regexp = "^[\\-\\+]?([0-8]?\\d{1}\\.\\d{1,6}|90\\.0{1,6})$",message = "请输入正确的出发地纬度")
 	private String depLatitude;
 
 	/**
@@ -89,15 +89,15 @@ public class OrderRequest {
 	/**
 	 * 预计目的地经度
 	 */
-	@NotBlank(message = "终点经度不能为空")
-	@Pattern(regexp = "^[\\-\\+]?(0?\\d{1,2}\\.\\d{1,6}|1[0-7]\\d{1}\\.\\d{1,6}|180\\.0{1,6})$",message = "请输入正确的终点经度")
+	@NotBlank(message = "目的地经度不能为空")
+	@Pattern(regexp = "^[\\-\\+]?(0?\\d{1,2}\\.\\d{1,6}|1[0-7]\\d{1}\\.\\d{1,6}|180\\.0{1,6})$",message = "请输入正确的目的地经度")
 	private String destLongitude;
 
 	/**
 	 * 预计目的地纬度
 	 */
-	@NotBlank(message = "终点纬度不能为空")
-	@Pattern(regexp = "^[\\-\\+]?([0-8]?\\d{1}\\.\\d{1,6}|90\\.0{1,6})$",message = "请输入正确的终点纬度")
+	@NotBlank(message = "目的地纬度不能为空")
+	@Pattern(regexp = "^[\\-\\+]?([0-8]?\\d{1}\\.\\d{1,6}|90\\.0{1,6})$",message = "请输入正确的目的地纬度")
 	private String destLatitude;
 
 	/**

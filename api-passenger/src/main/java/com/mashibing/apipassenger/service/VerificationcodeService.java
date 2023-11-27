@@ -14,6 +14,9 @@ import com.mashibing.internalcommon.utils.RedisKeyUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -85,22 +88,58 @@ public class VerificationcodeService {
 		//根据不同的情况，做不同的处理
 		VerificationcodeDTO verificationcodeDTO = new VerificationcodeDTO();
 		verificationcodeDTO.setPassengerPhone(phone);
-		servicePassengerUserClient.loginOrRegister(verificationcodeDTO);
+
+		//给调用方一个友好的提示信息
+		try {
+			servicePassengerUserClient.loginOrRegister(verificationcodeDTO);
+		} catch (Exception e) {
+			return ResponseResult.fail(CommonStatusEnum.CALL_SERVER_EXCEPTION.getCode(), CommonStatusEnum.CALL_SERVER_EXCEPTION.getMessage());
+		}
 
 		//颁发令牌
 		String accessToken = JWTUtils.generatorToken(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.ACCESS_TOKEN_TYPE);
 		String refreshToken = JWTUtils.generatorToken(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.REFRESH_TOKEN_TYPE);
 
 		//将token存储到Redis中
-		String accessTokenKey = RedisKeyUtils.generateTokenKey(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.ACCESS_TOKEN_TYPE);
-		String refreshTokenKey = RedisKeyUtils.generateTokenKey(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.REFRESH_TOKEN_TYPE);
-		stringRedisTemplate.opsForValue().set(accessTokenKey, accessToken, 30, TimeUnit.DAYS);
-		stringRedisTemplate.opsForValue().set(refreshTokenKey, refreshToken, 31, TimeUnit.DAYS);
 
-		//响应结果，返回token令牌
-		TokenResponse tokenResponse = new TokenResponse();
-		tokenResponse.setAccessToken(accessToken);
-		tokenResponse.setRefreshToken(refreshToken);
-		return ResponseResult.success(tokenResponse);
+		//1.开始Redis的事务支持
+		stringRedisTemplate.setEnableTransactionSupport(true);
+
+		SessionCallback<Boolean> sessionCallback = new SessionCallback<Boolean>() {
+			@Override
+			public Boolean execute(RedisOperations operations) throws DataAccessException {
+				//2.事务开始
+				stringRedisTemplate.multi();
+
+				try {
+					String accessTokenKey = RedisKeyUtils.generateTokenKey(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.ACCESS_TOKEN_TYPE);
+					stringRedisTemplate.opsForValue().set(accessTokenKey, accessToken, 30, TimeUnit.DAYS);
+
+					//int i = 1 / 0;
+
+					String refreshTokenKey = RedisKeyUtils.generateTokenKey(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.REFRESH_TOKEN_TYPE);
+					stringRedisTemplate.opsForValue().set(refreshTokenKey, refreshToken, 31, TimeUnit.DAYS);
+					//3.事务提交
+					operations.exec();
+					return true;
+				} catch (Exception e) {
+					//3.事务回滚
+					operations.discard();
+					return false;
+				}
+			}
+		};
+
+		Boolean execute = stringRedisTemplate.execute(sessionCallback);
+		if (Boolean.TRUE.equals(execute)) {
+			//响应结果，返回token令牌
+			TokenResponse tokenResponse = new TokenResponse();
+			tokenResponse.setAccessToken(accessToken);
+			tokenResponse.setRefreshToken(refreshToken);
+			return ResponseResult.success(tokenResponse);
+		}else {
+			return ResponseResult.fail(CommonStatusEnum.VALIDATION_PHONE_AND_VERIFICATIONCODE_EXCEPTION.getCode(),
+					CommonStatusEnum.VALIDATION_PHONE_AND_VERIFICATIONCODE_EXCEPTION.getMessage());
+		}
 	}
 }

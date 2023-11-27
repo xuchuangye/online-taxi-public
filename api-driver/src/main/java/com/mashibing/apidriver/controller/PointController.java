@@ -1,8 +1,8 @@
 package com.mashibing.apidriver.controller;
 
+import com.mashibing.apidriver.request.ApiDriverPointRequest;
 import com.mashibing.apidriver.service.PointService;
 import com.mashibing.internalcommon.dto.ResponseResult;
-import com.mashibing.internalcommon.request.ApiDriverPointRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

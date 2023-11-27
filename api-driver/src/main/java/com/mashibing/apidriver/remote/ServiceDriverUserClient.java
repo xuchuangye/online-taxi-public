@@ -1,6 +1,10 @@
 package com.mashibing.apidriver.remote;
 
-import com.mashibing.internalcommon.dto.*;
+import com.mashibing.apidriver.request.Car;
+import com.mashibing.apidriver.request.DriverCarBindingRelationship;
+import com.mashibing.apidriver.request.DriverUser;
+import com.mashibing.apidriver.request.DriverUserWorkStatus;
+import com.mashibing.internalcommon.dto.ResponseResult;
 import com.mashibing.internalcommon.response.DriverUserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;

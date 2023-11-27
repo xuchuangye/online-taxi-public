@@ -2,9 +2,9 @@ package com.mashibing.apidriver.service;
 
 import com.mashibing.apidriver.remote.ServiceDriverUserClient;
 import com.mashibing.apidriver.remote.ServiceMapClient;
-import com.mashibing.internalcommon.dto.Car;
+import com.mashibing.apidriver.request.ApiDriverPointRequest;
+import com.mashibing.apidriver.request.Car;
 import com.mashibing.internalcommon.dto.ResponseResult;
-import com.mashibing.internalcommon.request.ApiDriverPointRequest;
 import com.mashibing.internalcommon.request.PointUploadRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

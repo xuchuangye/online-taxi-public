@@ -15,6 +15,10 @@ public enum CommonStatusEnum {
 	 */
 	VERIFICATIONCODE_OVERDUE(1001, "验证码已过期"),
 
+	CALL_SERVER_EXCEPTION(1002, "调用新增用户服务异常"),
+
+	VALIDATION_PHONE_AND_VERIFICATIONCODE_EXCEPTION(1003, "验证手机号和验证码异常"),
+
 	VERIFICATIONCODE_ERROR(1099, "验证码不正确"),
 	/**
 	 * token类的提示：1101 ~ 1199
