@@ -35,6 +35,17 @@ public class OrderInfoController {
 	}
 
 	/**
+	 * 乘客下订预约单
+	 *
+	 * @param orderRequest
+	 * @return
+	 */
+	@PostMapping("/add")
+	public ResponseResult book(@RequestBody OrderRequest orderRequest/*, HttpServletRequest httpServletRequest*/) {
+		return orderInfoService.bookOrder(orderRequest);
+	}
+
+	/**
 	 * 司机去接乘客
 	 *
 	 * @param orderRequest

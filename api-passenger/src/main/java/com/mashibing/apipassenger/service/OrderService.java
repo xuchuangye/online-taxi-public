@@ -28,6 +28,15 @@ public class OrderService {
 	}
 
 	/**
+	 * 乘客下订预约单
+	 * @param orderRequest
+	 * @return
+	 */
+	public ResponseResult book(OrderRequest orderRequest) {
+		return serviceOrderClient.bookOrder(orderRequest);
+	}
+
+	/**
 	 * 取消订单
 	 * @param orderId
 	 * @return
