@@ -20,5 +20,5 @@ public interface ServiceMapClient {
 	public ResponseResult<TerminalResponse> addTerminal(@RequestParam String name, @RequestParam String desc);
 
 	@RequestMapping(method = RequestMethod.POST, value = "/trace/add")
-	public ResponseResult<TraceResponse> addTrace(@RequestParam Integer tid);
+	public ResponseResult<TraceResponse> addTrace(@RequestParam String tid);
 }

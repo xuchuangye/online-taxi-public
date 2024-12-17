@@ -12,7 +12,7 @@ public class TerminalResponse {
 	/**
 	 * terminal_id
 	 */
-	private Integer tid;
+	private String tid;
 
 	private Long desc;
 

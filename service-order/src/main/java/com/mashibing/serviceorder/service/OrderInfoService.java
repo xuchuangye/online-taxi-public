@@ -436,7 +436,7 @@ public class OrderInfoService {
             //测试数据
             TerminalResponse testTerminal = new TerminalResponse();
             testTerminal.setCarId(1868576644493398018L);
-            testTerminal.setTid(1112624258);
+            testTerminal.setTid("1112624258");
             testTerminal.setLongitude("39.908308");
             testTerminal.setLatitude("116.421289");
             List<TerminalResponse> data = new ArrayList<>();
@@ -444,7 +444,7 @@ public class OrderInfoService {
             //List<TerminalResponse> data = new ArrayList<>();
             for (int j = 0; j < data.size(); j++) {
                 TerminalResponse terminalResponse = data.get(i);
-                Long carId = terminalResponse.getDesc();
+                Long carId = terminalResponse.getCarId();
                 //获取经度
                 String longitude = terminalResponse.getLongitude();
                 //获取经度
@@ -452,10 +452,10 @@ public class OrderInfoService {
 
                 ResponseResult<OrderAboutDriverResponse> availableDriver = serviceDriverUserClient.getAvailableDriver(carId);
                 if (availableDriver.getCode() == CommonStatusEnum.NOT_AVAILABLE_DRIVER.getCode()) {
-                    log.info("没有车辆" + carId + "可以派单的司机");
+                    log.info("没有车辆ID: " + carId + "可以派单的司机");
                     continue;
                 } else {
-                    log.info("车辆" + carId + "有可以派单的司机");
+                    log.info("车辆ID: " + carId + "检车到正在出车可以派单的司机");
                     //获取订单中关于司机的信息
                     OrderAboutDriverResponse orderAboutDriverResponse = availableDriver.getData();
                     Long driverId = orderAboutDriverResponse.getDriverId();
@@ -544,6 +544,8 @@ public class OrderInfoService {
 					result = 1;
 
 					lock.unlock(); */
+
+                    result = 1;
 
                     break radius;
                     //}
@@ -748,7 +750,7 @@ public class OrderInfoService {
 
         //获取终端id
         ResponseResult<Car> car = serviceDriverUserClient.getCar(orderInfo.getCarId());
-        Integer tid = car.getData().getTid();
+        String tid = car.getData().getTid();
         //载客起始时间戳 = 司机接到乘客，乘客上车的时间
         Long startTime = orderInfo.getPickUpPassengerTime().toInstant(ZoneOffset.of("+8")).toEpochMilli();
         //载客截止时间戳 = 乘客下车的时间，也就是现在

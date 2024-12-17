@@ -1,0 +1,2 @@
+1. 连接服务: http://localhost:9002/service-sse-push-test.html
+2. 发送消息: http://localhost:9002/push?userId=1&identity=1&content=消息内容
