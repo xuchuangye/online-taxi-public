@@ -102,12 +102,14 @@ public class VerificationcodeService {
 
 		//将token存储到Redis中
 
-		//1.开始Redis的事务支持
+		//1.打开Redis的事务支持
 		stringRedisTemplate.setEnableTransactionSupport(true);
 
+		//SessionCallback表示将多个命令作为一个Session执行，这样事务才会生效
+		//泛型Boolean用于后续代码的判断
 		SessionCallback<Boolean> sessionCallback = new SessionCallback<Boolean>() {
 			@Override
-			public Boolean execute(RedisOperations operations) throws DataAccessException {
+			public Boolean execute(RedisOperations redisOperations) throws DataAccessException {
 				//2.事务开始
 				stringRedisTemplate.multi();
 
@@ -120,11 +122,11 @@ public class VerificationcodeService {
 					String refreshTokenKey = RedisKeyUtils.generateTokenKey(phone, IdentityConstant.PASSENGER_IDENTITY, TokenTypeConstant.REFRESH_TOKEN_TYPE);
 					stringRedisTemplate.opsForValue().set(refreshTokenKey, refreshToken, 31, TimeUnit.DAYS);
 					//3.事务提交
-					operations.exec();
+					redisOperations.exec();
 					return true;
 				} catch (Exception e) {
 					//3.事务回滚
-					operations.discard();
+					redisOperations.discard();
 					return false;
 				}
 			}

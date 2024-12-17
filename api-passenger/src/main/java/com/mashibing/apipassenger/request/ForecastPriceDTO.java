@@ -58,6 +58,6 @@ public class ForecastPriceDTO {
 	 */
 	@NotBlank(message = "车辆类型不能为空")
 	//@Pattern(regexp = "^1$", message = "请输入正确的车辆类型")
-	@DicCheck(vehicleTypeValue = {"1,2"}, message = "请输入正确的车辆类型")
+	@DicCheck(dicValue = {"1","2"}, message = "请输入正确的车辆类型")
 	private String vehicleType;
 }

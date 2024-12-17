@@ -22,5 +22,5 @@ spring:
 
 logging:
   level:
-    com.mashibing: debug
+    com.mashibing: info
 

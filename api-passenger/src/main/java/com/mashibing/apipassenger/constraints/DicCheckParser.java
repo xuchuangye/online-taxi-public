@@ -19,12 +19,13 @@ public class DicCheckParser implements ConstraintValidator<DicCheck, Object> {
 
 	@Override
 	public void initialize(DicCheck constraintAnnotation) {
-		dicValue = Arrays.asList(constraintAnnotation.vehicleTypeValue());
+		dicValue = Arrays.asList(constraintAnnotation.dicValue());
 		ConstraintValidator.super.initialize(constraintAnnotation);
 	}
 
 	@Override
 	public boolean isValid(Object value, ConstraintValidatorContext context) {
+		System.out.println("自定义Validation校验注解开始进行校验...");
 		if (value instanceof Integer) {
 			return dicValue.contains(String.valueOf(value));
 		}

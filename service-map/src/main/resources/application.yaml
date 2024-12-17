@@ -14,12 +14,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/service-map?characterEncoding=UTF-8&serverTimezone=GMT%2B8
     username: root
-    password: root
+    password: 123456
 logging:
   level:
-    com.mashibing: debug
+    com.mashibing: info
 
 #自定义URL的key
 amap:
-  key: e0d3379f01867fcdb15286f434e7eaa3
+  key: 5b80a61e7d55d25f082996c13e698b27
   sid: 880995

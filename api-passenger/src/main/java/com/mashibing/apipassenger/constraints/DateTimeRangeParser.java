@@ -39,7 +39,7 @@ public class DateTimeRangeParser implements ConstraintValidator<DateTimeRange, O
 
 
 		//如果用户传入的日期参数为空，不需要进行判断，直接返回true
-		if (paramDate == null) {
+		if (null == paramDate) {
 			return true;
 		}
 

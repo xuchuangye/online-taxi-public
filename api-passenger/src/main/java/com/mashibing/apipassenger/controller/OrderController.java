@@ -52,6 +52,11 @@ public class OrderController {
 		return orderService.book(orderRequest);
 	}
 
+	/**
+	 * 注解@Positive表示参数必须是大于0的
+	 * @param orderId
+	 * @return
+	 */
 	@PostMapping("/cancel")
 	public ResponseResult cancel(@NotNull(message = "订单id不能为空")
 	                             @Positive(message = "订单id格式不正确")

@@ -10,21 +10,28 @@ spring:
     database: 0
   application:
     name: service-order
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8849
 
 logging:
   level:
-    com.baomidou: debug
+    com.baomidou: info
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: 0
 
 ---
 spring:
-  profiles: 8087
+  profiles: 8007
 server:
-  port: 8087
+  port: 8007
 ---
 spring:
-  profiles: 8090
+  profiles: 8008
 server:
-  port: 8090
+  port: 8008

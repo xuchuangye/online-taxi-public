@@ -40,7 +40,7 @@ public class OrderInfoController {
 	 * @param orderRequest
 	 * @return
 	 */
-	@PostMapping("/add")
+	@PostMapping("/book")
 	public ResponseResult book(@RequestBody OrderRequest orderRequest/*, HttpServletRequest httpServletRequest*/) {
 		return orderInfoService.bookOrder(orderRequest);
 	}

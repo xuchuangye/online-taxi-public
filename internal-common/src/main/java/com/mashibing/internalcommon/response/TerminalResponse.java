@@ -20,4 +20,6 @@ public class TerminalResponse {
 
 	private String latitude;
 
+	private Long carId;
+
 }

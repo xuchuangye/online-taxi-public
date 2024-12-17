@@ -104,13 +104,13 @@ public class OrderRequest {
 	 * 坐标加密标识：1：GCJ-02测绘局标准，2：WGS84 GPS标准，3：BD-09 百度标准，4：CGCS2000 北斗标准，0：其他
 	 */
 	@NotNull(message = "坐标加密标识不能为空")
-	@DicCheck(vehicleTypeValue = {"1", "2", "3", "4", "0"}, message = "请输入0-4范围内的坐标加密标识")
+	@DicCheck(dicValue = {"1", "2", "3", "4", "0"}, message = "请输入0-4范围内的坐标加密标识")
 	private Integer encrypt;
 	/**
 	 * 运价类型编码
 	 */
 	@NotBlank(message = "运价类型编码不能为空")
-	@Pattern(regexp = "^\\d{6}\\$\\d$", message = "请输入正确的运价类型编码")
+	@Pattern(regexp = "^\\d{6}\\$\\d{1}$", message = "请输入正确的运价类型编码")
 	private String fareType;
 
 	/**
@@ -124,7 +124,7 @@ public class OrderRequest {
 	 * 车辆类型
 	 */
 	@NotBlank(message = "车辆类型不能为空")
-	@DicCheck(vehicleTypeValue = {"1", "2"}, message = "请输入正确的车辆类型")
+	@DicCheck(dicValue = {"1", "2"}, message = "请输入正确的车辆类型")
 	private String vehicleType;
 
 	/**
